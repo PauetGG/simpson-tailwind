@@ -18,7 +18,7 @@ function renderPersonajes(personajes: Personaje[]) {
     div.className = 'personaje';
 
     div.innerHTML = `
-      <div class="flex flex-wrap">
+      <div>
         <div class="w-48 bg-white rounded-lg shadow-md border-gray-200 p-2">
           <h3 style="font-family: 'Rock Salt'; font-weight: bold;" class="text-lg text-center mb-3">${personaje.Nombre}</h3>
           <img src="${personaje.Imagen}" alt="${personaje.Nombre}" class="w-32 h-64 mx-auto object-cover">
@@ -39,9 +39,6 @@ function renderPersonajes(personajes: Personaje[]) {
 async function mostrarPersonajesPorPaginas() {
   const contenedor = document.getElementById('contenedor');
   if (!contenedor) return;
-
-  contenedor.innerHTML = 'Cargando personajes...';
-
   try {
     // Primera llamada para saber cuántas páginas hay
     const res = await fetch(`https://apisimpsons.fly.dev/api/personajes?limit=100&page=1`);
