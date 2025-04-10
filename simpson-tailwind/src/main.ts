@@ -41,3 +41,33 @@ obtenerPersonajes().then(personajes => {
   console.error('❌ Error al leer personajes:', error);
 });
 
+async function mostrarPersonajes() {
+  const contenedor = document.getElementById('contenedor')!;
+contenedor.innerHTML = "Hola!";
+  const personajes = await obtenerPersonajes();
+
+  personajes.forEach(personaje => {
+    const div = document.createElement('div');
+    div.className = 'personaje';
+
+    div.innerHTML = `
+
+    <div class="flex flex-wrap">
+    <div class="w-48 bg-white rounded-lg shadow-md  border-gray-200">
+      <h3 style="font-family: 'Rock Salt', bold" class="font-rock-salt font-bold text-lg text-center mb-3">${personaje.Nombre}</h3>
+      <img src="${personaje.Imagen}" alt="${personaje.Nombre}" class="w-32 h-64 mx-auto  object-cover  borderpink-300">
+      <div class="mt-4 text-sm text-gray-600">
+      <div style="font-family: 'Rock Salt', bold" class="nombre"></div>
+        <p class="mb-1"><span class="font-semibold">Género:</span> Mujer</p>
+        <p class="mb-1"><span class="font-semibold">Estado:</span> Ficticio</p>
+        <p><span class="font-semibold">Ocupación:</span> Ama de casa</p>
+      </div>
+    </div>
+  </div>
+    `;
+
+   contenedor.appendChild(div);
+  });
+}
+
+mostrarPersonajes();
