@@ -41,3 +41,20 @@ obtenerPersonajes().then(personajes => {
   console.error('❌ Error al leer personajes:', error);
 });
 
+async function setupBotonAleatorio() {
+  const personajes = await obtenerPersonajes();
+
+  const boton = document.getElementById('randomButton');
+  if (!boton) {
+    console.error('❌ No se encontró el div con id="randomButton"');
+    return;
+  }
+
+  boton.addEventListener('click', () => {
+    const aleatorio = personajes[Math.floor(Math.random() * personajes.length)];
+    console.log('🌀 Personaje aleatorio:', aleatorio);
+  });
+}
+
+setupBotonAleatorio();
+ 
