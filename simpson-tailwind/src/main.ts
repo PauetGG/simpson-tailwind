@@ -18,10 +18,10 @@ function renderPersonajes(personajes: Personaje[]) {
     div.className = 'personaje';
 
     div.innerHTML = `
-      <div>
-        <div class="w-48 bg-white rounded-lg shadow-md border-gray-200 p-2">
+      <div class="border-4 border-black border-solid rounded-xl">
+        <div class=" w-62 h-[450px] bg-white rounded-lg shadow-md border-gray-200 p-2">
           <h3 style="font-family: 'Rock Salt'; font-weight: bold;" class="text-lg text-center mb-3">${personaje.Nombre}</h3>
-          <img src="${personaje.Imagen}" alt="${personaje.Nombre}" class="w-32 h-64 mx-auto object-cover">
+          <img style="object-fit: contain" src="${personaje.Imagen}" alt="${personaje.Nombre}" class=" w-32 h-64 mx-auto object-cover">
           <div class="mt-4 text-sm text-gray-600">
             <p class="mb-1"><span class="font-semibold">Género:</span> ${personaje.Genero}</p>
             <p class="mb-1"><span class="font-semibold">Estado:</span> ${personaje.Estado}</p>
