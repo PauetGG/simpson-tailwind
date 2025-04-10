@@ -6,9 +6,64 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>The Simpsons</title>
     <link href="./src/style.css" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Rock+Salt&display=swap" rel="stylesheet">
   </head>
-  <body>
-    <div id="personajes" class="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-6 p-6"></div>
+  <body class="bg-[url('https://preview.redd.it/92uojpw8udf41.jpg?auto=webp&s=410fffa16a851319b19f195976654a030748647f')] bg-cover bg-center bg-no-repeat bg-fixed min-h-screen h-screen bg-blue-300">
+    <header class="flex justify-center">
+      <a href="index.html">
+        <img class="h-[25vh] justify-center" src="https://upload.wikimedia.org/wikipedia/commons/thumb/9/98/The_Simpsons_yellow_logo.svg/1600px-The_Simpsons_yellow_logo.svg.png" alt="">
+      </a>
+    </header>
+
+
+    <div class="relative mx-auto max-w-md">
+      <input 
+        type="text" 
+        placeholder="Buscar..." 
+        class="w-full py-2 px-4 pr-10 rounded-full border border-gray-300 focus:outline-none focus:ring-2 focus:ring-yellow-400 focus:border-transparent"
+      >
+      <button class="absolute right-3 top-2 text-gray-500 hover:text-yellow-600">
+        <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+          <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z" />
+        </svg>
+      </button>
+    </div>
+
+    
+
+
+
+
+<div class="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-6 p-6">
+  <!-- Card 1 - Ejemplo Mujer -->
+  <div class="bg-white rounded-lg shadow-md overflow-hidden  border-gray-200">
+    <div class="p-4">
+      <h3 style="font-family: 'Rock Salt', bold" class="font-rock-salt font-bold text-lg text-center mb-3">Marge Simpson</h3>
+      <img 
+        src="https://upload.wikimedia.org/wikipedia/en/0/0b/Marge_Simpson.png" 
+        alt="Marge Simpson"
+        class="w-32 h-64 mx-auto  object-cover  borderpink-300"
+      >
+      <div class="mt-4 text-sm text-gray-600">
+        <p class="mb-1"><span class="font-semibold">Género:</span> Mujer</p>
+        <p class="mb-1"><span class="font-semibold">Estado:</span> Ficticio</p>
+        <p><span class="font-semibold">Ocupación:</span> Ama de casa</p>
+      </div>
+    </div>
+  </div>
+  
+</div>
+
+
+
+
+
+
+
+
+
+      <div id="personajes" class="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-6 p-6"></div>
+    </div>
     <script type="module" src="/src/main.ts"></script>
   </body>
 </html>
