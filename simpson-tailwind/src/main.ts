@@ -11,11 +11,13 @@ interface Personaje {
 let todosLosPersonajes: Personaje[] = [];
 
 // 🔧 Renderiza las tarjetas
-function renderPersonajes(personajes: Personaje[]) {
+function renderPersonajes(personajes: Personaje[], reset: boolean = false) {
   const contenedor = document.getElementById('contenedor');
   if (!contenedor) return;
 
-  contenedor.innerHTML = '';
+  if (reset) {
+    contenedor.innerHTML = ''; // solo si lo pedimos
+  }
 
   personajes.forEach(personaje => {
     const div = document.createElement('div');
@@ -39,6 +41,14 @@ function renderPersonajes(personajes: Personaje[]) {
       mostrarModal(personaje);
     });
 
+    const audio = document.getElementById('dohAudio') as HTMLAudioElement;
+    div.addEventListener('click', () => {
+      if (audio) {
+        audio.currentTime = 0;
+        audio.play().catch(() => {});
+      }
+    });
+
     contenedor.appendChild(div);
   });
 }
@@ -50,7 +60,9 @@ async function mostrarPersonajesPorPaginas() {
   try {
     const res = await fetch(`https://apisimpsons.fly.dev/api/personajes?limit=100&page=1`);
     const data = await res.json();
-    renderPersonajes(data.docs);
+
+    // 👉 Primera tanda: limpiar antes de mostrar
+    renderPersonajes(data.docs, true);
     sonidoAlHoverDeBounce();
     todosLosPersonajes = data.docs;
 
@@ -59,8 +71,10 @@ async function mostrarPersonajesPorPaginas() {
     for (let p = 2; p <= totalPaginas; p++) {
       const resPagina = await fetch(`https://apisimpsons.fly.dev/api/personajes?limit=100&page=${p}`);
       const dataPagina = await resPagina.json();
+
+      // 👉 Agregar más personajes sin limpiar
       todosLosPersonajes = todosLosPersonajes.concat(dataPagina.docs);
-      renderPersonajes(dataPagina.docs);
+      renderPersonajes(dataPagina.docs); // reset = false por defecto
       sonidoAlHoverDeBounce();
     }
 
