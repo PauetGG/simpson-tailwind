@@ -15,9 +15,21 @@
       </a>
     </header>
   
+    <div class="flex gap-4 my-4" id="filtros">
+      <button data-genero="Masculino" class="filtro-genero px-4 py-2 bg-yellow-400 rounded">Masculino</button>
+      <button data-genero="Femenino" class="filtro-genero px-4 py-2 bg-yellow-400 rounded">Femenino</button>
+    
+      <button data-estado="Vivo" class="filtro-estado px-4 py-2 bg-green-400 rounded">Vivo</button>
+      <button data-estado="Muerto" class="filtro-estado px-4 py-2 bg-red-400 rounded">Muerto</button>
+      <button data-estado="Fallecido" class="filtro-estado px-4 py-2 bg-red-600 rounded">Fallecido</button>
+      <button data-estado="Desconocido" class="filtro-estado px-4 py-2 bg-gray-400 rounded">Desconocido</button>
+      <button id="limpiarFiltros" class="px-4 py-2 bg-blue-500 text-white rounded">Limpiar Filtros</button>
+
+    </div>
+
     <div class="relative mx-auto max-w-md">
       <input 
-        type="text" 
+        type="text" id="buscador"
         placeholder="Buscar..." 
         class="w-full py-2 px-4 pr-10 rounded-full border border-gray-300 focus:outline-none focus:ring-2 focus:ring-yellow-400 focus:border-transparent"
       >
