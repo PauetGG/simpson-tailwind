@@ -29,9 +29,9 @@ function renderPersonajes(personajes: Personaje[], reset: boolean = false) {
           <h3 style="font-family: 'Rock Salt'; font-weight: bold;" class="text-lg text-center mb-3">${personaje.Nombre}</h3>
           <img style="object-fit: contain" src="${personaje.Imagen}" alt="${personaje.Nombre}" class="w-32 h-64 mx-auto object-contain bounce-simpson-hover">
           <div class="mt-4 text-sm text-gray-600">
-            <p class="mb-1"><span class="font-semibold">Género:</span> ${personaje.Genero}</p>
-            <p class="mb-1"><span class="font-semibold">Estado:</span> ${personaje.Estado}</p>
-            <p><span class="font-semibold">Ocupación:</span> ${personaje.Ocupacion}</p>
+            <p class="mb-1"><span style="font-family: 'Rock Salt'; font-weight: bold;" class="font-semibold">Género:</span> ${personaje.Genero}</p>
+            <p class="mb-1"><span style="font-family: 'Rock Salt'; font-weight: bold;" class="font-semibold">Estado:</span> ${personaje.Estado}</p>
+            <p><span style="font-family: 'Rock Salt'; font-weight: bold;" class="font-semibold">Ocupación:</span> ${personaje.Ocupacion}</p>
           </div>
         </div>
       </div>
