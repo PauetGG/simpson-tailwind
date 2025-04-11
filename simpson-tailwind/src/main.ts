@@ -8,10 +8,14 @@ interface Personaje {
   Ocupacion: string;
 }
 
+let todosLosPersonajes: Personaje[] = [];
+
 // 🔧 Función para renderizar un grupo de personajes
 function renderPersonajes(personajes: Personaje[]) {
   const contenedor = document.getElementById('contenedor');
   if (!contenedor) return;
+
+  contenedor.innerHTML = ''; // ⬅️ Limpia antes de renderizar
 
   personajes.forEach(personaje => {
     const div = document.createElement('div');
@@ -43,10 +47,13 @@ async function mostrarPersonajesPorPaginas() {
     // Primera llamada para saber cuántas páginas hay
     const res = await fetch(`https://apisimpsons.fly.dev/api/personajes?limit=100&page=1`);
     const data = await res.json();
-    renderPersonajes(data.docs); // renderizar primera página
+    todosLosPersonajes = data.docs;
 
-    const totalPaginas = data.totalPages;
+    renderPersonajes(todosLosPersonajes);
 
+    todosLosPersonajes = todosLosPersonajes.concat(dataPagina.docs);
+
+      renderPersonajes(dataPagina.docs); // Puedes comentar esta línea si quieres evitar render doble
     // Resto de las páginas
     for (let p = 2; p <= totalPaginas; p++) {
       const resPagina = await fetch(`https://apisimpsons.fly.dev/api/personajes?limit=100&page=${p}`);
