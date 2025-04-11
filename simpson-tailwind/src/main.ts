@@ -256,3 +256,72 @@ function mostrarModal(personaje: Personaje) {
 mostrarPersonajesPorPaginas();
 setupBotonAleatorio();
 
+
+
+
+
+
+
+
+
+class BackgroundToggler {
+  private toggleButton: HTMLButtonElement;
+  private container: HTMLElement;
+  private backgrounds: { url: string; buttonText: string }[];
+  private currentIndex: number;
+
+  constructor() {
+    this.toggleButton = document.getElementById('bgToggle') as HTMLButtonElement;
+    this.container = document.getElementById('backgroundContainer') as HTMLElement;
+    
+    this.backgrounds = [
+      { 
+        url: 'url("https://ia904506.us.archive.org/1/items/AfterDarkSimpsons/simpsons.png")',
+        buttonText: '🌅' 
+      },
+      { 
+        url: 'url("https://preview.redd.it/92uojpw8udf41.jpg?auto=webp&s=410fffa16a851319b19f195976654a030748647f")',
+        buttonText: '🌚' 
+      }
+    ];
+    
+    this.currentIndex = 0;
+    this.init();
+  }
+
+  private init(): void {
+    this.setBackground();
+    this.toggleButton.addEventListener('click', () => this.toggleBackground());
+  }
+
+  private toggleBackground(): void {
+    this.currentIndex = (this.currentIndex + 1) % this.backgrounds.length;
+    this.setBackground();
+  }
+
+  private setBackground(): void {
+    const { url, buttonText } = this.backgrounds[this.currentIndex];
+    
+    // Aplicar cambios con transición
+    this.container.style.opacity = '0';
+    
+    setTimeout(() => {
+      this.container.style.backgroundImage = url;
+      this.container.style.opacity = '1';
+      this.toggleButton.textContent = buttonText;
+      
+      // Cambiar clase de color del botón según el modo
+      if (this.currentIndex === 0) {
+        this.toggleButton.classList.remove('bg-yellow-500', 'text-yellow-600');
+        this.toggleButton.classList.add('bg-yellow-500', 'text-yellow-500');
+      } else {
+        this.toggleButton.classList.remove('bg-yellow-500', 'text-yellow-600');
+        this.toggleButton.classList.add('bg-yellow-500', 'text-yellow-500');
+      }
+    }, 300); // Coincide con la duración de la transición
+  }
+}
+
+document.addEventListener('DOMContentLoaded', () => {
+  new BackgroundToggler();
+});
