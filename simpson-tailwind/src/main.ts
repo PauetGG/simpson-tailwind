@@ -255,4 +255,3 @@ function mostrarModal(personaje: Personaje) {
 // 🔁 Ejecutar todo
 mostrarPersonajesPorPaginas();
 setupBotonAleatorio();
-
