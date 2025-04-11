@@ -20,7 +20,7 @@
       </a>
       <div class="relative">
         <input 
-          type="text" 
+          type="text" id="buscador"
           placeholder="Buscar..." 
           class="w-full py-2 px-4 pr-10 rounded-full border border-gray-300 focus:outline-none focus:ring-2 focus:ring-yellow-400 focus:border-transparent"
         >
@@ -32,16 +32,6 @@
       </div>
     </header>
   
-    <div class="flex gap-4 my-4" id="filtros">
-      <button data-genero="Masculino" class="filtro-genero px-4 py-2 bg-yellow-400 rounded">Masculino</button>
-      <button data-genero="Femenino" class="filtro-genero px-4 py-2 bg-yellow-400 rounded">Femenino</button>
-    
-      <button data-estado="Vivo" class="filtro-estado px-4 py-2 bg-green-400 rounded">Vivo</button>
-      <button data-estado="Muerto" class="filtro-estado px-4 py-2 bg-red-400 rounded">Muerto</button>
-      <button data-estado="Fallecido" class="filtro-estado px-4 py-2 bg-red-600 rounded">Fallecido</button>
-      <button data-estado="Desconocido" class="filtro-estado px-4 py-2 bg-gray-400 rounded">Desconocido</button>
-      <button id="limpiarFiltros" class="px-4 py-2 bg-blue-500 text-white rounded">Limpiar Filtros</button>
-
     <div class="flex gap-4 my-4 justify-center" id="filtros">
       <button data-genero="Masculino" class="filtro-genero px-4 py-2 bg-yellow-400 rounded">Masculino</button>
       <button data-genero="Femenino" class="filtro-genero px-4 py-2 bg-yellow-400 rounded">Femenino</button>
@@ -53,21 +43,8 @@
       <button id="limpiarFiltros" class="px-4 py-2 bg-blue-500 text-white rounded">Limpiar Filtros</button>
     </div>
 
-    
-    </div>
 
-    <div class="relative mx-auto max-w-md">
-      <input 
-        type="text" id="buscador"
-        placeholder="Buscar..." 
-        class="w-full py-2 px-4 pr-10 rounded-full border border-gray-300 focus:outline-none focus:ring-2 focus:ring-yellow-400 focus:border-transparent"
-      >
-      <button class="absolute right-3 top-2 text-gray-500 hover:text-yellow-600">
-        <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-          <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z" />
-        </svg>
-      </button>
-    </div>
+ 
 
     <div id="randomContainer" class="fixed top-0 left-0 w-full h-full backdrop-blur bg-opacity-80 flex items-center justify-center z-50 hidden"></div>
 
