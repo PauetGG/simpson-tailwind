@@ -17,17 +17,17 @@ function renderPersonajes(personajes: Personaje[]) {
   const contenedor = document.getElementById('contenedor');
   if (!contenedor) return;
 
-  contenedor.innerHTML = ''; // ⬅️ Limpia antes de renderizar
+  contenedor.innerHTML = ''; // Limpia antes de renderizar
 
   personajes.forEach(personaje => {
     const div = document.createElement('div');
-    div.className = 'personaje';
+    div.className = 'personaje cursor-pointer';
 
     div.innerHTML = `
       <div class="border-4 border-black border-solid rounded-xl">
         <div class="w-62 h-[450px] bg-white rounded-lg shadow-md border-gray-200 p-2">
           <h3 style="font-family: 'Rock Salt'; font-weight: bold;" class="text-lg text-center mb-3">${personaje.Nombre}</h3>
-          <img style="object-fit: contain" src="${personaje.Imagen}" alt="${personaje.Nombre}" class="w-32 h-64 mx-auto object-cover">
+          <img style="object-fit: contain" src="${personaje.Imagen}" alt="${personaje.Nombre}" class="w-32 h-64 mx-auto object-contain">
           <div class="mt-4 text-sm text-gray-600">
             <p class="mb-1"><span class="font-semibold">Género:</span> ${personaje.Genero}</p>
             <p class="mb-1"><span class="font-semibold">Estado:</span> ${personaje.Estado}</p>
@@ -37,9 +37,15 @@ function renderPersonajes(personajes: Personaje[]) {
       </div>
     `;
 
+    // 👉 Mostrar modal al hacer clic en una card
+    div.addEventListener('click', () => {
+      mostrarModal(personaje);
+    });
+
     contenedor.appendChild(div);
   });
 }
+
 
 // 🔁 Obtener personajes y renderizar por página
 
@@ -213,7 +219,40 @@ async function obtenerTodosLosPersonajes(): Promise<Personaje[]> {
     return [];
   }
 }
+function mostrarModal(personaje: Personaje) {
+  const randomContainer = document.getElementById('randomContainer');
+  if (!randomContainer) return;
+
+  // Mostramos el modal
+  randomContainer.classList.remove('hidden');
+
+  // Renderizamos el contenido
+  randomContainer.innerHTML = `
+    <div class="bg-yellow-100 rounded-xl border-4 border-black p-6 w-80 h-[450px] relative shadow-lg text-center z-[60]">
+      <button class="cerrarModal absolute top-2 right-2 text-black font-bold text-lg cursor-pointer">✖</button>
+      <h2 class="text-xl font-bold mb-3" style="font-family: 'Rock Salt';">${personaje.Nombre}</h2>
+      <img src="${personaje.Imagen}" alt="${personaje.Nombre}" class="w-40 h-64 object-contain mx-auto rounded mb-3" />
+      <div class="text-sm text-gray-700 text-left">
+        <p><strong>Género:</strong> ${personaje.Genero}</p>
+        <p><strong>Estado:</strong> ${personaje.Estado}</p>
+        <p><strong>Ocupación:</strong> ${personaje.Ocupacion}</p>
+      </div>
+    </div>
+  `;
+
+  // Esperamos un poco para asegurarnos de que el botón ya está en el DOM
+  setTimeout(() => {
+    const cerrarBtn = document.querySelector('.cerrarModal');
+    cerrarBtn?.addEventListener('click', () => {
+      randomContainer.classList.add('hidden');
+      randomContainer.innerHTML = '';
+    });
+  }, 0);
+}
+
+
 
 // 🔁 Ejecutar todo
 mostrarPersonajesPorPaginas();
 setupBotonAleatorio();
+
