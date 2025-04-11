@@ -58,12 +58,12 @@ function renderPersonajes(personajes: Personaje[], reset: boolean = false) {
 async function mostrarPersonajesPorPaginas() {
   const contenedor = document.getElementById('contenedor');
   if (!contenedor) return;
+
   try {
     const res = await fetch(`https://apisimpsons.fly.dev/api/personajes?limit=100&page=1`);
     const data = await res.json();
 
-    // 👉 Primera tanda: limpiar antes de mostrar
-    renderPersonajes(data.docs, true);
+    renderPersonajes(data.docs, true); // 👉 Primera tanda limpia
     sonidoAlHoverDeBounce();
     todosLosPersonajes = data.docs;
 
@@ -72,13 +72,14 @@ async function mostrarPersonajesPorPaginas() {
     for (let p = 2; p <= totalPaginas; p++) {
       const resPagina = await fetch(`https://apisimpsons.fly.dev/api/personajes?limit=100&page=${p}`);
       const dataPagina = await resPagina.json();
-    
+
+      // 👉 Añadir progresivamente
       todosLosPersonajes = todosLosPersonajes.concat(dataPagina.docs);
-      renderPersonajes(dataPagina.docs); // 🔁 seguir renderizando
+      renderPersonajes(dataPagina.docs); // ❗️ NO limpiar
       sonidoAlHoverDeBounce();
-    
-      // 👇 Forzar un pequeño retraso para dar tiempo al render
-      await new Promise(resolve => setTimeout(resolve, 100));
+
+      // 🕒 Esperar un poquito para que el navegador repinte
+      await new Promise(resolve => setTimeout(resolve, 200)); // Podés ajustar el tiempo
     }
 
   } catch (error) {
@@ -86,6 +87,7 @@ async function mostrarPersonajesPorPaginas() {
     contenedor.innerHTML = 'Error al cargar personajes.';
   }
 }
+
 
 
 const inputBuscador = document.getElementById('buscador') as HTMLInputElement;
