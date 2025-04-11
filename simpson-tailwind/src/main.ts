@@ -1,4 +1,3 @@
-
 interface Personaje {
   _id: string;
   Nombre: string;
@@ -7,17 +6,16 @@ interface Personaje {
   Genero: string;
   Estado: string;
   Ocupacion: string;
-  
 }
+
 let todosLosPersonajes: Personaje[] = [];
 
-
-// 🔧 Función para renderizar un grupo de personajes (grid)
+// 🔧 Renderiza las tarjetas
 function renderPersonajes(personajes: Personaje[]) {
   const contenedor = document.getElementById('contenedor');
   if (!contenedor) return;
 
-  contenedor.innerHTML = ''; // Limpia antes de renderizar
+  contenedor.innerHTML = '';
 
   personajes.forEach(personaje => {
     const div = document.createElement('div');
@@ -37,7 +35,6 @@ function renderPersonajes(personajes: Personaje[]) {
       </div>
     `;
 
-    // 👉 Mostrar modal al hacer clic en una card
     div.addEventListener('click', () => {
       mostrarModal(personaje);
     });
@@ -46,11 +43,7 @@ function renderPersonajes(personajes: Personaje[]) {
   });
 }
 
-
-// 🔁 Obtener personajes y renderizar por página
-
-
-// 🔁 Obtener personajes y renderizar por cada página
+// 🔁 Carga por páginas
 async function mostrarPersonajesPorPaginas() {
   const contenedor = document.getElementById('contenedor');
   if (!contenedor) return;
@@ -58,8 +51,8 @@ async function mostrarPersonajesPorPaginas() {
     const res = await fetch(`https://apisimpsons.fly.dev/api/personajes?limit=100&page=1`);
     const data = await res.json();
     renderPersonajes(data.docs);
+    sonidoAlHoverDeBounce();
     todosLosPersonajes = data.docs;
-    renderPersonajes(todosLosPersonajes);
 
     const totalPaginas = data.totalPages;
 
@@ -67,7 +60,8 @@ async function mostrarPersonajesPorPaginas() {
       const resPagina = await fetch(`https://apisimpsons.fly.dev/api/personajes?limit=100&page=${p}`);
       const dataPagina = await resPagina.json();
       todosLosPersonajes = todosLosPersonajes.concat(dataPagina.docs);
-      renderPersonajes(dataPagina.docs); // Puedes comentar esta línea si quieres evitar render doble
+      renderPersonajes(dataPagina.docs);
+      sonidoAlHoverDeBounce();
     }
 
   } catch (error) {
@@ -75,27 +69,18 @@ async function mostrarPersonajesPorPaginas() {
     contenedor.innerHTML = 'Error al cargar personajes.';
   }
 }
+
 const inputBuscador = document.getElementById('buscador') as HTMLInputElement;
 
-inputBuscador.addEventListener('input', () => {
-  const texto = inputBuscador.value.toLowerCase();
-  const filtrados = todosLosPersonajes.filter(p =>
-    p.Nombre.toLowerCase().startsWith(texto)
-  );
-  renderPersonajes(filtrados);
-});
+inputBuscador.addEventListener('input', aplicarFiltrosYBuscar);
 
-let filtrosSeleccionados: {
-  genero: Set<string>;
-  estado: Set<string>;
-} = {
-  genero: new Set(),
-  estado: new Set()
+let filtrosSeleccionados = {
+  genero: new Set<string>(),
+  estado: new Set<string>()
 };
 
 function aplicarFiltrosYBuscar() {
   const texto = inputBuscador.value.toLowerCase();
-
   const filtrados = todosLosPersonajes.filter(p => {
     const coincideNombre = p.Nombre.toLowerCase().startsWith(texto);
     const coincideGenero = filtrosSeleccionados.genero.size === 0 || filtrosSeleccionados.genero.has(p.Genero);
@@ -104,9 +89,10 @@ function aplicarFiltrosYBuscar() {
   });
 
   renderPersonajes(filtrados);
+  sonidoAlHoverDeBounce();
 }
 
-// 👇 Eventos para filtros de género
+// Filtros género
 document.querySelectorAll('.filtro-genero').forEach(btn => {
   btn.addEventListener('click', () => {
     const genero = btn.getAttribute('data-genero');
@@ -124,7 +110,7 @@ document.querySelectorAll('.filtro-genero').forEach(btn => {
   });
 });
 
-// 👇 Eventos para filtros de estado
+// Filtros estado
 document.querySelectorAll('.filtro-estado').forEach(btn => {
   btn.addEventListener('click', () => {
     const estado = btn.getAttribute('data-estado');
@@ -142,35 +128,30 @@ document.querySelectorAll('.filtro-estado').forEach(btn => {
   });
 });
 
-// 👇 Buscador
-inputBuscador.addEventListener('input', aplicarFiltrosYBuscar);
-
-// 👇 Limpiar filtros
+// Limpiar filtros
 document.getElementById('limpiarFiltros')?.addEventListener('click', () => {
   filtrosSeleccionados = { genero: new Set(), estado: new Set() };
   inputBuscador.value = '';
-  
+
   document.querySelectorAll('.filtro-genero, .filtro-estado').forEach(btn => {
     btn.classList.remove('ring', 'ring-2');
   });
 
   renderPersonajes(todosLosPersonajes);
+  sonidoAlHoverDeBounce();
 });
 
-// 🔄 Mostrar personaje aleatorio centrado
+// 🔄 Botón aleatorio
 async function setupBotonAleatorio() {
   const personajes = await obtenerTodosLosPersonajes();
   const boton = document.getElementById('randomButton');
   const randomContainer = document.getElementById('randomContainer');
 
-  if (!boton || !randomContainer) {
-    console.error('❌ No se encontró el botón o contenedor del personaje aleatorio');
-    return;
-  }
+  if (!boton || !randomContainer) return;
 
   boton.addEventListener('click', () => {
     const aleatorio = personajes[Math.floor(Math.random() * personajes.length)];
-  
+
     randomContainer.innerHTML = `
       <div class="bg-yellow-100 rounded-xl border-4 border-black p-6 w-80 h-[450px] relative shadow-lg text-center z-[60]">
         <button id="cerrarModal" class="absolute top-2 right-2 text-black font-bold text-lg cursor-pointer">✖</button>
@@ -183,20 +164,19 @@ async function setupBotonAleatorio() {
         </div>
       </div>
     `;
-  
-    // Mostrar el modal
+
     randomContainer.classList.remove('hidden');
-  
-    // Cerrar al apretar la X
-    const cerrarBtn = document.getElementById('cerrarModal');
-    cerrarBtn?.addEventListener('click', () => {
-      randomContainer.classList.add('hidden');
-      randomContainer.innerHTML = '';
-    });
-  });  
+
+    setTimeout(() => {
+      document.querySelector('#cerrarModal')?.addEventListener('click', () => {
+        randomContainer.classList.add('hidden');
+        randomContainer.innerHTML = '';
+      });
+      sonidoAlHoverDeBounce();
+    }, 0);
+  });
 }
 
-// 🔁 Obtener todos los personajes para el aleatorio
 async function obtenerTodosLosPersonajes(): Promise<Personaje[]> {
   const personajes: Personaje[] = [];
   let totalPaginas = 1;
@@ -219,14 +199,12 @@ async function obtenerTodosLosPersonajes(): Promise<Personaje[]> {
     return [];
   }
 }
+
 function mostrarModal(personaje: Personaje) {
   const randomContainer = document.getElementById('randomContainer');
   if (!randomContainer) return;
 
-  // Mostramos el modal
   randomContainer.classList.remove('hidden');
-
-  // Renderizamos el contenido
   randomContainer.innerHTML = `
     <div class="bg-yellow-100 rounded-xl border-4 border-black p-6 w-80 h-[450px] relative shadow-lg text-center z-[60]">
       <button class="cerrarModal absolute top-2 right-2 text-black font-bold text-lg cursor-pointer">✖</button>
@@ -240,19 +218,55 @@ function mostrarModal(personaje: Personaje) {
     </div>
   `;
 
-  // Esperamos un poco para asegurarnos de que el botón ya está en el DOM
   setTimeout(() => {
-    const cerrarBtn = document.querySelector('.cerrarModal');
-    cerrarBtn?.addEventListener('click', () => {
+    document.querySelector('.cerrarModal')?.addEventListener('click', () => {
       randomContainer.classList.add('hidden');
       randomContainer.innerHTML = '';
     });
+
+    sonidoAlHoverDeBounce(); // ✅ ACTUALIZA los listeners después de que se creó el modal
   }, 0);
 }
 
+function sonidoAlHoverDeBounce() {
+  const audio = document.getElementById('boingAudio') as HTMLAudioElement;
+  const elementos = document.querySelectorAll('.bounce-simpson-hover');
 
+  elementos.forEach(el => {
+    el.addEventListener('mouseenter', () => {
+      if (audio) {
+        audio.currentTime = 0;
+        audio.play().then(() => {
+        }).catch(err => {
+          console.warn('❌ Error al reproducir el audio:', err);
+        });
+      }
+    });
+  });
+}
+function reproducirDohConCursor() {
+  const audio = document.getElementById('dohAudio') as HTMLAudioElement;
+  if (audio) {
+    audio.currentTime = 0;
+    audio.play().catch(err => {
+      console.warn('❌ Error al reproducir DOH:', err);
+    });
+  }
 
-// 🔁 Ejecutar todo
+  // 🖱️ Cambiar cursor
+  document.body.classList.add('custom-cursor');
+
+  // ⏳ Volver al cursor normal después de 1 segundo
+  setTimeout(() => {
+    document.body.classList.remove('custom-cursor');
+  }, 600);
+}
+
+// 🎯 Activar en todos los clics
+document.addEventListener('click', () => {
+  reproducirDohConCursor();
+});
+
+// 🚀 Ejecutar todo
 mostrarPersonajesPorPaginas();
 setupBotonAleatorio();
-
