@@ -10,26 +10,32 @@
   </head>
   <body id="backgroundContainer" class="bg-[url('https://ia904506.us.archive.org/1/items/AfterDarkSimpsons/simpsons.png')] bg-cover bg-center bg-no-repeat bg-fixed min-h-screen h-screen bg-blue-300">
     <header class="flex justify-between items-center p-8 w-full">
-      <!-- Botón random alineado a la izquierda -->
-       <div>
-        <div>
-      <button id="randomButton" class="rounded-full p-4 bg-yellow-500 text-black font-bold py-2 px-4 border-b-4 border-yellow-600 hover:border-b-1 rounded-full">
-        <img src="https://upload.wikimedia.org/wikipedia/commons/7/70/Random_font_awesome.svg" 
-              alt="Random icon" 
-              class="w-6 h-6" />
-      </button>
-    </div>
-    <div>
-      <button id="bgToggle" class="mt-4 bg-yellow-500 text-white font-bold py-2 px-4 border-b-4 border-yellow-600 hover:border-b-1 rounded-full">
-        ☀️ / 🌃
-      </button>
-    </div>
-    </div>
-
+      <!-- Contenedor de botones a la izquierda -->
+      <div class="flex items-center gap-4">
+        <!-- Botón Random -->
+        <button id="randomButton" class="rounded-full p-4 bg-yellow-500 text-black font-bold border-b-4 border-yellow-600 hover:border-b-1">
+          <img src="https://upload.wikimedia.org/wikipedia/commons/7/70/Random_font_awesome.svg" 
+                alt="Random icon" 
+                class="w-6 h-6" />
+        </button>
+    
+        <!-- Botón Piano -->
+        <button id="pianoButton" class="rounded-full p-4 bg-yellow-500 text-black font-bold border-b-4 border-yellow-600 hover:border-b-1">
+          🎹 Piano
+        </button>
+    
+        <!-- Botón Día/Noche -->
+        <button id="bgToggle" class="bg-yellow-500 text-white font-bold py-2 px-4 border-b-4 border-yellow-600 hover:border-b-1 rounded-full">
+          ☀️ / 🌃
+        </button>
+      </div>
+    
+      <!-- Logo central -->
       <a href="index.html" class="flex justify-center ml-45">
         <img class="h-[25vh]" src="https://upload.wikimedia.org/wikipedia/commons/thumb/9/98/The_Simpsons_yellow_logo.svg/1600px-The_Simpsons_yellow_logo.svg.png" alt="">
       </a>
-
+    
+      <!-- Buscador -->
       <div class="relative">
         <input 
           type="text" id="buscador"
@@ -42,10 +48,8 @@
           </svg>
         </button>
       </div>
-
-
     </header>
-  
+    
     <div class="mb-8 flex gap-4 my-4 justify-center" id="filtros">
       <button data-genero="Masculino" class="filtro-genero bg-yellow-500 text-white font-bold py-2 px-4 border-b-4 border-yellow-600 hover:border-b-1 rounded-full">Masculino</button>
       <button data-genero="Femenino" class="filtro-genero bg-yellow-500 text-white font-bold py-2 px-4 border-b-4 border-yellow-600 hover:border-b-1 rounded-full">Femenino</button>
@@ -63,6 +67,9 @@
     <div id="contenedor"  class="flex flex-wrap gap-4 justify-center p-4"></div>
     
   </div>
-    <script type="module" src="/src/main.ts"></script>
+ 
+   <audio id="boingAudio" src="public/sounds/boing.mp3" preload="auto"></audio>
+   <audio id="dohAudio" src="public/sounds/doh.mp3" preload="auto"></audio>
+   <script type="module" src="/src/main.ts"></script>
   </body>
 </html>

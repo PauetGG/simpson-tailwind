@@ -1,12 +1,14 @@
 @import "tailwindcss";
 body {
-    cursor: url('../public/cursors/auto.png'), auto;
-  }
-  
-  button, a, [role="button"], .cursor-pointer {
-    cursor: url('../public/cursors/pointer.png'), pointer;
-  }
-  @keyframes bounceSimpson {
+    cursor: url('/cursors/auto.png'), auto;
+}  
+button, a, [role="button"], .cursor-pointer {
+    cursor: url('/cursors/pointer.png'), pointer;
+}
+body.custom-cursor {
+    cursor: url('/cursors/doh.png'), auto;
+}
+@keyframes bounceSimpson {
     0%   { transform: translateY(0); }
     20%  { transform: translateY(-20px); }
     40%  { transform: translateY(0); }
