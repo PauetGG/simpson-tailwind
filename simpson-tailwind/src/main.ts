@@ -27,7 +27,7 @@ function renderPersonajes(personajes: Personaje[]) {
       <div class="border-4 border-black border-solid rounded-xl">
         <div class="w-62 h-[450px] bg-white rounded-lg shadow-md border-gray-200 p-2">
           <h3 style="font-family: 'Rock Salt'; font-weight: bold;" class="text-lg text-center mb-3">${personaje.Nombre}</h3>
-          <img style="object-fit: contain" src="${personaje.Imagen}" alt="${personaje.Nombre}" class="w-32 h-64 mx-auto object-contain">
+          <img style="object-fit: contain" src="${personaje.Imagen}" alt="${personaje.Nombre}" class="w-32 h-64 mx-auto object-contain bounce-simpson-hover">
           <div class="mt-4 text-sm text-gray-600">
             <p class="mb-1"><span class="font-semibold">Género:</span> ${personaje.Genero}</p>
             <p class="mb-1"><span class="font-semibold">Estado:</span> ${personaje.Estado}</p>
@@ -175,7 +175,7 @@ async function setupBotonAleatorio() {
       <div class="bg-yellow-100 rounded-xl border-4 border-black p-6 w-80 h-[450px] relative shadow-lg text-center z-[60]">
         <button id="cerrarModal" class="absolute top-2 right-2 text-black font-bold text-lg cursor-pointer">✖</button>
         <h2 class="text-xl font-bold mb-3" style="font-family: 'Rock Salt';">${aleatorio.Nombre}</h2>
-        <img src="${aleatorio.Imagen}" alt="${aleatorio.Nombre}" class="w-40 h-64 object-contain mx-auto rounded mb-3" />
+        <img src="${aleatorio.Imagen}" alt="${aleatorio.Nombre}" class="w-40 h-64 object-contain mx-auto rounded mb-3 bounce-simpson-hover" />
         <div class="text-sm text-gray-700 text-left">
           <p><strong>Género:</strong> ${aleatorio.Genero}</p>
           <p><strong>Estado:</strong> ${aleatorio.Estado}</p>
@@ -231,7 +231,7 @@ function mostrarModal(personaje: Personaje) {
     <div class="bg-yellow-100 rounded-xl border-4 border-black p-6 w-80 h-[450px] relative shadow-lg text-center z-[60]">
       <button class="cerrarModal absolute top-2 right-2 text-black font-bold text-lg cursor-pointer">✖</button>
       <h2 class="text-xl font-bold mb-3" style="font-family: 'Rock Salt';">${personaje.Nombre}</h2>
-      <img src="${personaje.Imagen}" alt="${personaje.Nombre}" class="w-40 h-64 object-contain mx-auto rounded mb-3" />
+      <img src="${personaje.Imagen}" alt="${personaje.Nombre}" class="w-40 h-64 object-contain mx-auto rounded mb-3 bounce-simpson-hover" />
       <div class="text-sm text-gray-700 text-left">
         <p><strong>Género:</strong> ${personaje.Genero}</p>
         <p><strong>Estado:</strong> ${personaje.Estado}</p>
