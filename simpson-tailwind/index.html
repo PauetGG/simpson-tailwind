@@ -8,10 +8,10 @@
     <link href="./src/style.css" rel="stylesheet">
     <link href="https://fonts.googleapis.com/css2?family=Rock+Salt&display=swap" rel="stylesheet">
   </head>
-  <body class="bg-[url('https://preview.redd.it/92uojpw8udf41.jpg?auto=webp&s=410fffa16a851319b19f195976654a030748647f')] bg-cover bg-center bg-no-repeat bg-fixed min-h-screen h-screen bg-blue-300">
+  <body class="bg-[url('https://ia904506.us.archive.org/1/items/AfterDarkSimpsons/simpsons.png')] bg-cover bg-center bg-no-repeat bg-fixed min-h-screen h-screen bg-blue-300">
     <header class="flex justify-between items-center p-8 w-full">
       <!-- Botón random alineado a la izquierda -->
-      <button id="randomButton" class="rounded-full p-4 bg-blue-500 hover:bg-blue-600 text-white shadow-md transition-colors duration-300">
+      <button id="randomButton" class="rounded-full p-4 bg-yellow-500 text-white font-bold py-2 px-4 border-b-4 border-yellow-600 hover:border-b-1 rounded-full">
         <img src="https://upload.wikimedia.org/wikipedia/commons/7/70/Random_font_awesome.svg" 
               alt="Random icon" 
               class="w-6 h-6" />
@@ -24,7 +24,7 @@
         <input 
           type="text" id="buscador"
           placeholder="Buscar..." 
-          class="w-full py-2 px-4 pr-10 rounded-full border border-gray-300 focus:outline-none focus:ring-2 focus:ring-yellow-400 focus:border-transparent"
+          class="w-full py-2 px-4 pr-10 text-white rounded-full border border-gray-300 focus:outline-none focus:ring-2 focus:ring-yellow-400 focus:border-transparent"
         >
         <button class="absolute right-3 top-2 text-gray-500 hover:text-yellow-600">
           <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
@@ -34,7 +34,7 @@
       </div>
     </header>
   
-    <div class="flex gap-4 my-4 justify-center" id="filtros">
+    <div class="mb-8 flex gap-4 my-4 justify-center" id="filtros">
       <button data-genero="Masculino" class="filtro-genero bg-yellow-500 text-white font-bold py-2 px-4 border-b-4 border-yellow-600 hover:border-b-1 rounded-full">Masculino</button>
       <button data-genero="Femenino" class="filtro-genero bg-yellow-500 text-white font-bold py-2 px-4 border-b-4 border-yellow-600 hover:border-b-1 rounded-full">Femenino</button>
       <button data-estado="Vivo" class="filtro-estado bg-green-500 text-white font-bold py-2 px-4 border-b-4 border-green-600 hover:border-b-1 rounded-full">Vivo</button>
