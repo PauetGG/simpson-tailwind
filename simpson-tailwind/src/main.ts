@@ -17,7 +17,7 @@ function renderPersonajes(personajes: Personaje[]) {
 
   contenedor.innerHTML = '';
 
-  personajes.forEach(personaje => {
+  personajes.forEach(personaje => { 
     const div = document.createElement('div');
     div.className = 'personaje cursor-pointer';
 
@@ -47,6 +47,7 @@ function renderPersonajes(personajes: Personaje[]) {
 async function mostrarPersonajesPorPaginas() {
   const contenedor = document.getElementById('contenedor');
   if (!contenedor) return;
+
   try {
     const res = await fetch(`https://apisimpsons.fly.dev/api/personajes?limit=100&page=1`);
     const data = await res.json();
