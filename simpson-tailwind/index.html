@@ -9,18 +9,19 @@
     <link href="https://fonts.googleapis.com/css2?family=Rock+Salt&display=swap" rel="stylesheet">
   </head>
   <body class="bg-[url('https://preview.redd.it/92uojpw8udf41.jpg?auto=webp&s=410fffa16a851319b19f195976654a030748647f')] bg-cover bg-center bg-no-repeat bg-fixed min-h-screen h-screen bg-blue-300">
-    <header class="flex justify-between items-center p-8">
+    <header class="flex justify-between items-center p-8 w-full">
+      <!-- Botón random alineado a la izquierda -->
       <button id="randomButton" class="rounded-full p-4 bg-blue-500 hover:bg-blue-600 text-white shadow-md transition-colors duration-300">
-  <img src="https://upload.wikimedia.org/wikipedia/commons/7/70/Random_font_awesome.svg" 
-       alt="Random icon" 
-       class="w-6 h-6" />
-</button>
-      <a href="index.html">
-        <img class="h-[25vh] justify-center" src="https://upload.wikimedia.org/wikipedia/commons/thumb/9/98/The_Simpsons_yellow_logo.svg/1600px-The_Simpsons_yellow_logo.svg.png" alt="">
+        <img src="https://upload.wikimedia.org/wikipedia/commons/7/70/Random_font_awesome.svg" 
+              alt="Random icon" 
+              class="w-6 h-6" />
+      </button>
+      <a href="index.html" class="flex justify-center ml-45">
+        <img class="h-[25vh]" src="https://upload.wikimedia.org/wikipedia/commons/thumb/9/98/The_Simpsons_yellow_logo.svg/1600px-The_Simpsons_yellow_logo.svg.png" alt="">
       </a>
+
       <div class="relative">
         <input 
-          type="text" id="buscador"
           type="text" id="buscador"
           placeholder="Buscar..." 
           class="w-full py-2 px-4 pr-10 rounded-full border border-gray-300 focus:outline-none focus:ring-2 focus:ring-yellow-400 focus:border-transparent"
@@ -32,7 +33,6 @@
         </button>
       </div>
     </header>
-  
   
     <div class="flex gap-4 my-4 justify-center" id="filtros">
       <button data-genero="Masculino" class="filtro-genero px-4 py-2 bg-yellow-400 rounded">Masculino</button>
