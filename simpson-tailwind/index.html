@@ -11,27 +11,34 @@
   <body id="backgroundContainer" class="bg-[url('https://ia904506.us.archive.org/1/items/AfterDarkSimpsons/simpsons.png')] bg-cover bg-center bg-no-repeat bg-fixed min-h-screen h-screen bg-blue-300">
     <header class="flex justify-between items-center p-8 w-full">
       <!-- Contenedor de botones a la izquierda -->
-      <div class="flex items-center gap-4">
+      <div class="grid grid-cols-2 gap-4 place-items-center">
         <!-- Botón Random -->
         <button id="randomButton" class="rounded-full p-4 bg-yellow-500 text-black font-bold border-b-4 border-yellow-600 hover:border-b-1">
           <img src="https://upload.wikimedia.org/wikipedia/commons/7/70/Random_font_awesome.svg" 
                 alt="Random icon" 
                 class="w-6 h-6" />
         </button>
-    
+      
         <!-- Botón Piano -->
         <button id="pianoButton" class="rounded-full p-4 bg-yellow-500 text-black font-bold border-b-4 border-yellow-600 hover:border-b-1">
           🎹 Piano
         </button>
-    
         <!-- Botón Día/Noche -->
         <button id="bgToggle" class="bg-yellow-500 text-white font-bold py-2 px-4 border-b-4 border-yellow-600 hover:border-b-1 rounded-full">
           ☀️ / 🌃
         </button>
+      
+        <!-- Botón Quiz -->
+        <button id="quizButton" class="rounded-full p-4 bg-yellow-500 text-black font-bold border-b-4 border-yellow-600 hover:border-b-1">
+          ❓ Quiz
+        </button>
+      
+        
       </div>
+      
     
       <!-- Logo central -->
-      <a href="index.html" class="flex justify-center ">
+      <a href="index.html" class="flex justify-center">
         <img class="h-[25vh]" src="https://upload.wikimedia.org/wikipedia/commons/thumb/9/98/The_Simpsons_yellow_logo.svg/1600px-The_Simpsons_yellow_logo.svg.png" alt="">
       </a>
     
@@ -48,8 +55,7 @@
           </svg>
         </button>
       </div>
-    </header>
-    
+    </header>    
     <div class="mb-8 flex gap-4 my-4 justify-center" id="filtros">
       <button data-genero="Masculino" class="filtro-genero bg-yellow-500 text-white font-bold py-2 px-4 border-b-4 border-yellow-600 hover:border-b-1 rounded-full">Masculino</button>
       <button data-genero="Femenino" class="filtro-genero bg-yellow-500 text-white font-bold py-2 px-4 border-b-4 border-yellow-600 hover:border-b-1 rounded-full">Femenino</button>
@@ -57,19 +63,89 @@
       <button data-estado="Muerto" class="filtro-estado bg-red-500 text-white font-bold py-2 px-4 border-b-4 border-red-700 hover:border-b-1 rounded-full">Muerto</button>
       <button data-estado="Fallecido" class="filtro-estado bg-pink-700 text-white font-bold py-2 px-4 border-b-4 border-red-900 hover:border-b-1 rounded-full">Fallecido</button>
       <button data-estado="Desconocido" class="filtro-estado bg-gray-700 text-white font-bold py-2 px-4 border-b-4 border-gray-900 hover:border-b-1 rounded-full">Desconocido</button>
-      <button id="limpiarFiltros" class="bg-blue-400 text-white font-bold py-2 px-4 border-b-4 border-blue-600 hover:border-b-1 rounded-full">Limpiar Filtros</button>
+      <select id="selectorOcupacion" class="class=filtro-estado bg-blue-500 text-white font-bold py-2 px-4 border-b-4 border-blue-800 hover:border-b-1 rounded-full">
+        <option value="">Todas las ocupaciones</option>
+        <option value="Alumno">Alumnno</option>
+        <option value="Desempleado">Desempleado</option>
+        <option value="Profesor">Profesor</option> 
+        <option value="Superhéroe">Superhéroe</option> 
+        <option value="Mascota">Mascota</option>
+        <option value="Trabajador">Trabajador</option> 
+      </select>
+      <button id="limpiarFiltros" class="bg-gray-500 text-white font-bold py-2 px-4 border-b-4 border-gray-700 hover:border-b-1 rounded-full">Limpiar Filtros</button>
+    </div>
+    <div id="modalPiano" class="fixed top-0 left-0 w-full h-full backdrop-blur  bg-opacity-80 flex items-center justify-center z-50 hidden">
+      <div class="bg-yellow-200 p-6 rounded-xl shadow-lg border-4 border-black text-center relative w-[90%] max-w-[600px]">
+        <button id="cerrarPiano" class="absolute top-2 right-2 text-black text-lg font-bold cursor-pointer">✖</button>
+        <h2 class="text-2xl mb-4 font-bold font-rock-salt">Simpson Piano</h2>
+        <div class="relative h-52 w-full flex justify-center items-end">
+          <div id="teclado" class="flex relative z-10">
+            <div class="relative">
+              <button class="tecla tecla-blanca" data-sonido="notaC">A</button>
+              <button class="tecla tecla-negra absolute left-[35px] -top-[10px]" data-sonido="notaCs">W</button>
+            </div>
+            <div class="relative">
+              <button class="tecla tecla-blanca" data-sonido="notaD">S</button>
+              <button class="tecla tecla-negra absolute left-[35px] -top-[10px]" data-sonido="notaDs">E</button>
+            </div>
+            <div class="relative">
+              <button class="tecla tecla-blanca" data-sonido="notaE">D</button>
+            </div>
+            <div class="relative">
+              <button class="tecla tecla-blanca" data-sonido="notaF">F</button>
+              <button class="tecla tecla-negra absolute left-[35px] -top-[10px]" data-sonido="notaFs">T</button>
+            </div>
+            <div class="relative">
+              <button class="tecla tecla-blanca" data-sonido="notaG">G</button>
+              <button class="tecla tecla-negra absolute left-[35px] -top-[10px]" data-sonido="notaGs">Y</button>
+            </div>
+            <div class="relative">
+              <button class="tecla tecla-blanca" data-sonido="notaA">H</button>
+              <button class="tecla tecla-negra absolute left-[35px] -top-[10px]" data-sonido="notaAs">U</button>
+            </div>
+            <div class="relative">
+              <button class="tecla tecla-blanca" data-sonido="notaB">J</button>
+            </div>
+          </div>
+      </div>
+    </div>
+    </div>
+    <!-- Modal del Quiz -->
+    <div id="quizModal" class="fixed top-0 left-0 w-full h-full flex items-center justify-center backdrop-blur bg-opacity-60 z-50 hidden">
+      <div class="bg-yellow-100 rounded-xl shadow-lg border-4 border-black p-6 w-[90%] max-w-[500px] text-center relative">
+        <button id="cerrarQuiz" class="absolute top-2 right-2 text-black text-lg font-bold cursor-pointer">✖</button>
+        <h2 class="text-2xl font-bold mb-4 font-rock-salt">¿Quién hace este sonido?</h2>
+        <button id="playQuizSound" class="mb-4 px-6 py-2 bg-yellow-500 text-black font-bold rounded-full border-b-4 border-yellow-600 hover:border-b-2">
+          🔊 Reproducir sonido
+        </button>
+        <div id="quizOptions" class="flex flex-col gap-3 mt-4"></div>
+      </div>
     </div>
 
-
     <div id="randomContainer" class="fixed top-0 left-0 w-full h-full backdrop-blur bg-opacity-80 flex items-center justify-center z-50 hidden"></div>
-
-
     <div id="contenedor"  class="flex flex-wrap gap-4 justify-center p-4"></div>
-    
   </div>
- 
+  <audio id="homero1" src="/public/sounds/HYoink.mp3"></audio>
+  <audio id="bart1" src="/public/sounds/BYoink.mp3"></audio>
+  <audio id="marge1" src="/public/sounds/Marge.mp3"></audio>
+  <audio id="lisa1" src="/public/sounds/Lisa.mp3"></audio>
+  <audio id="apu1" src="/public/sounds/Apu.mp3"></audio>
+  <audio id="milhouse1" src="/public/sounds/Milhouse.mp3"></audio>
+  <audio id="krusty1" src="/public/sounds/Krusty.mp3"></audio>
+  <audio id="flanders1" src="/public/sounds/Flanders.mp3"></audio>
    <audio id="boingAudio" src="public/sounds/boing.mp3" preload="auto"></audio>
-   <audio id="dohAudio" src="public/sounds/doh.mp3" preload="auto"></audio>
+   <audio id="notaC" src="public/sounds/boing.mp3" preload="auto"></audio>
+   <audio id="notaD" src="public/sounds/doh.mp3" preload="auto"></audio>
+   <audio id="notaE" src="public/sounds/WooHoo.mp3" preload="auto"></audio>
+   <audio id="notaF" src="public/sounds/ShutUp.mp3" preload="auto"></audio>
+   <audio id="notaA" src="public/sounds/UhOh.mp3" preload="auto"></audio>
+   <audio id="notaB" src="public/sounds/Oh.mp3" preload="auto"></audio>
+   <audio id="notaCs" src="public/sounds/Haha.mp3" preload="auto"></audio>
+   <audio id="notaDs" src="public/sounds/BYoink.mp3" preload="auto"></audio>
+   <audio id="notaFs" src="public/sounds/HYoink.mp3" preload="auto"></audio>
+   <audio id="notaGs" src="public/sounds/Scream.mp3" preload="auto"></audio>
+   <audio id="notaAs" src="public/sounds/Scream2.mp3" preload="auto"></audio>
+   <audio id="notaG" src="public/sounds/NHaha.mp3" preload="auto"></audio>
    <script type="module" src="/src/main.ts"></script>
   </body>
 </html>

@@ -88,21 +88,26 @@ inputBuscador.addEventListener('input', aplicarFiltrosYBuscar);
 
 let filtrosSeleccionados = {
   genero: new Set<string>(),
-  estado: new Set<string>()
+  estado: new Set<string>(),
+  ocupacion: '' 
 };
+
 
 function aplicarFiltrosYBuscar() {
   const texto = inputBuscador.value.toLowerCase();
+  const filtroOcupacion = selectorOcupacion.value.toLowerCase();
   const filtrados = todosLosPersonajes.filter(p => {
     const coincideNombre = p.Nombre.toLowerCase().startsWith(texto);
     const coincideGenero = filtrosSeleccionados.genero.size === 0 || filtrosSeleccionados.genero.has(p.Genero);
     const coincideEstado = filtrosSeleccionados.estado.size === 0 || filtrosSeleccionados.estado.has(p.Estado);
-    return coincideNombre && coincideGenero && coincideEstado;
+    const coincideOcupacion = filtroOcupacion === '' || (p.Ocupacion && p.Ocupacion.toLowerCase().startsWith(filtroOcupacion));
+    return coincideNombre && coincideGenero && coincideEstado && coincideOcupacion;
   });
 
   renderPersonajes(filtrados);
   sonidoAlHoverDeBounce();
 }
+
 
 // Filtros género
 document.querySelectorAll('.filtro-genero').forEach(btn => {
@@ -142,8 +147,11 @@ document.querySelectorAll('.filtro-estado').forEach(btn => {
 
 // Limpiar filtros
 document.getElementById('limpiarFiltros')?.addEventListener('click', () => {
-  filtrosSeleccionados = { genero: new Set(), estado: new Set() };
+  filtrosSeleccionados = { genero: new Set(), estado: new Set(), ocupacion:''};
   inputBuscador.value = '';
+  selectorOcupacion.value = '';
+  filtrosSeleccionados.ocupacion = '';
+
 
   document.querySelectorAll('.filtro-genero, .filtro-estado').forEach(btn => {
     btn.classList.remove('ring', 'ring-2');
@@ -151,6 +159,7 @@ document.getElementById('limpiarFiltros')?.addEventListener('click', () => {
 
   renderPersonajes(todosLosPersonajes);
   sonidoAlHoverDeBounce();
+  
 });
 
 // 🔄 Botón aleatorio
@@ -188,6 +197,12 @@ async function setupBotonAleatorio() {
     }, 0);
   });
 }
+const selectorOcupacion = document.getElementById('selectorOcupacion') as HTMLSelectElement;
+
+selectorOcupacion.addEventListener('change', () => {
+  filtrosSeleccionados.ocupacion = selectorOcupacion.value;
+  aplicarFiltrosYBuscar();
+});
 
 async function obtenerTodosLosPersonajes(): Promise<Personaje[]> {
   const personajes: Personaje[] = [];
@@ -278,18 +293,159 @@ function reproducirDohConCursor() {
 document.addEventListener('click', () => {
   reproducirDohConCursor();
 });
+const teclaToSonido: { [key: string]: string } = {
+  a: 'notaC',
+  s: 'notaD',
+  d: 'notaE',
+  f: 'notaF',
+  g: 'notaG',
+  h: 'notaA',
+  j: 'notaB',
+  w: 'notaCs',
+  e: 'notaDs',
+  t: 'notaFs',
+  y: 'notaGs',
+  u: 'notaAs'
+};
+function setupModalPiano() {
+  const pianoModal = document.getElementById('modalPiano')!;
+  const abrirBtn = document.getElementById('pianoButton')!;
+  const cerrarBtn = document.getElementById('cerrarPiano')!;
+
+  abrirBtn.addEventListener('click', () => {
+    pianoModal.classList.remove('hidden');
+  });
+
+  cerrarBtn.addEventListener('click', () => {
+    pianoModal.classList.add('hidden');
+  });
+
+  document.querySelectorAll<HTMLButtonElement>('.tecla').forEach(tecla => {
+    tecla.addEventListener('click', () => {
+      const idSonido = tecla.dataset.sonido;
+      const audio = document.getElementById(idSonido!) as HTMLAudioElement;
+      if (audio) {
+        audio.currentTime = 0;
+        audio.play();
+      }
+    });
+  });
+  document.addEventListener('keydown', (e) => {
+    const modal = document.getElementById('modalPiano');
+    if (!modal || modal.classList.contains('hidden')) return;
+  
+    const letra = e.key.toLowerCase();
+    const sonidoId = teclaToSonido[letra];
+    if (!sonidoId) return;
+  
+    const audio = document.getElementById(sonidoId) as HTMLAudioElement;
+    if (audio) {
+      audio.currentTime = 0;
+      audio.play().catch(() => {});
+    }
+  
+    // 🔁 Encuentra la tecla visual correspondiente
+    const tecla = [...document.querySelectorAll('.tecla-blanca, .tecla-negra')]
+      .find(t => t instanceof HTMLButtonElement && t.dataset.sonido === sonidoId);
+  
+    if (tecla) {
+      tecla.classList.add('presionada');
+  
+      // Quitar la clase tras un corto delay (como un "rebote")
+      setTimeout(() => {
+        tecla.classList.remove('presionada');
+      }, 150);
+    }
+  });
+}
+function setupQuizModal() {
+  const quizButton = document.getElementById('quizButton')!;
+  const quizModal = document.getElementById('quizModal')!;
+  const cerrarQuiz = document.getElementById('cerrarQuiz')!;
+  const playQuizSound = document.getElementById('playQuizSound')!;
+  const quizOptions = document.getElementById('quizOptions')!;
+
+  const sonidos = [
+    { id: 'homero1', personaje: 'Homer' },
+    { id: 'bart1', personaje: 'Bart' },
+    { id: 'marge1', personaje: 'Marge' },
+    { id: 'lisa1', personaje: 'Lisa' },
+    { id: 'nelson1', personaje: 'Nelson'},
+    { id: 'flanders1', personaje: 'Flanders'},
+    { id: 'apu1', personaje: 'Apu'},
+    { id: 'milhouse1', personaje: 'Milhouse'},
+    { id: 'krusty1', personaje: 'Krusty el payaso'},
+  ];
+
+  let sonidoActual: { id: string, personaje: string } | null = null;
+
+  quizButton.addEventListener('click', () => {
+    quizModal.classList.remove('hidden');
+    iniciarQuiz();
+  });
+
+  cerrarQuiz.addEventListener('click', () => {
+    quizModal.classList.add('hidden');
+    sonidoActual = null;
+    quizOptions.innerHTML = '';
+  });
+
+  playQuizSound.addEventListener('click', () => {
+    if (sonidoActual) {
+      const audio = document.getElementById(sonidoActual.id) as HTMLAudioElement;
+      audio.currentTime = 0;
+      audio.play();
+    }
+  });
+
+  function iniciarQuiz() {
+    quizOptions.innerHTML = '';
+
+    // Elegir sonido aleatorio
+    const indexCorrecto = Math.floor(Math.random() * sonidos.length);
+    sonidoActual = sonidos[indexCorrecto];
+
+    // Mezclar opciones
+    const opciones = [sonidoActual.personaje];
+    while (opciones.length < 4) {
+      const candidato = sonidos[Math.floor(Math.random() * sonidos.length)].personaje;
+      if (!opciones.includes(candidato)) {
+        opciones.push(candidato);
+      }
+    }
+
+    // Mezclar el orden de las opciones
+    opciones.sort(() => Math.random() - 0.5);
+
+    opciones.forEach(opcion => {
+      const btn = document.createElement('button');
+      btn.textContent = opcion;
+      btn.className = 'bg-white text-black border-2 border-black rounded-full px-4 py-2 hover:bg-yellow-300 font-bold';
+      btn.addEventListener('click', () => {
+        if (opcion === sonidoActual!.personaje) {
+          btn.style.backgroundColor = 'rgb(74 222 128)';
+          setTimeout(() => {
+            iniciarQuiz(); // ✅ Solo avanza si acierta
+          }, 1000);
+        } else {
+          btn.style.backgroundColor = 'rgb(248 113 113)';
+          setTimeout(() => {
+            btn.classList.remove('bg-red-400'); // ❌ Permite seguir probando
+          }, 1000);
+        }
+      });
+      quizOptions.appendChild(btn);
+    });
+  }
+}
+
+
 
 // 🚀 Ejecutar todo
 mostrarPersonajesPorPaginas();
 setupBotonAleatorio();
-
-
-
-
-
-
-
-
+setupModalPiano();
+setupQuizModal();
 
 class BackgroundToggler {
   private toggleButton: HTMLButtonElement;
