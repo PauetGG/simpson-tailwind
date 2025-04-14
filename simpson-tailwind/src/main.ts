@@ -11,15 +11,13 @@ interface Personaje {
 let todosLosPersonajes: Personaje[] = [];
 
 // 🔧 Renderiza las tarjetas
-function renderPersonajes(personajes: Personaje[], reset: boolean = false) {
+function renderPersonajes(personajes: Personaje[]) {
   const contenedor = document.getElementById('contenedor');
   if (!contenedor) return;
 
-  if (reset) {
-    contenedor.innerHTML = ''; // solo si lo pedimos
-  }
+  contenedor.innerHTML = '';
 
-  personajes.forEach(personaje => {
+  personajes.forEach(personaje => { 
     const div = document.createElement('div');
     div.className = 'personaje cursor-pointer';
 
@@ -29,9 +27,9 @@ function renderPersonajes(personajes: Personaje[], reset: boolean = false) {
           <h3 style="font-family: 'Rock Salt'; font-weight: bold;" class="text-lg text-center mb-3">${personaje.Nombre}</h3>
           <img style="object-fit: contain" src="${personaje.Imagen}" alt="${personaje.Nombre}" class="w-32 h-64 mx-auto object-contain bounce-simpson-hover">
           <div class="mt-4 text-sm text-gray-600">
-            <p class="mb-1"><span style="font-family: 'Rock Salt'; font-weight: bold;" class="font-semibold">Género:</span> ${personaje.Genero}</p>
-            <p class="mb-1"><span style="font-family: 'Rock Salt'; font-weight: bold;" class="font-semibold">Estado:</span> ${personaje.Estado}</p>
-            <p><span style="font-family: 'Rock Salt'; font-weight: bold;" class="font-semibold">Ocupación:</span> ${personaje.Ocupacion}</p>
+            <p class="mb-1"><span class="font-semibold">Género:</span> ${personaje.Genero}</p>
+            <p class="mb-1"><span class="font-semibold">Estado:</span> ${personaje.Estado}</p>
+            <p><span class="font-semibold">Ocupación:</span> ${personaje.Ocupacion}</p>
           </div>
         </div>
       </div>
@@ -41,18 +39,9 @@ function renderPersonajes(personajes: Personaje[], reset: boolean = false) {
       mostrarModal(personaje);
     });
 
-    const audio = document.getElementById('dohAudio') as HTMLAudioElement;
-    div.addEventListener('click', () => {
-      if (audio) {
-        audio.currentTime = 0;
-        audio.play().catch(() => {});
-      }
-    });
-
     contenedor.appendChild(div);
   });
 }
-
 
 // 🔁 Carga por páginas
 async function mostrarPersonajesPorPaginas() {
@@ -62,8 +51,7 @@ async function mostrarPersonajesPorPaginas() {
   try {
     const res = await fetch(`https://apisimpsons.fly.dev/api/personajes?limit=100&page=1`);
     const data = await res.json();
-
-    renderPersonajes(data.docs, true); // 👉 Primera tanda limpia
+    renderPersonajes(data.docs);
     sonidoAlHoverDeBounce();
     todosLosPersonajes = data.docs;
 
@@ -72,14 +60,9 @@ async function mostrarPersonajesPorPaginas() {
     for (let p = 2; p <= totalPaginas; p++) {
       const resPagina = await fetch(`https://apisimpsons.fly.dev/api/personajes?limit=100&page=${p}`);
       const dataPagina = await resPagina.json();
-
-      // 👉 Añadir progresivamente
       todosLosPersonajes = todosLosPersonajes.concat(dataPagina.docs);
-      renderPersonajes(dataPagina.docs); // ❗️ NO limpiar
+      renderPersonajes(dataPagina.docs);
       sonidoAlHoverDeBounce();
-
-      // 🕒 Esperar un poquito para que el navegador repinte
-      await new Promise(resolve => setTimeout(resolve, 200)); // Podés ajustar el tiempo
     }
 
   } catch (error) {
@@ -87,8 +70,6 @@ async function mostrarPersonajesPorPaginas() {
     contenedor.innerHTML = 'Error al cargar personajes.';
   }
 }
-
-
 
 const inputBuscador = document.getElementById('buscador') as HTMLInputElement;
 
