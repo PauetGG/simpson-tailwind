@@ -105,7 +105,7 @@ function aplicarFiltrosYBuscar() {
     const estado = p.Estado?.toLowerCase().trim() || '';
     const ocupacion = p.Ocupacion?.toLowerCase().trim() || '';
 
-    const coincideNombre = nombre.startsWith(texto);
+    const coincideNombre = nombre.includes(texto);
     const coincideGenero = filtroGenero === '' || genero === filtroGenero;
     const coincideEstado = filtroEstado === '' || estado === filtroEstado;
     const coincideOcupacion = filtroOcupacion === '' || ocupacion.startsWith(filtroOcupacion);
@@ -288,24 +288,7 @@ function sonidoAlHoverDeBounce() {
     });
   });
 }
-function reproducirDohConCursor() {
-  const audio = document.getElementById('dohAudio') as HTMLAudioElement;
-  if (audio) {
-    audio.currentTime = 0;
-    audio.play().catch(err => {
-      console.warn('❌ Error al reproducir DOH:', err);
-    });
-  }
-  document.body.classList.add('custom-cursor');
-  setTimeout(() => {
-    document.body.classList.remove('custom-cursor');
-  }, 600);
-}
 
-// 🎯 Activar en todos los clics
-document.addEventListener('click', () => {
-  reproducirDohConCursor();
-});
 const teclaToSonido: { [key: string]: string } = {
   a: 'notaC',
   s: 'notaD',
@@ -388,9 +371,22 @@ function setupQuizModal() {
     { id: 'apu1', personaje: 'Apu'},
     { id: 'milhouse1', personaje: 'Milhouse'},
     { id: 'krusty1', personaje: 'Krusty el payaso'},
+    { id: 'barney1', personaje: 'Barney'},
+    { id: 'bob1', personaje: 'Bob'},
+    { id: 'burns1', personaje: 'Burns'},
+    { id: 'duff1', personaje: 'Duff'},
+    { id: 'edna1', personaje: 'Edna'},
+    { id: 'gorgory1', personaje: 'Gorgory'},
+    { id: 'maggie1', personaje: 'Maggie'},
+    { id: 'moe1', personaje: 'Moe'},
+    { id: 'otto1', personaje: 'Otto'},
+    { id: 'ralph1', personaje: 'Ralph'},
+    { id: 'skinner1', personaje: 'Skinner'},
+    { id: 'smithers1', personaje: 'Smithers'},
   ];
 
   let sonidoActual: { id: string, personaje: string } | null = null;
+  let ultimoSonidoIndex: number | null = null;
 
   quizButton.addEventListener('click', () => {
     quizModal.classList.remove('hidden');
@@ -413,46 +409,87 @@ function setupQuizModal() {
 
   function iniciarQuiz() {
     quizOptions.innerHTML = '';
+    quizOptions.className = 'grid grid-cols-2 gap-4 mt-4';
 
-    // Elegir sonido aleatorio
-    const indexCorrecto = Math.floor(Math.random() * sonidos.length);
+    // 🔊 Elegir un sonido aleatorio distinto al anterior
+    let indexCorrecto: number;
+    do {
+      indexCorrecto = Math.floor(Math.random() * sonidos.length);
+    } while (indexCorrecto === ultimoSonidoIndex && sonidos.length > 1);
+
+    ultimoSonidoIndex = indexCorrecto;
     sonidoActual = sonidos[indexCorrecto];
+    const nombreCorrecto = sonidoActual.personaje;
 
-    // Mezclar opciones
-    const opciones = [sonidoActual.personaje];
+    const opciones: any[] = [];
+
+    // ✅ Buscar personajes cuyo nombre contenga el del personaje del sonido
+    const coincidencias = todosLosPersonajes.filter(p =>
+      p.Nombre.toLowerCase().includes(nombreCorrecto.toLowerCase())
+    );
+
+    if (coincidencias.length === 0) {
+      console.warn(`❌ No se encontraron personajes que coincidan con "${nombreCorrecto}"`);
+      quizOptions.innerHTML = '<p class="text-red-500">No hay coincidencias para este personaje.</p>';
+      return;
+    }
+
+    // Elegir uno aleatorio de las coincidencias como opción correcta
+    const correcto = coincidencias[Math.floor(Math.random() * coincidencias.length)];
+    opciones.push(correcto);
+
+    // ❌ Personajes incorrectos = todos los que no están entre las coincidencias
+    const candidatos = todosLosPersonajes.filter(p =>
+      !coincidencias.includes(p)
+    );
+
     while (opciones.length < 4) {
-      const candidato = sonidos[Math.floor(Math.random() * sonidos.length)].personaje;
-      if (!opciones.includes(candidato)) {
-        opciones.push(candidato);
+      const random = candidatos[Math.floor(Math.random() * candidatos.length)];
+      if (!opciones.find(p => p.Nombre === random.Nombre)) {
+        opciones.push(random);
       }
     }
 
-    // Mezclar el orden de las opciones
+    // 🎲 Mezclar opciones
     opciones.sort(() => Math.random() - 0.5);
 
-    opciones.forEach(opcion => {
+    // 🧩 Crear botones de opciones
+    opciones.forEach(personaje => {
       const btn = document.createElement('button');
-      btn.textContent = opcion;
-      btn.className = 'bg-white text-black border-2 border-black rounded-full px-4 py-2 hover:bg-yellow-300 font-bold';
+      btn.className = 'flex flex-col items-center border-4 border-black rounded-xl p-2 bg-white hover:scale-105 transition-transform';
+      btn.style.backgroundColor = 'white';
+
+      const img = document.createElement('img');
+      img.src = personaje.Imagen;
+      img.alt = personaje.Nombre;
+      img.title = personaje.Nombre;
+      img.className = 'w-16 aspect-[1/2] object-contain mx-auto';
+      btn.appendChild(img);
+
+      const nombre = document.createElement('p');
+      nombre.textContent = personaje.Nombre;
+      nombre.className = 'mt-2 text-sm font-semibold text-center';
+      btn.appendChild(nombre);
+
       btn.addEventListener('click', () => {
-        if (opcion === sonidoActual!.personaje) {
-          btn.style.backgroundColor = 'rgb(74 222 128)';
+        const esCorrecto = personaje.Nombre === correcto.Nombre;
+        btn.style.backgroundColor = esCorrecto ? 'rgb(74 222 128)' : 'rgb(248 113 113)';
+
+        if (esCorrecto) {
           setTimeout(() => {
-            iniciarQuiz(); // ✅ Solo avanza si acierta
+            iniciarQuiz();
           }, 1000);
         } else {
-          btn.style.backgroundColor = 'rgb(248 113 113)';
           setTimeout(() => {
-            btn.classList.remove('bg-red-400'); // ❌ Permite seguir probando
+            btn.style.backgroundColor = 'white';
           }, 1000);
         }
       });
+
       quizOptions.appendChild(btn);
     });
   }
 }
-
-
 
 // 🚀 Ejecutar todo
 mostrarPersonajesPorPaginas();
