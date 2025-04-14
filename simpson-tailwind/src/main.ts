@@ -340,15 +340,6 @@ mostrarPersonajesPorPaginas();
 setupBotonAleatorio();
 setupModalPiano();
 
-
-
-
-
-
-
-
-
-
 class BackgroundToggler {
   private toggleButton: HTMLButtonElement;
   private container: HTMLElement;
