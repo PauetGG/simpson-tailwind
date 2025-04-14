@@ -5,9 +5,6 @@ body {
 button, a, [role="button"], .cursor-pointer {
     cursor: url('/cursors/pointer.png'), pointer;
 }
-body.custom-cursor {
-    cursor: url('/cursors/doh.png'), auto;
-}
 @keyframes bounceSimpson {
     0%   { transform: translateY(0); }
     20%  { transform: translateY(-20px); }
@@ -68,3 +65,6 @@ body.custom-cursor {
     transform: scale(0.97);
     box-shadow: none !important;
   }
+  #loadingIndicator.hidden {
+    display: none;
+}
