@@ -22,18 +22,29 @@ function renderPersonajes(personajes: Personaje[]) {
     div.className = 'personaje cursor-pointer';
 
     div.innerHTML = `
-      <div class="border-4 border-black border-solid rounded-xl">
-        <div class="w-62 h-[450px] bg-white rounded-lg shadow-md border-gray-200 p-2">
-          <h3 style="font-family: 'Rock Salt'; font-weight: bold;" class="text-lg text-center mb-3">${personaje.Nombre}</h3>
-          <img style="object-fit: contain" src="${personaje.Imagen}" alt="${personaje.Nombre}" class="w-32 h-64 mx-auto object-contain bounce-simpson-hover">
-          <div class="mt-4 text-sm text-gray-600">
-            <p class="mb-1"><span class="font-semibold">Género:</span> ${personaje.Genero}</p>
-            <p class="mb-1"><span class="font-semibold">Estado:</span> ${personaje.Estado}</p>
-            <p><span class="font-semibold">Ocupación:</span> ${personaje.Ocupacion}</p>
-          </div>
+    <div class="border-4 border-black border-solid rounded-xl">
+      <div class="w-62 h-[600px] bg-white rounded-lg shadow-md border-gray-200 p-2 flex flex-col border-b-4 border-r-4 border-gray-300">
+        <h3 style="font-family: 'Simpsonfont'; font-weight: bold;" class="text-lg text-center mb-3">${personaje.Nombre}</h3>
+        
+        <!-- Nuevo div contenedor para la imagen -->
+        <div class="rounded-lg p-2 mb-4 flex-grow flex items-center justify-center">
+          <img 
+            style="object-fit: contain" 
+            src="${personaje.Imagen}" 
+            alt="${personaje.Nombre}" 
+            class="w-32 h-64 mx-auto object-contain bounce-simpson-hover"
+          >
+        </div>
+        
+        <!-- Div gris (se mantiene abajo por flex-col) -->
+        <div class="h-[200px] text-sm text-gray-600 text-center bg-gray-200 rounded-lg p-2 border-b-4 border-l-4 border-gray-300 content-center">
+          <p class="mb-1"><span style="font-family: 'Simpsonfont';" class="font-semibold">Genero: <br> </span> ${personaje.Genero}</p>
+          <p class="mb-1"><span style="font-family: 'Simpsonfont';" class="font-semibold">Estado: <br> </span> ${personaje.Estado}</p>
+          <p><span style="font-family: 'Simpsonfont';" class="font-semibold">Ocupación: <br> </span> ${personaje.Ocupacion}</p>
         </div>
       </div>
-    `;
+    </div>
+  `;
 
     div.addEventListener('click', () => {
       mostrarModal(personaje);
