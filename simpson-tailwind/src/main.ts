@@ -11,6 +11,9 @@ interface Personaje {
 let todosLosPersonajes: Personaje[] = [];
 let filtroGenero: string = '';
 let filtroEstado: string = '';
+let offset = 0; // Para rastrear cuántos personajes se han cargado
+let isLoading = false; // Para evitar múltiples cargas simultáneas
+const batchSize = 20; // Número de personajes por lote
 
 // 🔧 Renderiza las tarjetas
 function renderPersonajes(personajes: Personaje[]) {
@@ -19,7 +22,8 @@ function renderPersonajes(personajes: Personaje[]) {
 
   contenedor.innerHTML = '';
 
-  personajes.forEach(personaje => { 
+  // Limitar a los primeros 20 personajes
+  personajes.slice(0, 20).forEach(personaje => {
     const div = document.createElement('div');
     div.className = 'personaje cursor-pointer';
 
@@ -117,28 +121,95 @@ function aplicarFiltrosYBuscar() {
   sonidoAlHoverDeBounce();
 }
 
+// Carga un lote de personajes con un retardo
+// Modificar cargarMasPersonajes para que permita añadir al contenedor existente
+async function cargarMasPersonajes(personajes: Personaje[]) {
+  if (isLoading) return; // Evita cargar si ya está en proceso
 
+  isLoading = true;
 
-// Filtros género
-document.querySelectorAll('.filtro-genero').forEach(btn => {
-  btn.addEventListener('click', () => {
-    const genero = btn.getAttribute('data-genero')?.toLowerCase().trim();
-    if (!genero) return;
+  // Verificar si ya existe el contenedor de carga
+  let loadingContainer = document.getElementById('loadingContainer') as HTMLDivElement;
+  if (!loadingContainer) {
+    // Crear el contenedor para el GIF y el texto
+    loadingContainer = document.createElement('div');
+    loadingContainer.id = 'loadingContainer';
+    loadingContainer.className = 'flex items-center justify-center space-x-4 mt-4';
 
-    // Quitar selección de todos
-    document.querySelectorAll('.filtro-genero').forEach(b => b.classList.remove('ring', 'ring-2'));
+    // Crear el GIF
+    const loadingGif = document.createElement('img');
+    loadingGif.src = 'https://media.giphy.com/media/lyBCBlxAI0bo4/giphy.gif';
+    loadingGif.alt = 'Cargando...';
+    loadingGif.style.width = '100px';
+    loadingGif.style.height = '100px';
+    loadingGif.id = 'loadingGif';
 
-    if (filtroGenero === genero) {
-      filtroGenero = ''; // desactivar
-    } else {
-      filtroGenero = genero;
-      btn.classList.add('ring', 'ring-2');
+    // Crear el texto
+    const loadingText = document.createElement('span');
+    loadingText.style="font-family: 'Simpsonfont'"
+    loadingText.textContent = 'Cargando Simpsons...';
+    loadingText.className = 'text-lg font-bold text-yellow-500';
+
+    // Agregar el GIF y el texto al contenedor
+    loadingContainer.appendChild(loadingGif);
+    loadingContainer.appendChild(loadingText);
+
+    // Agregar el contenedor al final del contenedor principal
+    const contenedor = document.getElementById('contenedor');
+    if (contenedor) {
+      contenedor.parentElement?.appendChild(loadingContainer);
     }
+  }
 
-    aplicarFiltrosYBuscar();
-  });
-});
+  // Mostrar el contenedor de carga
+  loadingContainer.style.display = 'flex';
 
+  // Simular retardo de carga
+  await new Promise(resolve => setTimeout(resolve, 2000));
+
+  // Cargar el siguiente lote
+  const siguienteLote = personajes.slice(offset, offset + batchSize);
+  const contenedor = document.getElementById('contenedor');
+  if (contenedor) {
+    siguienteLote.forEach(personaje => {
+      const div = document.createElement('div');
+      div.className = 'personaje cursor-pointer';
+
+      div.innerHTML = `
+        <div class="border-4 border-black border-solid rounded-xl">
+          <div class="w-62 h-[600px] bg-white rounded-lg shadow-md border-gray-200 p-2 flex flex-col border-b-4 border-r-4 border-gray-300">
+            <h3 style="font-family: 'Simpsonfont'; font-weight: bold;" class="text-lg text-center mb-3">${personaje.Nombre}</h3>
+            <div class="rounded-lg p-2 mb-4 flex-grow flex items-center justify-center">
+              <img 
+                style="object-fit: contain" 
+                src="${personaje.Imagen}" 
+                alt="${personaje.Nombre}" 
+                class="w-32 h-64 mx-auto object-contain bounce-simpson-hover"
+              >
+            </div>
+            <div class="h-[200px] text-sm text-gray-600 text-center bg-gray-200 rounded-lg p-2 border-b-4 border-l-4 border-gray-300 content-center">
+              <p class="mb-1"><span style="font-family: 'Simpsonfont';" class="font-semibold">Genero: <br> </span> ${personaje.Genero}</p>
+              <p class="mb-1"><span style="font-family: 'Simpsonfont';" class="font-semibold">Estado: <br> </span> ${personaje.Estado}</p>
+              <p><span style="font-family: 'Simpsonfont';" class="font-semibold">Ocupación: <br> </span> ${personaje.Ocupacion}</p>
+            </div>
+          </div>
+        </div>
+      `;
+
+      div.addEventListener('click', () => {
+        mostrarModal(personaje);
+      });
+
+      contenedor.appendChild(div);
+    });
+  }
+
+  // Ocultar el contenedor de carga
+  loadingContainer.style.display = 'none';
+
+  offset += batchSize; // Actualiza el offset
+  isLoading = false;
+}
 
 
 // Filtros estado
@@ -558,4 +629,17 @@ class BackgroundToggler {
 
 document.addEventListener('DOMContentLoaded', () => {
   new BackgroundToggler();
+});
+document.addEventListener('scroll', async () => {
+  const contenedor = document.getElementById('contenedor');
+  if (!contenedor) return;
+
+  // Detecta si el scroll está cerca del final del contenedor
+  const scrollTop = window.scrollY;
+  const windowHeight = window.innerHeight;
+  const contenedorHeight = contenedor.offsetHeight;
+
+  if (scrollTop + windowHeight >= contenedorHeight - 100 && !isLoading) {
+    await cargarMasPersonajes(todosLosPersonajes); // Carga 20 personajes más
+  }
 });
