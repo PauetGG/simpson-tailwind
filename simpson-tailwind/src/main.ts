@@ -355,10 +355,15 @@ function setupQuizModal() {
   const quizOptions = document.getElementById('quizOptions')!;
 
   const sonidos = [
-    { id: 'homero1', personaje: 'Homero' },
+    { id: 'homero1', personaje: 'Homer' },
     { id: 'bart1', personaje: 'Bart' },
     { id: 'marge1', personaje: 'Marge' },
     { id: 'lisa1', personaje: 'Lisa' },
+    { id: 'nelson1', personaje: 'Nelson'},
+    { id: 'flanders1', personaje: 'Flanders'},
+    { id: 'apu1', personaje: 'Apu'},
+    { id: 'milhouse1', personaje: 'Milhouse'},
+    { id: 'krusty1', personaje: 'Krusty el payaso'},
   ];
 
   let sonidoActual: { id: string, personaje: string } | null = null;
