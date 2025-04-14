@@ -40,6 +40,13 @@ body.custom-cursor {
     transition: transform 0.1s ease;
   }
   
+  @font-face {
+    font-family: 'Simpsonfont';  /* Nombre que usarás en Tailwind */
+    src: url('../public/fonts/Simpsonfont.otf') format('opentype');
+    font-weight: normal;
+    font-style: normal;
+    font-display: swap; /* Mejora la renderización mientras carga */
+  }
   .tecla-negra {
     width: 40px;
     height: 130px;
