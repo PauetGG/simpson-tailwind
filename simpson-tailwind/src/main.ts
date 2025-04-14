@@ -9,6 +9,8 @@ interface Personaje {
 }
 
 let todosLosPersonajes: Personaje[] = [];
+let filtroGenero: string = '';
+let filtroEstado: string = '';
 
 // 🔧 Renderiza las tarjetas
 function renderPersonajes(personajes: Personaje[]) {
@@ -83,13 +85,20 @@ let filtrosSeleccionados = {
 
 
 function aplicarFiltrosYBuscar() {
-  const texto = inputBuscador.value.toLowerCase();
-  const filtroOcupacion = selectorOcupacion.value.toLowerCase();
+  const texto = inputBuscador.value.toLowerCase().trim();
+  const filtroOcupacion = selectorOcupacion.value.toLowerCase().trim();
+
   const filtrados = todosLosPersonajes.filter(p => {
-    const coincideNombre = p.Nombre.toLowerCase().startsWith(texto);
-    const coincideGenero = filtrosSeleccionados.genero.size === 0 || filtrosSeleccionados.genero.has(p.Genero);
-    const coincideEstado = filtrosSeleccionados.estado.size === 0 || filtrosSeleccionados.estado.has(p.Estado);
-    const coincideOcupacion = filtroOcupacion === '' || (p.Ocupacion && p.Ocupacion.toLowerCase().startsWith(filtroOcupacion));
+    const nombre = p.Nombre?.toLowerCase().trim() || '';
+    const genero = p.Genero?.toLowerCase().trim() || '';
+    const estado = p.Estado?.toLowerCase().trim() || '';
+    const ocupacion = p.Ocupacion?.toLowerCase().trim() || '';
+
+    const coincideNombre = nombre.startsWith(texto);
+    const coincideGenero = filtroGenero === '' || genero === filtroGenero;
+    const coincideEstado = filtroEstado === '' || estado === filtroEstado;
+    const coincideOcupacion = filtroOcupacion === '' || ocupacion.startsWith(filtroOcupacion);
+
     return coincideNombre && coincideGenero && coincideEstado && coincideOcupacion;
   });
 
@@ -98,41 +107,49 @@ function aplicarFiltrosYBuscar() {
 }
 
 
+
 // Filtros género
 document.querySelectorAll('.filtro-genero').forEach(btn => {
   btn.addEventListener('click', () => {
-    const genero = btn.getAttribute('data-genero');
+    const genero = btn.getAttribute('data-genero')?.toLowerCase().trim();
     if (!genero) return;
 
-    if (filtrosSeleccionados.genero.has(genero)) {
-      filtrosSeleccionados.genero.delete(genero);
-      btn.classList.remove('ring', 'ring-2');
+    // Quitar selección de todos
+    document.querySelectorAll('.filtro-genero').forEach(b => b.classList.remove('ring', 'ring-2'));
+
+    if (filtroGenero === genero) {
+      filtroGenero = ''; // desactivar
     } else {
-      filtrosSeleccionados.genero.add(genero);
+      filtroGenero = genero;
       btn.classList.add('ring', 'ring-2');
     }
 
     aplicarFiltrosYBuscar();
   });
 });
+
+
 
 // Filtros estado
 document.querySelectorAll('.filtro-estado').forEach(btn => {
   btn.addEventListener('click', () => {
-    const estado = btn.getAttribute('data-estado');
+    const estado = btn.getAttribute('data-estado')?.toLowerCase().trim();
     if (!estado) return;
 
-    if (filtrosSeleccionados.estado.has(estado)) {
-      filtrosSeleccionados.estado.delete(estado);
-      btn.classList.remove('ring', 'ring-2');
+    document.querySelectorAll('.filtro-estado').forEach(b => b.classList.remove('ring', 'ring-2'));
+
+    if (filtroEstado === estado) {
+      filtroEstado = '';
     } else {
-      filtrosSeleccionados.estado.add(estado);
+      filtroEstado = estado;
       btn.classList.add('ring', 'ring-2');
     }
 
     aplicarFiltrosYBuscar();
   });
 });
+
+
 
 // Limpiar filtros
 document.getElementById('limpiarFiltros')?.addEventListener('click', () => {
@@ -268,11 +285,7 @@ function reproducirDohConCursor() {
       console.warn('❌ Error al reproducir DOH:', err);
     });
   }
-
-  // 🖱️ Cambiar cursor
   document.body.classList.add('custom-cursor');
-
-  // ⏳ Volver al cursor normal después de 1 segundo
   setTimeout(() => {
     document.body.classList.remove('custom-cursor');
   }, 600);
