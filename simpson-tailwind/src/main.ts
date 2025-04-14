@@ -77,21 +77,26 @@ inputBuscador.addEventListener('input', aplicarFiltrosYBuscar);
 
 let filtrosSeleccionados = {
   genero: new Set<string>(),
-  estado: new Set<string>()
+  estado: new Set<string>(),
+  ocupacion: '' 
 };
+
 
 function aplicarFiltrosYBuscar() {
   const texto = inputBuscador.value.toLowerCase();
+  const filtroOcupacion = selectorOcupacion.value.toLowerCase();
   const filtrados = todosLosPersonajes.filter(p => {
     const coincideNombre = p.Nombre.toLowerCase().startsWith(texto);
     const coincideGenero = filtrosSeleccionados.genero.size === 0 || filtrosSeleccionados.genero.has(p.Genero);
     const coincideEstado = filtrosSeleccionados.estado.size === 0 || filtrosSeleccionados.estado.has(p.Estado);
-    return coincideNombre && coincideGenero && coincideEstado;
+    const coincideOcupacion = filtroOcupacion === '' || (p.Ocupacion && p.Ocupacion.toLowerCase().startsWith(filtroOcupacion));
+    return coincideNombre && coincideGenero && coincideEstado && coincideOcupacion;
   });
 
   renderPersonajes(filtrados);
   sonidoAlHoverDeBounce();
 }
+
 
 // Filtros género
 document.querySelectorAll('.filtro-genero').forEach(btn => {
@@ -131,8 +136,11 @@ document.querySelectorAll('.filtro-estado').forEach(btn => {
 
 // Limpiar filtros
 document.getElementById('limpiarFiltros')?.addEventListener('click', () => {
-  filtrosSeleccionados = { genero: new Set(), estado: new Set() };
+  filtrosSeleccionados = { genero: new Set(), estado: new Set(), ocupacion:''};
   inputBuscador.value = '';
+  selectorOcupacion.value = '';
+  filtrosSeleccionados.ocupacion = '';
+
 
   document.querySelectorAll('.filtro-genero, .filtro-estado').forEach(btn => {
     btn.classList.remove('ring', 'ring-2');
@@ -140,6 +148,7 @@ document.getElementById('limpiarFiltros')?.addEventListener('click', () => {
 
   renderPersonajes(todosLosPersonajes);
   sonidoAlHoverDeBounce();
+  
 });
 
 // 🔄 Botón aleatorio
@@ -177,6 +186,12 @@ async function setupBotonAleatorio() {
     }, 0);
   });
 }
+const selectorOcupacion = document.getElementById('selectorOcupacion') as HTMLSelectElement;
+
+selectorOcupacion.addEventListener('change', () => {
+  filtrosSeleccionados.ocupacion = selectorOcupacion.value;
+  aplicarFiltrosYBuscar();
+});
 
 async function obtenerTodosLosPersonajes(): Promise<Personaje[]> {
   const personajes: Personaje[] = [];

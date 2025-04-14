@@ -61,7 +61,16 @@
       <button data-estado="Muerto" class="filtro-estado bg-red-500 text-white font-bold py-2 px-4 border-b-4 border-red-700 hover:border-b-1 rounded-full">Muerto</button>
       <button data-estado="Fallecido" class="filtro-estado bg-pink-700 text-white font-bold py-2 px-4 border-b-4 border-red-900 hover:border-b-1 rounded-full">Fallecido</button>
       <button data-estado="Desconocido" class="filtro-estado bg-gray-700 text-white font-bold py-2 px-4 border-b-4 border-gray-900 hover:border-b-1 rounded-full">Desconocido</button>
-      <button id="limpiarFiltros" class="bg-blue-400 text-white font-bold py-2 px-4 border-b-4 border-blue-600 hover:border-b-1 rounded-full">Limpiar Filtros</button>
+      <select id="selectorOcupacion" class="class=filtro-estado bg-blue-500 text-white font-bold py-2 px-4 border-b-4 border-blue-800 hover:border-b-1 rounded-full">
+        <option value="">Todas las ocupaciones</option>
+        <option value="Alumno">Alumnno</option>
+        <option value="Desempleado">Desempleado</option>
+        <option value="Profesor">Profesor</option> 
+        <option value="Superhéroe">Superhéroe</option> 
+        <option value="Mascota">Mascota</option>
+        <option value="Trabajador">Trabajador</option> 
+      </select>
+      <button id="limpiarFiltros" class="bg-gray-500 text-white font-bold py-2 px-4 border-b-4 border-gray-700 hover:border-b-1 rounded-full">Limpiar Filtros</button>
     </div>
     <div id="modalPiano" class="fixed top-0 left-0 w-full h-full backdrop-blur  bg-opacity-80 flex items-center justify-center z-50 hidden">
       <div class="bg-yellow-200 p-6 rounded-xl shadow-lg border-4 border-black text-center relative w-[90%] max-w-[600px]">
