@@ -331,14 +331,90 @@ function setupModalPiano() {
       }, 150);
     }
   });
-  
 }
+function setupQuizModal() {
+  const quizButton = document.getElementById('quizButton')!;
+  const quizModal = document.getElementById('quizModal')!;
+  const cerrarQuiz = document.getElementById('cerrarQuiz')!;
+  const playQuizSound = document.getElementById('playQuizSound')!;
+  const quizOptions = document.getElementById('quizOptions')!;
+
+  const sonidos = [
+    { id: 'homero1', personaje: 'Homero' },
+    { id: 'bart1', personaje: 'Bart' },
+    { id: 'marge1', personaje: 'Marge' },
+    { id: 'lisa1', personaje: 'Lisa' },
+  ];
+
+  let sonidoActual: { id: string, personaje: string } | null = null;
+
+  quizButton.addEventListener('click', () => {
+    quizModal.classList.remove('hidden');
+    iniciarQuiz();
+  });
+
+  cerrarQuiz.addEventListener('click', () => {
+    quizModal.classList.add('hidden');
+    sonidoActual = null;
+    quizOptions.innerHTML = '';
+  });
+
+  playQuizSound.addEventListener('click', () => {
+    if (sonidoActual) {
+      const audio = document.getElementById(sonidoActual.id) as HTMLAudioElement;
+      audio.currentTime = 0;
+      audio.play();
+    }
+  });
+
+  function iniciarQuiz() {
+    quizOptions.innerHTML = '';
+
+    // Elegir sonido aleatorio
+    const indexCorrecto = Math.floor(Math.random() * sonidos.length);
+    sonidoActual = sonidos[indexCorrecto];
+
+    // Mezclar opciones
+    const opciones = [sonidoActual.personaje];
+    while (opciones.length < 4) {
+      const candidato = sonidos[Math.floor(Math.random() * sonidos.length)].personaje;
+      if (!opciones.includes(candidato)) {
+        opciones.push(candidato);
+      }
+    }
+
+    // Mezclar el orden de las opciones
+    opciones.sort(() => Math.random() - 0.5);
+
+    opciones.forEach(opcion => {
+      const btn = document.createElement('button');
+      btn.textContent = opcion;
+      btn.className = 'bg-white text-black border-2 border-black rounded-full px-4 py-2 hover:bg-yellow-300 font-bold';
+      btn.addEventListener('click', () => {
+        if (opcion === sonidoActual!.personaje) {
+          btn.style.backgroundColor = 'rgb(74 222 128)';
+          setTimeout(() => {
+            iniciarQuiz(); // ✅ Solo avanza si acierta
+          }, 1000);
+        } else {
+          btn.style.backgroundColor = 'rgb(248 113 113)';
+          setTimeout(() => {
+            btn.classList.remove('bg-red-400'); // ❌ Permite seguir probando
+          }, 1000);
+        }
+      });
+      quizOptions.appendChild(btn);
+    });
+  }
+}
+
 
 
 // 🚀 Ejecutar todo
 mostrarPersonajesPorPaginas();
 setupBotonAleatorio();
 setupModalPiano();
+setupQuizModal();
 
 class BackgroundToggler {
   private toggleButton: HTMLButtonElement;

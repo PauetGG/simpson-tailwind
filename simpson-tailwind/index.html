@@ -99,13 +99,25 @@
       </div>
     </div>
     </div>
+    <!-- Modal del Quiz -->
+    <div id="quizModal" class="fixed top-0 left-0 w-full h-full flex items-center justify-center backdrop-blur bg-opacity-60 z-50 hidden">
+      <div class="bg-yellow-100 rounded-xl shadow-lg border-4 border-black p-6 w-[90%] max-w-[500px] text-center relative">
+        <button id="cerrarQuiz" class="absolute top-2 right-2 text-black text-lg font-bold cursor-pointer">✖</button>
+        <h2 class="text-2xl font-bold mb-4 font-rock-salt">¿Quién hace este sonido?</h2>
+        <button id="playQuizSound" class="mb-4 px-6 py-2 bg-yellow-500 text-black font-bold rounded-full border-b-4 border-yellow-600 hover:border-b-2">
+          🔊 Reproducir sonido
+        </button>
+        <div id="quizOptions" class="flex flex-col gap-3 mt-4"></div>
+      </div>
+    </div>
+
     <div id="randomContainer" class="fixed top-0 left-0 w-full h-full backdrop-blur bg-opacity-80 flex items-center justify-center z-50 hidden"></div>
     <div id="contenedor"  class="flex flex-wrap gap-4 justify-center p-4"></div>
   </div>
-  <audio id="homero1" src="/sounds/homero-doh.mp3"></audio>
-  <audio id="bart1" src="/sounds/bart-aycaramba.mp3"></audio>
-  <audio id="marge1" src="/sounds/marge-mmm.mp3"></audio>
-  <audio id="lisa1" src="/sounds/lisa-sax.mp3"></audio>
+  <audio id="homero1" src="/public/sounds/HYoink.mp3"></audio>
+  <audio id="bart1" src="/public/sounds/BYoink.mp3"></audio>
+  <audio id="marge1" src="/public/sounds/Marge.mp3"></audio>
+  <audio id="lisa1" src="/public/sounds/Lisa.mp3"></audio>
    <audio id="boingAudio" src="public/sounds/boing.mp3" preload="auto"></audio>
    <audio id="notaC" src="public/sounds/boing.mp3" preload="auto"></audio>
    <audio id="notaD" src="public/sounds/doh.mp3" preload="auto"></audio>
