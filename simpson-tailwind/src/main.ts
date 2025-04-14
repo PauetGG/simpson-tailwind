@@ -9,9 +9,8 @@ interface Personaje {
 }
 
 let todosLosPersonajes: Personaje[] = [];
-let paginaActual = 1; // Página actual
-let cargando = false; // Estado para evitar múltiples solicitudes
-const limitePersonajes = 20; // Número de personajes por carga
+let filtroGenero: string = '';
+let filtroEstado: string = '';
 
 // 🔧 Renderiza las tarjetas
 function renderPersonajes(personajes: Personaje[]) {
@@ -57,67 +56,33 @@ function renderPersonajes(personajes: Personaje[]) {
   });
 }
 
-
 // 🔁 Carga por páginas
-const loadingGif = document.getElementById('loadingGif'); // Elemento del GIF de carga
-
 async function mostrarPersonajesPorPaginas() {
   const contenedor = document.getElementById('contenedor');
   if (!contenedor) return;
 
-  if (loadingGif) loadingGif.classList.remove('hidden'); // Muestra el GIF de carga
-
   try {
-    const res = await fetch(`https://apisimpsons.fly.dev/api/personajes?limit=${limitePersonajes}&page=${paginaActual}`);
+    const res = await fetch(`https://apisimpsons.fly.dev/api/personajes?limit=100&page=1`);
     const data = await res.json();
-    todosLosPersonajes = data.docs; // Guardamos todos los personajes cargados inicialmente
+    renderPersonajes(data.docs);
+    sonidoAlHoverDeBounce();
+    todosLosPersonajes = data.docs;
 
-    renderPersonajes(todosLosPersonajes); // Renderizamos los primeros personajes
-    sonidoAlHoverDeBounce(); // Configuramos los eventos necesarios
+    const totalPaginas = data.totalPages;
+
+    for (let p = 2; p <= totalPaginas; p++) {
+      const resPagina = await fetch(`https://apisimpsons.fly.dev/api/personajes?limit=100&page=${p}`);
+      const dataPagina = await resPagina.json();
+      todosLosPersonajes = todosLosPersonajes.concat(dataPagina.docs);
+      renderPersonajes(dataPagina.docs);
+      sonidoAlHoverDeBounce();
+    }
+
   } catch (error) {
     console.error('❌ Error al obtener los personajes:', error);
     contenedor.innerHTML = 'Error al cargar personajes.';
-  } finally {
-    if (loadingGif) loadingGif.classList.add('hidden'); // Oculta el GIF de carga
   }
 }
-
-async function cargarMasPersonajes() {
-  if (cargando) return; // Evita solicitudes duplicadas
-  cargando = true;
-
-  if (loadingGif) loadingGif.classList.remove('hidden'); // Muestra el GIF de carga
-
-  try {
-    await new Promise(resolve => setTimeout(resolve, 2000)); // Simula retraso de carga
-
-    paginaActual++;
-    const res = await fetch(`https://apisimpsons.fly.dev/api/personajes?limit=${limitePersonajes}&page=${paginaActual}`);
-    const data = await res.json();
-
-    if (data.docs && data.docs.length > 0) {
-      todosLosPersonajes.push(...data.docs); // Agregar los nuevos personajes a la lista global
-      renderPersonajes(data.docs); // Renderizar solo los nuevos personajes
-    } else {
-      console.log("No hay más personajes para cargar.");
-    }
-  } catch (error) {
-    console.error('❌ Error al cargar más personajes:', error);
-  } finally {
-    if (loadingGif) loadingGif.classList.add('hidden'); // Oculta el GIF de carga
-    cargando = false;
-  }
-}
-
-window.addEventListener('scroll', () => {
-  const { scrollTop, scrollHeight, clientHeight } = document.documentElement;
-
-  // Si el usuario llega al final de la página, cargamos más personajes
-  if (scrollTop + clientHeight >= scrollHeight - 5) {
-    cargarMasPersonajes();
-  }
-});
-
 
 const inputBuscador = document.getElementById('buscador') as HTMLInputElement;
 
@@ -258,20 +223,24 @@ selectorOcupacion.addEventListener('change', () => {
 
 async function obtenerTodosLosPersonajes(): Promise<Personaje[]> {
   const personajes: Personaje[] = [];
+  let totalPaginas = 1;
+
   try {
     const res = await fetch(`https://apisimpsons.fly.dev/api/personajes?limit=100&page=1`);
     const data = await res.json();
     personajes.push(...data.docs);
-
-    const totalPaginas = data.totalPages;
+    totalPaginas = data.totalPages;
 
     for (let p = 2; p <= totalPaginas; p++) {
       const resPagina = await fetch(`https://apisimpsons.fly.dev/api/personajes?limit=100&page=${p}`);
       const dataPagina = await resPagina.json();
       personajes.push(...dataPagina.docs);
     }
+
+    return personajes;
   } catch (error) {
     console.error('❌ Error al obtener personajes:', error);
+    return [];
   }
   return personajes;
 }
@@ -590,4 +559,3 @@ class BackgroundToggler {
 document.addEventListener('DOMContentLoaded', () => {
   new BackgroundToggler();
 });
-
