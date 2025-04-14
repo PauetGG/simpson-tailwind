@@ -59,7 +59,57 @@
       <button data-estado="Desconocido" class="filtro-estado bg-gray-700 text-white font-bold py-2 px-4 border-b-4 border-gray-900 hover:border-b-1 rounded-full">Desconocido</button>
       <button id="limpiarFiltros" class="bg-blue-400 text-white font-bold py-2 px-4 border-b-4 border-blue-600 hover:border-b-1 rounded-full">Limpiar Filtros</button>
     </div>
-
+    <div id="modalPiano" class="fixed top-0 left-0 w-full h-full backdrop-blur  bg-opacity-80 flex items-center justify-center z-50 hidden">
+      <div class="bg-yellow-200 p-6 rounded-xl shadow-lg border-4 border-black text-center relative w-[90%] max-w-[600px]">
+        <button id="cerrarPiano" class="absolute top-2 right-2 text-black text-lg font-bold cursor-pointer">✖</button>
+        <h2 class="text-2xl mb-4 font-bold font-rock-salt">Simpson Piano</h2>
+        
+        <div class="relative h-52 w-full flex justify-center items-end">
+          <!-- Teclas blancas -->
+          <div id="teclado" class="flex relative z-10">
+            <!-- C y C# -->
+            <div class="relative">
+              <button class="tecla tecla-blanca" data-sonido="notaC">A</button>
+              <button class="tecla tecla-negra absolute left-[35px] -top-[10px]" data-sonido="notaCs">W</button>
+            </div>
+          
+            <!-- D y D# -->
+            <div class="relative">
+              <button class="tecla tecla-blanca" data-sonido="notaD">S</button>
+              <button class="tecla tecla-negra absolute left-[35px] -top-[10px]" data-sonido="notaDs">E</button>
+            </div>
+          
+            <!-- E (sin tecla negra encima) -->
+            <div class="relative">
+              <button class="tecla tecla-blanca" data-sonido="notaE">D</button>
+            </div>
+          
+            <!-- F y F# -->
+            <div class="relative">
+              <button class="tecla tecla-blanca" data-sonido="notaF">F</button>
+              <button class="tecla tecla-negra absolute left-[35px] -top-[10px]" data-sonido="notaFs">T</button>
+            </div>
+          
+            <!-- G y G# -->
+            <div class="relative">
+              <button class="tecla tecla-blanca" data-sonido="notaG">G</button>
+              <button class="tecla tecla-negra absolute left-[35px] -top-[10px]" data-sonido="notaGs">Y</button>
+            </div>
+          
+            <!-- A y A# -->
+            <div class="relative">
+              <button class="tecla tecla-blanca" data-sonido="notaA">H</button>
+              <button class="tecla tecla-negra absolute left-[35px] -top-[10px]" data-sonido="notaAs">U</button>
+            </div>
+          
+            <div class="relative">
+              <button class="tecla tecla-blanca" data-sonido="notaB">J</button>
+            </div>
+          </div>
+      </div>
+    </div>
+    </div>
+    
 
     <div id="randomContainer" class="fixed top-0 left-0 w-full h-full backdrop-blur bg-opacity-80 flex items-center justify-center z-50 hidden"></div>
 
@@ -67,9 +117,23 @@
     <div id="contenedor"  class="flex flex-wrap gap-4 justify-center p-4"></div>
     
   </div>
- 
+  <audio id="homero1" src="/sounds/homero-doh.mp3"></audio>
+  <audio id="bart1" src="/sounds/bart-aycaramba.mp3"></audio>
+  <audio id="marge1" src="/sounds/marge-mmm.mp3"></audio>
+  <audio id="lisa1" src="/sounds/lisa-sax.mp3"></audio>
    <audio id="boingAudio" src="public/sounds/boing.mp3" preload="auto"></audio>
-   <audio id="dohAudio" src="public/sounds/doh.mp3" preload="auto"></audio>
+   <audio id="notaC" src="public/sounds/boing.mp3" preload="auto"></audio>
+   <audio id="notaD" src="public/sounds/doh.mp3" preload="auto"></audio>
+   <audio id="notaE" src="public/sounds/WooHoo.mp3" preload="auto"></audio>
+   <audio id="notaF" src="public/sounds/ShutUp.mp3" preload="auto"></audio>
+   <audio id="notaA" src="public/sounds/UhOh.mp3" preload="auto"></audio>
+   <audio id="notaB" src="public/sounds/Oh.mp3" preload="auto"></audio>
+   <audio id="notaCs" src="public/sounds/Haha.mp3" preload="auto"></audio>
+   <audio id="notaDs" src="public/sounds/BYoink.mp3" preload="auto"></audio>
+   <audio id="notaFs" src="public/sounds/HYoink.mp3" preload="auto"></audio>
+   <audio id="notaGs" src="public/sounds/Scream.mp3" preload="auto"></audio>
+   <audio id="notaAs" src="public/sounds/Scream2.mp3" preload="auto"></audio>
+   <audio id="notaG" src="public/sounds/NHaha.mp3" preload="auto"></audio>
    <script type="module" src="/src/main.ts"></script>
   </body>
 </html>

@@ -286,10 +286,79 @@ function reproducirDohConCursor() {
 document.addEventListener('click', () => {
   reproducirDohConCursor();
 });
+const teclaToSonido: { [key: string]: string } = {
+  a: 'notaC',
+  s: 'notaD',
+  d: 'notaE',
+  f: 'notaF',
+  g: 'notaG',
+  h: 'notaA',
+  j: 'notaB',
+  w: 'notaCs',
+  e: 'notaDs',
+  t: 'notaFs',
+  y: 'notaGs',
+  u: 'notaAs'
+};
+function setupModalPiano() {
+  const pianoModal = document.getElementById('modalPiano')!;
+  const abrirBtn = document.getElementById('pianoButton')!;
+  const cerrarBtn = document.getElementById('cerrarPiano')!;
+
+  abrirBtn.addEventListener('click', () => {
+    pianoModal.classList.remove('hidden');
+  });
+
+  cerrarBtn.addEventListener('click', () => {
+    pianoModal.classList.add('hidden');
+  });
+
+  document.querySelectorAll<HTMLButtonElement>('.tecla').forEach(tecla => {
+    tecla.addEventListener('click', () => {
+      const idSonido = tecla.dataset.sonido;
+      const audio = document.getElementById(idSonido!) as HTMLAudioElement;
+      if (audio) {
+        audio.currentTime = 0;
+        audio.play();
+      }
+    });
+  });
+  document.addEventListener('keydown', (e) => {
+    const modal = document.getElementById('modalPiano');
+    if (!modal || modal.classList.contains('hidden')) return;
+  
+    const letra = e.key.toLowerCase();
+    const sonidoId = teclaToSonido[letra];
+    if (!sonidoId) return;
+  
+    const audio = document.getElementById(sonidoId) as HTMLAudioElement;
+    if (audio) {
+      audio.currentTime = 0;
+      audio.play().catch(() => {});
+    }
+  
+    // 🔁 Encuentra la tecla visual correspondiente
+    const tecla = [...document.querySelectorAll('.tecla-blanca, .tecla-negra')]
+      .find(t => t instanceof HTMLButtonElement && t.dataset.sonido === sonidoId);
+  
+    if (tecla) {
+      tecla.classList.add('presionada');
+  
+      // Quitar la clase tras un corto delay (como un "rebote")
+      setTimeout(() => {
+        tecla.classList.remove('presionada');
+      }, 150);
+    }
+  });
+  
+}
+
 
 // 🚀 Ejecutar todo
 mostrarPersonajesPorPaginas();
 setupBotonAleatorio();
+setupModalPiano();
+
 
 
 
