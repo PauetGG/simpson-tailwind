@@ -14,6 +14,7 @@ let filtroEstado: string = '';
 let offset = 0; // Para rastrear cuántos personajes se han cargado
 let isLoading = false; // Para evitar múltiples cargas simultáneas
 const batchSize = 20; // Número de personajes por lote
+const favoritos: string[] = [];
 
 // 🔧 Renderiza las tarjetas
 function renderPersonajes(personajes: Personaje[]) {
@@ -28,11 +29,10 @@ function renderPersonajes(personajes: Personaje[]) {
     div.className = 'personaje cursor-pointer';
 
     div.innerHTML = `
-    <div class="border-4 border-black border-solid rounded-xl">
+    <div class="border-4 border-black border-solid rounded-xl relative">
       <div class="w-62 h-[600px] bg-white rounded-lg shadow-md border-gray-200 p-2 flex flex-col border-b-4 border-r-4 border-gray-300">
         <h3 style="font-family: 'Simpsonfont'; font-weight: bold;" class="text-lg text-center mb-3">${personaje.Nombre}</h3>
         
-        <!-- Nuevo div contenedor para la imagen -->
         <div class="rounded-lg p-2 mb-4 flex-grow flex items-center justify-center">
           <img 
             style="object-fit: contain" 
@@ -41,16 +41,47 @@ function renderPersonajes(personajes: Personaje[]) {
             class="w-32 h-64 mx-auto object-contain bounce-simpson-hover"
           >
         </div>
-        
-        <!-- Div gris (se mantiene abajo por flex-col) -->
-        <div class="h-[200px] text-sm text-gray-600 text-center bg-gray-200 rounded-lg p-2 border-b-4 border-l-4 border-gray-300 content-center">
-          <p class="mb-1"><span style="font-family: 'Simpsonfont';" class="font-semibold">Genero: <br> </span> ${personaje.Genero}</p>
-          <p class="mb-1"><span style="font-family: 'Simpsonfont';" class="font-semibold">Estado: <br> </span> ${personaje.Estado}</p>
-          <p><span style="font-family: 'Simpsonfont';" class="font-semibold">Ocupación: <br> </span> ${personaje.Ocupacion}</p>
+        <div class="h-[200px] text-sm text-gray-600 bg-gray-200 rounded-lg p-2 border-b-4 border-l-4 border-gray-300 relative flex flex-col">
+        <div class="flex justify-end">
+         <button class="btn-fav absolute top-1 right-1 text-2xl text-gray-300 hover:scale-110 transition-transform">🤍</button>
+        </div>
+        <div class="text-center mt-1">
+          <p class="mb-1"><span style="font-family: 'Simpsonfont';" class="font-semibold">Genero: <br></span> ${personaje.Genero}</p>
+          <p class="mb-1"><span style="font-family: 'Simpsonfont';" class="font-semibold">Estado: <br></span> ${personaje.Estado}</p>
+          <p><span style="font-family: 'Simpsonfont';" class="font-semibold">Ocupación: <br></span> ${personaje.Ocupacion}</p>
+        </div>
         </div>
       </div>
     </div>
   `;
+  const btnFav = div.querySelector('.btn-fav') as HTMLButtonElement;
+  const nombre = personaje.Nombre;
+  
+  // Estado inicial del corazón
+  if (favoritos.includes(nombre)) {
+    btnFav.textContent = '❤️';
+    btnFav.classList.add('active');
+  }
+  
+  // Toggle al hacer clic
+  btnFav.addEventListener('click', (e) => {
+    e.stopPropagation(); // ⛔️ Evita que se dispare el modal
+  
+    const index = favoritos.indexOf(nombre);
+  
+    if (index === -1) {
+      favoritos.push(nombre);
+      btnFav.textContent = '❤️';
+      btnFav.classList.add('active');
+    } else {
+      favoritos.splice(index, 1);
+      btnFav.textContent = '🤍';
+      btnFav.classList.remove('active');
+    }
+  
+    console.log('Favoritos:', favoritos);
+  });
+  
 
     div.addEventListener('click', () => {
       mostrarModal(personaje);
@@ -248,6 +279,38 @@ document.getElementById('limpiarFiltros')?.addEventListener('click', () => {
   renderPersonajes(todosLosPersonajes);
   sonidoAlHoverDeBounce();
   
+});
+const btnMostrarFavoritos = document.getElementById('mostrarFavoritos')!;
+let mostrandoFavoritos = false; // ⬅️ Estado de toggle
+
+btnMostrarFavoritos.addEventListener('click', () => {
+  const contenedor = document.getElementById('contenedor');
+  if (!contenedor) return;
+
+  if (mostrandoFavoritos) {
+    // ⬅️ Si ya está activado, volvemos a mostrar todos con filtros
+    aplicarFiltrosYBuscar();
+    mostrandoFavoritos = false;
+    btnMostrarFavoritos.textContent = '❤️ Ver Favoritos';
+    return;
+  }
+
+  // ⬅️ Si está desactivado, activamos y mostramos favoritos
+  if (favoritos.length === 0) {
+    contenedor.innerHTML = `
+      <div class="text-center text-xl font-bold text-gray-500 mt-8">
+        No hay ningún Simpson favorito.
+      </div>
+    `;
+  } else {
+    const favoritosFiltrados = todosLosPersonajes.filter(p =>
+      favoritos.includes(p.Nombre)
+    );
+    renderPersonajes(favoritosFiltrados);
+  }
+
+  mostrandoFavoritos = true;
+  btnMostrarFavoritos.textContent = '🔁 Volver a Todos';
 });
 
 // 🔄 Botón aleatorio
@@ -642,4 +705,61 @@ document.addEventListener('scroll', async () => {
   if (scrollTop + windowHeight >= contenedorHeight - 100 && !isLoading) {
     await cargarMasPersonajes(todosLosPersonajes); // Carga 20 personajes más
   }
+});
+
+class SimpsonScrollButton {
+  private button: HTMLButtonElement;
+  private isVisible: boolean = false;
+
+  constructor() {
+    // Crear el botón
+    this.button = document.createElement('button');
+    this.button.className = 'fixed bottom-6 right-6 z-50 p-2 rounded-full bg-yellow-400 hover:bg-yellow-500 transition-all duration-300 shadow-lg focus:outline-none';
+    this.button.style.display = 'none';
+    this.button.setAttribute('aria-label', 'Volver arriba');
+
+    // Añadir la imagen
+    const img = document.createElement('img');
+    img.src = 'https://pngimg.com/uploads/simpsons/simpsons_PNG36.png';
+    img.alt = 'Volver arriba';
+    img.className = 'w-16 h-16 object-contain';
+    this.button.appendChild(img);
+
+    // Añadir evento de click
+    this.button.addEventListener('click', () => {
+      window.scrollTo({
+        top: 0,
+        behavior: 'smooth'
+      });
+    });
+
+    // Añadir el botón al cuerpo del documento
+    document.body.appendChild(this.button);
+
+    // Configurar el evento de scroll
+    window.addEventListener('scroll', () => this.handleScroll());
+  }
+
+  private handleScroll(): void {
+    const shouldBeVisible = window.pageYOffset > 300;
+    
+    if (shouldBeVisible !== this.isVisible) {
+      this.isVisible = shouldBeVisible;
+      this.button.style.display = this.isVisible ? 'block' : 'none';
+      
+      // Opcional: animación de entrada/salida
+      if (this.isVisible) {
+        this.button.classList.remove('opacity-0', 'translate-y-4');
+        this.button.classList.add('opacity-100');
+      } else {
+        this.button.classList.add('opacity-0', 'translate-y-4');
+        this.button.classList.remove('opacity-100');
+      }
+    }
+  }
+}
+
+// Inicializar el botón cuando el DOM esté listo
+document.addEventListener('DOMContentLoaded', () => {
+  new SimpsonScrollButton();
 });
