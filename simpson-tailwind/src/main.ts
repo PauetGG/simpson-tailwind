@@ -521,3 +521,60 @@ class BackgroundToggler {
 document.addEventListener('DOMContentLoaded', () => {
   new BackgroundToggler();
 });
+
+class SimpsonScrollButton {
+  private button: HTMLButtonElement;
+  private isVisible: boolean = false;
+
+  constructor() {
+    // Crear el botón
+    this.button = document.createElement('button');
+    this.button.className = 'fixed bottom-6 right-6 z-50 p-2 rounded-full bg-yellow-400 hover:bg-yellow-500 transition-all duration-300 shadow-lg focus:outline-none';
+    this.button.style.display = 'none';
+    this.button.setAttribute('aria-label', 'Volver arriba');
+
+    // Añadir la imagen
+    const img = document.createElement('img');
+    img.src = 'https://pngimg.com/uploads/simpsons/simpsons_PNG36.png';
+    img.alt = 'Volver arriba';
+    img.className = 'w-16 h-16 object-contain';
+    this.button.appendChild(img);
+
+    // Añadir evento de click
+    this.button.addEventListener('click', () => {
+      window.scrollTo({
+        top: 0,
+        behavior: 'smooth'
+      });
+    });
+
+    // Añadir el botón al cuerpo del documento
+    document.body.appendChild(this.button);
+
+    // Configurar el evento de scroll
+    window.addEventListener('scroll', () => this.handleScroll());
+  }
+
+  private handleScroll(): void {
+    const shouldBeVisible = window.pageYOffset > 300;
+    
+    if (shouldBeVisible !== this.isVisible) {
+      this.isVisible = shouldBeVisible;
+      this.button.style.display = this.isVisible ? 'block' : 'none';
+      
+      // Opcional: animación de entrada/salida
+      if (this.isVisible) {
+        this.button.classList.remove('opacity-0', 'translate-y-4');
+        this.button.classList.add('opacity-100');
+      } else {
+        this.button.classList.add('opacity-0', 'translate-y-4');
+        this.button.classList.remove('opacity-100');
+      }
+    }
+  }
+}
+
+// Inicializar el botón cuando el DOM esté listo
+document.addEventListener('DOMContentLoaded', () => {
+  new SimpsonScrollButton();
+});
