@@ -242,6 +242,25 @@ async function cargarMasPersonajes(personajes: Personaje[]) {
   isLoading = false;
 }
 
+// Filtros género
+document.querySelectorAll('.filtro-genero').forEach(btn => {
+  btn.addEventListener('click', () => {
+    const genero = btn.getAttribute('data-genero')?.toLowerCase().trim();
+    if (!genero) return;
+
+    // Quitar selección de todos
+    document.querySelectorAll('.filtro-genero').forEach(b => b.classList.remove('ring', 'ring-2'));
+
+    if (filtroGenero === genero) {
+      filtroGenero = ''; // desactivar
+    } else {
+      filtroGenero = genero;
+      btn.classList.add('ring', 'ring-2');
+    }
+
+    aplicarFiltrosYBuscar();
+  });
+});
 
 // Filtros estado
 document.querySelectorAll('.filtro-estado').forEach(btn => {
