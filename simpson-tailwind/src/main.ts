@@ -363,18 +363,33 @@ async function setupBotonAleatorio() {
   boton.addEventListener('click', () => {
     const aleatorio = personajes[Math.floor(Math.random() * personajes.length)];
 
-    randomContainer.innerHTML = `
-      <div class="bg-yellow-100 rounded-xl border-4 border-black p-6 w-80 h-[450px] relative shadow-lg text-center z-[60]">
-        <button id="cerrarModal" class="absolute top-2 right-2 text-black font-bold text-lg cursor-pointer">✖</button>
-        <h2 class="text-xl font-bold mb-3" style="font-family: 'Rock Salt';">${aleatorio.Nombre}</h2>
-        <img src="${aleatorio.Imagen}" alt="${aleatorio.Nombre}" class="w-40 h-64 object-contain mx-auto rounded mb-3 bounce-simpson-hover" />
-        <div class="text-sm text-gray-700 text-left">
-          <p><strong>Género:</strong> ${aleatorio.Genero}</p>
-          <p><strong>Estado:</strong> ${aleatorio.Estado}</p>
-          <p><strong>Ocupación:</strong> ${aleatorio.Ocupacion}</p>
+    randomContainer.innerHTML =  `
+    <div class="border-4 border-black border-solid rounded-xl relative">
+      <div class="w-62 h-[600px] bg-white rounded-lg shadow-md border-gray-200 p-2 flex flex-col border-b-4 border-r-4 border-gray-300">
+      <button id="cerrarModal" class="absolute top-2 right-2 text-black font-bold text-lg cursor-pointer">✖</button>
+        <h3 style="font-family: 'Simpsonfont'; font-weight: bold;" class="text-lg text-center mb-3">${aleatorio.Nombre}</h3>
+        
+        <div class="rounded-lg p-2 mb-4 flex-grow flex items-center justify-center">
+          <img 
+            style="object-fit: contain" 
+            src="${aleatorio.Imagen}" 
+            alt="${aleatorio.Nombre}" 
+            class="w-32 h-64 mx-auto object-contain bounce-simpson-hover"
+          >
+        </div>
+        <div class="h-[200px] text-sm text-gray-600 bg-gray-200 rounded-lg p-2 border-b-4 border-l-4 border-gray-300 relative flex flex-col">
+        <div class="flex justify-end">
+         <button class="btn-fav absolute top-1 right-1 text-2xl text-gray-300 hover:scale-110 transition-transform">🤍</button>
+        </div>
+        <div class="text-center mt-1">
+          <p class="mb-1"><span style="font-family: 'Simpsonfont';" class="font-semibold">Genero: <br></span> ${aleatorio.Genero}</p>
+          <p class="mb-1"><span style="font-family: 'Simpsonfont';" class="font-semibold">Estado: <br></span> ${aleatorio.Estado}</p>
+          <p><span style="font-family: 'Simpsonfont';" class="font-semibold">Ocupación: <br></span> ${aleatorio.Ocupacion}</p>
+        </div>
         </div>
       </div>
-    `;
+    </div>
+  `;
 
     randomContainer.classList.remove('hidden');
 
@@ -435,7 +450,6 @@ function mostrarModal(personaje: Personaje) {
       </div>
     </div>
   `;
-
   setTimeout(() => {
     document.querySelector('.cerrarModal')?.addEventListener('click', () => {
       randomContainer.classList.add('hidden');
