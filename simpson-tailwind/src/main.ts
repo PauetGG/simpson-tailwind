@@ -501,67 +501,63 @@ function setupQuizModal() {
     { id: 'bart1', personaje: 'Bart' },
     { id: 'marge1', personaje: 'Marge' },
     { id: 'lisa1', personaje: 'Lisa' },
-    { id: 'nelson1', personaje: 'Nelson'},
-    { id: 'flanders1', personaje: 'Flanders'},
-    { id: 'apu1', personaje: 'Apu'},
-    { id: 'milhouse1', personaje: 'Milhouse'},
-    { id: 'krusty1', personaje: 'Krusty el payaso'},
-    { id: 'barney1', personaje: 'Barney'},
-    { id: 'bob1', personaje: 'Bob'},
-    { id: 'burns1', personaje: 'Burns'},
-    { id: 'duff1', personaje: 'Duff'},
-    { id: 'edna1', personaje: 'Edna'},
-    { id: 'gorgory1', personaje: 'Gorgory'},
-    { id: 'maggie1', personaje: 'Maggie'},
-    { id: 'moe1', personaje: 'Moe'},
-    { id: 'otto1', personaje: 'Otto'},
-    { id: 'ralph1', personaje: 'Ralph'},
-    { id: 'skinner1', personaje: 'Skinner'},
-    { id: 'smithers1', personaje: 'Smithers'},
+    { id: 'nelson1', personaje: 'Nelson' },
+    { id: 'flanders1', personaje: 'Ned Flanders' },
+    { id: 'apu1', personaje: 'Apu' },
+    { id: 'milhouse1', personaje: 'Milhouse' },
+    { id: 'krusty1', personaje: 'Krusty el payaso' },
+    { id: 'barney1', personaje: 'Barney' },
+    { id: 'bob1', personaje: 'Bob' },
+    { id: 'burns1', personaje: 'Burns' },
+    { id: 'duff1', personaje: 'Duffman' },
+    { id: 'edna1', personaje: 'Edna' },
+    { id: 'gorgory1', personaje: 'Gorgory' },
+    { id: 'maggie1', personaje: 'Maggie' },
+    { id: 'moe1', personaje: 'Moe' },
+    { id: 'otto1', personaje: 'Otto' },
+    { id: 'ralph1', personaje: 'Ralph' },
+    { id: 'skinner1', personaje: 'Seymour Skinner' },
+    { id: 'smithers1', personaje: 'Smithers' },
   ];
 
   let sonidoActual: { id: string, personaje: string } | null = null;
   let ultimoSonidoIndex: number | null = null;
+  let vidas = 3;
 
-  quizButton.addEventListener('click', () => {
-    quizModal.classList.remove('hidden');
-    iniciarQuiz();
-  });
+  function actualizarVidas() {
+    const vidasContainer = document.getElementById('quizVidas');
+    if (!vidasContainer) return;
 
-  cerrarQuiz.addEventListener('click', () => {
-    quizModal.classList.add('hidden');
-    sonidoActual = null;
-    quizOptions.innerHTML = '';
-  });
-
-  playQuizSound.addEventListener('click', () => {
-    if (sonidoActual) {
-      const audio = document.getElementById(sonidoActual.id) as HTMLAudioElement;
-      audio.currentTime = 0;
-      audio.play();
+    vidasContainer.innerHTML = '';
+    for (let i = 0; i < vidas; i++) {
+      const img = document.createElement('img');
+      img.src = '/src/images/donut.png';
+      img.alt = `Vida ${i + 1}`;
+      img.className = 'w-8 h-8 donut';
+      vidasContainer.appendChild(img);
     }
-  });
+  }
 
-  function iniciarQuiz() {
-    quizOptions.innerHTML = '';
-    quizOptions.className = 'grid grid-cols-2 gap-4 mt-4';
+  function generarOpciones() {
+    if (!sonidoActual) return;
 
-    // 🔊 Elegir un sonido aleatorio distinto al anterior
-    let indexCorrecto: number;
-    do {
-      indexCorrecto = Math.floor(Math.random() * sonidos.length);
-    } while (indexCorrecto === ultimoSonidoIndex && sonidos.length > 1);
-
-    ultimoSonidoIndex = indexCorrecto;
-    sonidoActual = sonidos[indexCorrecto];
     const nombreCorrecto = sonidoActual.personaje;
+    quizOptions.innerHTML = '';
+    quizOptions.className = 'flex flex-wrap justify-center gap-4 mt-4';
 
     const opciones: any[] = [];
 
-    // ✅ Buscar personajes cuyo nombre contenga el del personaje del sonido
-    const coincidencias = todosLosPersonajes.filter(p =>
-      p.Nombre.toLowerCase().includes(nombreCorrecto.toLowerCase())
-    );
+    const coincidencias = todosLosPersonajes.filter(p => {
+    const nombreLower = p.Nombre.toLowerCase();
+    const correctoLower = nombreCorrecto.toLowerCase();
+  
+    // Excepción para Otto (solo match exacto)
+    if (correctoLower === 'otto') {
+      return nombreLower === 'otto';
+    }
+    // Para los demás personajes, permitimos includes
+    return nombreLower.includes(correctoLower);
+    });
 
     if (coincidencias.length === 0) {
       console.warn(`❌ No se encontraron personajes que coincidan con "${nombreCorrecto}"`);
@@ -569,11 +565,9 @@ function setupQuizModal() {
       return;
     }
 
-    // Elegir uno aleatorio de las coincidencias como opción correcta
     const correcto = coincidencias[Math.floor(Math.random() * coincidencias.length)];
     opciones.push(correcto);
 
-    // ❌ Personajes incorrectos = todos los que no están entre las coincidencias
     const candidatos = todosLosPersonajes.filter(p =>
       !coincidencias.includes(p)
     );
@@ -585,13 +579,11 @@ function setupQuizModal() {
       }
     }
 
-    // 🎲 Mezclar opciones
     opciones.sort(() => Math.random() - 0.5);
 
-    // 🧩 Crear botones de opciones
     opciones.forEach(personaje => {
       const btn = document.createElement('button');
-      btn.className = 'flex flex-col items-center border-4 border-black rounded-xl p-2 bg-white hover:scale-105 transition-transform';
+      btn.className = 'flex flex-col items-center justify-center w-48 h-48 border-4 border-black rounded-xl p-2 bg-white hover:scale-105 transition-transform';
       btn.style.backgroundColor = 'white';
 
       const img = document.createElement('img');
@@ -611,19 +603,70 @@ function setupQuizModal() {
         btn.style.backgroundColor = esCorrecto ? 'rgb(74 222 128)' : 'rgb(248 113 113)';
 
         if (esCorrecto) {
-          setTimeout(() => {
-            iniciarQuiz();
-          }, 1000);
+          setTimeout(() => iniciarQuiz(), 1000);
         } else {
-          setTimeout(() => {
-            btn.style.backgroundColor = 'white';
-          }, 1000);
+          vidas--;
+          actualizarVidas();
+
+          if (vidas === 0) {
+            quizOptions.innerHTML = `
+              <div class="flex flex-col items-center justify-center h-48 text-center space-y-4">
+                <h1 class="text-3xl font-extrabold text-red-700 drop-shadow-lg">¡Juego terminado!</h1>
+                <p class="text-xl font-semibold text-red-600">🍩 Te quedaste sin donuts 😭</p>
+                <button id="reiniciarQuiz" class="mt-2 px-6 py-2 bg-yellow-500 text-black font-bold rounded-full border-b-4 border-yellow-600 hover:border-b-2 transition-all">
+                  🔁 Volver a intentar
+                </button>
+              </div>
+            `;
+            const reiniciarBtn = document.getElementById('reiniciarQuiz');
+            reiniciarBtn?.addEventListener('click', () => {
+              vidas = 3;
+              iniciarQuiz();
+            });
+            return;
+          }
+
+          setTimeout(() => generarOpciones(), 1000); // 💡 solo cambia las opciones, no el audio
         }
       });
 
       quizOptions.appendChild(btn);
     });
   }
+
+  function iniciarQuiz() {
+    if (vidas === 0) vidas = 3;
+    actualizarVidas();
+
+    let indexCorrecto: number;
+    do {
+      indexCorrecto = Math.floor(Math.random() * sonidos.length);
+    } while (indexCorrecto === ultimoSonidoIndex && sonidos.length > 1);
+
+    ultimoSonidoIndex = indexCorrecto;
+    sonidoActual = sonidos[indexCorrecto];
+
+    generarOpciones();
+  }
+
+  quizButton.addEventListener('click', () => {
+    quizModal.classList.remove('hidden');
+    iniciarQuiz();
+  });
+
+  cerrarQuiz.addEventListener('click', () => {
+    quizModal.classList.add('hidden');
+    sonidoActual = null;
+    quizOptions.innerHTML = '';
+  });
+
+  playQuizSound.addEventListener('click', () => {
+    if (sonidoActual) {
+      const audio = document.getElementById(sonidoActual.id) as HTMLAudioElement;
+      audio.currentTime = 0;
+      audio.play();
+    }
+  });
 }
 
 // 🚀 Ejecutar todo
