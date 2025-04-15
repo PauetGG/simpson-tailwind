@@ -859,3 +859,236 @@ class SimpsonScrollButton {
 document.addEventListener('DOMContentLoaded', () => {
   new SimpsonScrollButton();
 });
+
+
+
+
+
+
+
+
+
+// Wait for DOM to be fully loaded
+document.addEventListener('DOMContentLoaded', () => {
+  // Element references with proper null checks
+  const btnAgregar = document.getElementById("btn-agregar");
+  const formAgregar = document.getElementById("form-agregar") as HTMLFormElement | null;
+  const formTitulo = document.querySelector("#form-agregar .title");
+  const btnModificar = document.getElementById("btn-modificar");
+  const buscadorModificar = document.getElementById("buscador-modificar") as HTMLDivElement | null;
+  const btnBuscarPersonaje = document.getElementById("btn-buscar-personaje");
+  const inputBusquedaModificar = document.getElementById("buscar-id-nombre") as HTMLInputElement | null;
+  const mensajeError = document.getElementById("msg-error");
+  const btnEliminar = document.getElementById("btn-eliminar");
+  const buscadorEliminar = document.getElementById("buscador-eliminar") as HTMLDivElement | null;
+  const inputEliminar = document.getElementById("input-eliminar") as HTMLInputElement | null;
+  const btnConfirmarEliminar = document.getElementById("btn-confirmar-eliminar");
+  const mensajeEliminar = document.getElementById("msg-eliminar");
+
+  // Check if essential elements exist
+  if (!btnAgregar || !formAgregar || !formTitulo || !btnModificar || !buscadorModificar || 
+      !btnBuscarPersonaje || !inputBusquedaModificar || !mensajeError || !btnEliminar || 
+      !buscadorEliminar || !inputEliminar || !btnConfirmarEliminar || !mensajeEliminar) {
+    console.error("One or more essential elements are missing from the DOM");
+    return;
+  }
+
+  let esEdicion = false;
+  let personajeIdEditar: number | string | null = null;
+
+  // Initialize form states
+  formAgregar.style.display = "none";
+  buscadorModificar.style.display = "none";
+  buscadorEliminar.style.display = "none";
+  mensajeError.style.display = "none";
+  mensajeEliminar.style.display = "none";
+
+  // Mostrar/ocultar formulario de agregar y limpiar
+  btnAgregar.addEventListener("click", () => {
+    formAgregar.style.display = formAgregar.style.display === "none" ? "block" : "none";
+    formAgregar.reset();
+    formTitulo.textContent = "➕ Añadir Personaje";
+    formAgregar.removeAttribute("data-id-edicion");
+    esEdicion = false;
+    personajeIdEditar = null;
+  });
+
+  // Mostrar/ocultar buscador de modificación
+  btnModificar.addEventListener("click", () => {
+    buscadorModificar.style.display = buscadorModificar.style.display === "none" ? "block" : "none";
+    buscadorEliminar.style.display = "none"; // Hide delete form when showing modify
+  });
+
+  // Mostrar/ocultar buscador de eliminación
+  btnEliminar.addEventListener("click", () => {
+    buscadorEliminar.style.display = buscadorEliminar.style.display === "none" ? "block" : "none";
+    buscadorModificar.style.display = "none"; // Hide modify form when showing delete
+    mensajeEliminar.style.display = "none";
+    inputEliminar.value = "";
+  });
+
+  // Confirmar eliminación
+  btnConfirmarEliminar.addEventListener("click", () => {
+    const valor = inputEliminar.value.trim().toLowerCase();
+    if (!valor) return;
+
+    let personalizados = JSON.parse(localStorage.getItem("personajesPersonalizados") || "[]");
+
+    // Try to find in custom characters first
+    const index = personalizados.findIndex((p: any) => 
+      p.Nombre.toLowerCase() === valor || p.id.toString().toLowerCase() === valor || 
+      (p._id && p._id.toString().toLowerCase() === valor)
+    );
+
+    if (index !== -1) {
+      personalizados.splice(index, 1);
+      localStorage.setItem("personajesPersonalizados", JSON.stringify(personalizados));
+      mensajeEliminar.textContent = "🗑️ Personaje eliminado correctamente.";
+      mensajeEliminar.style.display = "block";
+      inputEliminar.value = "";
+      return;
+    }
+
+    // If not found in custom characters, try API
+    fetch(`https://apisimpsons.fly.dev/api/personajes/find/${encodeURIComponent(valor)}`)
+      .then(res => {
+        if (!res.ok) throw new Error("Personaje no encontrado");
+        return res.json();
+      })
+      .then(data => {
+        if (data.result && data.result.length > 0) {
+          // Mark API character as deleted in local storage
+          const personaje = data.result[0];
+          personalizados.push({
+            id: personaje._id,
+            _id: personaje._id,
+            Nombre: personaje.Nombre,
+            Imagen: personaje.Imagen,
+            Historia: personaje.Historia,
+            Genero: personaje.Genero,
+            Estado: personaje.Estado,
+            Ocupacion: personaje.Ocupacion,
+            eliminado: true
+          });
+          localStorage.setItem("personajesPersonalizados", JSON.stringify(personalizados));
+          mensajeEliminar.textContent = "🗑️ Personaje marcado como eliminado.";
+          mensajeEliminar.style.display = "block";
+          inputEliminar.value = "";
+        } else {
+          throw new Error("Personaje no encontrado");
+        }
+      })
+      .catch((error) => {
+        mensajeEliminar.textContent = `❌ ${error.message || "Error al buscar personaje"}`;
+        mensajeEliminar.style.display = "block";
+      });
+  });
+
+  // Buscar Personaje para modificar
+  btnBuscarPersonaje.addEventListener("click", () => {
+    const valor = inputBusquedaModificar.value.trim().toLowerCase();
+    if (!valor) return;
+
+    const personalizados = JSON.parse(localStorage.getItem("personajesPersonalizados") || "[]");
+    const encontrado = personalizados.find((p: any) =>
+      p.Nombre.toLowerCase() === valor || 
+      p.id.toString().toLowerCase() === valor ||
+      (p._id && p._id.toString().toLowerCase() === valor)
+    );
+
+    if (encontrado) {
+      rellenarFormulario(encontrado);
+      return;
+    }
+
+    // Si no está en personalizados, lo buscamos en la API
+    fetch(`https://apisimpsons.fly.dev/api/personajes/find/${encodeURIComponent(valor)}`)
+      .then(res => {
+        if (!res.ok) throw new Error("Personaje no encontrado");
+        return res.json();
+      })
+      .then(data => {
+        if (data.result && data.result.length > 0) {
+          rellenarFormulario(data.result[0]);
+        } else {
+          throw new Error("Personaje no encontrado");
+        }
+      })
+      .catch((error) => {
+        mensajeError.textContent = `❌ ${error.message}`;
+        mensajeError.style.display = "block";
+      });
+  });
+
+  function rellenarFormulario(personaje: any) {
+    if (!formAgregar || !formTitulo || !mensajeError) return;
+
+    mensajeError.style.display = "none";
+    formAgregar.style.display = "block";
+    formTitulo.textContent = "✏️ Modificar Personaje";
+    esEdicion = true;
+    personajeIdEditar = personaje._id || personaje.id;
+
+    (document.getElementById("nombre") as HTMLInputElement).value = personaje.Nombre || "";
+    (document.getElementById("imagen") as HTMLInputElement).value = personaje.Imagen || "";
+    (document.getElementById("historia") as HTMLTextAreaElement).value = personaje.Historia || "";
+    (document.getElementById("genero") as HTMLSelectElement).value = personaje.Genero || "";
+    (document.getElementById("estado") as HTMLSelectElement).value = personaje.Estado || "";
+    (document.getElementById("ocupacion") as HTMLInputElement).value = personaje.Ocupacion || "";
+
+    if (personajeIdEditar) {
+      formAgregar.setAttribute("data-id-edicion", personajeIdEditar.toString());
+    }
+  }
+
+  // Guardar nuevo o modificar existente
+  formAgregar.addEventListener("submit", (e) => {
+    e.preventDefault();
+    if (!formAgregar) return;
+
+    let almacenados = JSON.parse(localStorage.getItem("personajesPersonalizados") || "[]");
+
+    const nombreInput = document.getElementById("nombre") as HTMLInputElement;
+    const imagenInput = document.getElementById("imagen") as HTMLInputElement;
+
+    if (!nombreInput.value || !imagenInput.value) {
+      alert("❗ Debes completar al menos el nombre y la imagen del personaje.");
+      return;
+    }
+
+    // ID: si estás en modo edición, usamos el ID que ya tenía
+    const nuevoId = esEdicion && personajeIdEditar ? personajeIdEditar : 
+                   Math.random().toString(36).substring(2) + Date.now().toString(36);
+
+    const nuevoPersonaje = {
+      _id: nuevoId,
+      id: nuevoId,
+      Nombre: nombreInput.value,
+      Imagen: imagenInput.value,
+      Historia: (document.getElementById("historia") as HTMLTextAreaElement).value,
+      Genero: (document.getElementById("genero") as HTMLSelectElement).value,
+      Estado: (document.getElementById("estado") as HTMLSelectElement).value,
+      Ocupacion: (document.getElementById("ocupacion") as HTMLInputElement).value
+    };
+
+    if (esEdicion) {
+      // Modificamos
+      almacenados = almacenados.map((p: any) => 
+        p.id === personajeIdEditar || p._id === personajeIdEditar ? nuevoPersonaje : p
+      );
+    } else {
+      // Añadimos nuevo
+      almacenados.push(nuevoPersonaje);
+    }
+
+    localStorage.setItem("personajesPersonalizados", JSON.stringify(almacenados));
+
+    alert(esEdicion ? "✏️ Personaje modificado con éxito." : "✅ Personaje añadido correctamente.");
+    formAgregar.reset();
+    formAgregar.style.display = "none";
+
+    // Reiniciamos estado
+    esEdicion = false;
+    personajeIdEditar = null;
+  });
+});
