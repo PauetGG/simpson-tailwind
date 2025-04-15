@@ -15,6 +15,9 @@ let offset = 0; // Para rastrear cuántos personajes se han cargado
 let isLoading = false; // Para evitar múltiples cargas simultáneas
 const batchSize = 20; // Número de personajes por lote
 const favoritos: string[] = [];
+let personajesFiltrados: Personaje[] = [];
+
+
 
 // 🔧 Renderiza las tarjetas
 function renderPersonajes(personajes: Personaje[]) {
@@ -134,7 +137,7 @@ function aplicarFiltrosYBuscar() {
   const texto = inputBuscador.value.toLowerCase().trim();
   const filtroOcupacion = selectorOcupacion.value.toLowerCase().trim();
 
-  const filtrados = todosLosPersonajes.filter(p => {
+  personajesFiltrados = todosLosPersonajes.filter(p => {
     const nombre = p.Nombre?.toLowerCase().trim() || '';
     const genero = p.Genero?.toLowerCase().trim() || '';
     const estado = p.Estado?.toLowerCase().trim() || '';
@@ -148,26 +151,35 @@ function aplicarFiltrosYBuscar() {
     return coincideNombre && coincideGenero && coincideEstado && coincideOcupacion;
   });
 
-  renderPersonajes(filtrados);
+  offset = 0;
+  document.getElementById('contenedor')!.innerHTML = '';
+  const gif = document.getElementById('loadingGif') as HTMLImageElement;
+const text = document.getElementById('loadingText') as HTMLSpanElement;
+
+if (gif && text) {
+  gif.src = 'https://media.giphy.com/media/lyBCBlxAI0bo4/giphy.gif';
+  gif.alt = 'Cargando...';
+  text.textContent = 'Cargando Simpsons...';
+  text.className = 'text-lg font-bold text-yellow-500';
+}
+  cargarMasPersonajes(personajesFiltrados); // 👉 Usamos solo los filtrados
   sonidoAlHoverDeBounce();
 }
+
 
 // Carga un lote de personajes con un retardo
 // Modificar cargarMasPersonajes para que permita añadir al contenedor existente
 async function cargarMasPersonajes(personajes: Personaje[]) {
-  if (isLoading) return; // Evita cargar si ya está en proceso
+  if (isLoading) return;
 
   isLoading = true;
 
-  // Verificar si ya existe el contenedor de carga
   let loadingContainer = document.getElementById('loadingContainer') as HTMLDivElement;
   if (!loadingContainer) {
-    // Crear el contenedor para el GIF y el texto
     loadingContainer = document.createElement('div');
     loadingContainer.id = 'loadingContainer';
     loadingContainer.className = 'flex items-center justify-center space-x-4 mt-4';
 
-    // Crear el GIF
     const loadingGif = document.createElement('img');
     loadingGif.src = 'https://media.giphy.com/media/lyBCBlxAI0bo4/giphy.gif';
     loadingGif.alt = 'Cargando...';
@@ -175,74 +187,123 @@ async function cargarMasPersonajes(personajes: Personaje[]) {
     loadingGif.style.height = '100px';
     loadingGif.id = 'loadingGif';
 
-    // Crear el texto
     const loadingText = document.createElement('span');
-    loadingText.style="font-family: 'Simpsonfont'"
+    loadingText.style.fontFamily = 'Simpsonfont';
     loadingText.textContent = 'Cargando Simpsons...';
     loadingText.className = 'text-lg font-bold text-yellow-500';
+    loadingText.id = 'loadingText';
 
-    // Agregar el GIF y el texto al contenedor
     loadingContainer.appendChild(loadingGif);
     loadingContainer.appendChild(loadingText);
 
-    // Agregar el contenedor al final del contenedor principal
     const contenedor = document.getElementById('contenedor');
     if (contenedor) {
       contenedor.parentElement?.appendChild(loadingContainer);
     }
   }
 
-  // Mostrar el contenedor de carga
   loadingContainer.style.display = 'flex';
 
-  // Simular retardo de carga
-  await new Promise(resolve => setTimeout(resolve, 2000));
+  await new Promise(resolve => setTimeout(resolve, 1000));
 
-  // Obtener el siguiente lote de personajes respetando los filtros actuales
-  const siguienteLote = personajes.slice(offset, offset + batchSize);
-  const filtrados = aplicarFiltros(siguienteLote); // Aplica los filtros al lote actual
+  if (offset < personajes.length) {
+    const siguienteLote = personajes.slice(offset, offset + batchSize);
+    const filtrados = aplicarFiltros(siguienteLote);
 
-  const contenedor = document.getElementById('contenedor');
-  if (contenedor) {
-    filtrados.forEach(personaje => {
-      const div = document.createElement('div');
-      div.className = 'personaje cursor-pointer';
+    const contenedor = document.getElementById('contenedor');
+    if (contenedor) {
+      filtrados.forEach(personaje => {
+        const div = document.createElement('div');
+        div.className = 'personaje cursor-pointer';
 
-      div.innerHTML = `
-        <div class="border-4 border-black border-solid rounded-xl">
-          <div class="w-62 h-[600px] bg-white rounded-lg shadow-md border-gray-200 p-2 flex flex-col border-b-4 border-r-4 border-gray-300">
-            <h3 style="font-family: 'Simpsonfont'; font-weight: bold;" class="text-lg text-center mb-3">${personaje.Nombre}</h3>
-            <div class="rounded-lg p-2 mb-4 flex-grow flex items-center justify-center">
-              <img 
-                style="object-fit: contain" 
-                src="${personaje.Imagen}" 
-                alt="${personaje.Nombre}" 
-                class="w-32 h-64 mx-auto object-contain bounce-simpson-hover"
-              >
-            </div>
-            <div class="h-[200px] text-sm text-gray-600 text-center bg-gray-200 rounded-lg p-2 border-b-4 border-l-4 border-gray-300 content-center">
-              <p class="mb-1"><span style="font-family: 'Simpsonfont';" class="font-semibold">Genero: <br> </span> ${personaje.Genero}</p>
-              <p class="mb-1"><span style="font-family: 'Simpsonfont';" class="font-semibold">Estado: <br> </span> ${personaje.Estado}</p>
-              <p><span style="font-family: 'Simpsonfont';" class="font-semibold">Ocupación: <br> </span> ${personaje.Ocupacion}</p>
+        div.innerHTML = `
+          <div class="border-4 border-black border-solid rounded-xl relative">
+            <div class="w-62 h-[600px] bg-white rounded-lg shadow-md border-gray-200 p-2 flex flex-col border-b-4 border-r-4 border-gray-300">
+              <h3 style="font-family: 'Simpsonfont'; font-weight: bold;" class="text-lg text-center mb-3">${personaje.Nombre}</h3>
+              <div class="rounded-lg p-2 mb-4 flex-grow flex items-center justify-center">
+                <img 
+                  style="object-fit: contain" 
+                  src="${personaje.Imagen}" 
+                  alt="${personaje.Nombre}" 
+                  class="w-32 h-64 mx-auto object-contain bounce-simpson-hover"
+                >
+              </div>
+              <div class="h-[200px] text-sm text-gray-600 bg-gray-200 rounded-lg p-2 border-b-4 border-l-4 border-gray-300 relative flex flex-col">
+                <div class="flex justify-end">
+                  <button class="btn-fav absolute top-1 right-1 text-2xl text-gray-300 hover:scale-110 transition-transform">🤍</button>
+                </div>
+                <div class="text-center mt-1">
+                  <p class="mb-1"><span style="font-family: 'Simpsonfont';" class="font-semibold">Genero: <br></span> ${personaje.Genero}</p>
+                  <p class="mb-1"><span style="font-family: 'Simpsonfont';" class="font-semibold">Estado: <br></span> ${personaje.Estado}</p>
+                  <p><span style="font-family: 'Simpsonfont';" class="font-semibold">Ocupación: <br></span> ${personaje.Ocupacion}</p>
+                </div>
+              </div>
             </div>
           </div>
-        </div>
-      `;
+        `;
 
-      div.addEventListener('click', () => {
-        mostrarModal(personaje);
+        const btnFav = div.querySelector('.btn-fav') as HTMLButtonElement;
+        const nombre = personaje.Nombre;
+
+        if (favoritos.includes(nombre)) {
+          btnFav.textContent = '❤️';
+          btnFav.classList.add('active');
+        }
+
+        btnFav.addEventListener('click', (e) => {
+          e.stopPropagation();
+          const index = favoritos.indexOf(nombre);
+          if (index === -1) {
+            favoritos.push(nombre);
+            btnFav.textContent = '❤️';
+            btnFav.classList.add('active');
+          } else {
+            favoritos.splice(index, 1);
+            btnFav.textContent = '🤍';
+            btnFav.classList.remove('active');
+          }
+          console.log('Favoritos:', favoritos);
+        });
+
+        div.addEventListener('click', () => {
+          mostrarModal(personaje);
+        });
+
+        contenedor.appendChild(div);
       });
+    }
 
-      contenedor.appendChild(div);
-    });
+    loadingContainer.style.display = 'none';
+    offset += batchSize;
+  } else {
+    const gif = document.getElementById('loadingGif') as HTMLImageElement;
+    const text = document.getElementById('loadingText') as HTMLSpanElement;
+
+        if (gif) {
+          gif.remove(); // ❌ Elimina el gif actual
+        }
+        const nuevoGif = document.createElement('img');
+        nuevoGif.id = 'loadingGif';
+        nuevoGif.src = 'https://media4.giphy.com/media/v1.Y2lkPTc5MGI3NjExaHR3djFxZDhkZzJ3YWdydnF4d2k4aTA2dTJvMXVodTQ2and0YjFxaSZlcD12MV9pbnRlcm5hbF9naWZfYnlfaWQmY3Q9Zw/jUwpNzg9IcyrK/giphy.gif';
+        nuevoGif.alt = 'Fin';
+        nuevoGif.style.width = '100px';
+        nuevoGif.style.height = '100px';
+
+        const container = document.getElementById('loadingContainer');
+        if (container) {
+          container.prepend(nuevoGif); // 👈 Lo pones arriba
+          console.log('✅ Gif anterior eliminado y nuevo gif de fin añadido');
+        }
+    if (text) {
+      text.textContent = '¡Eso es todo! No hay personajes para mostrar.';
+      text.className = 'text-lg font-bold text-red-600';
+    }
   }
 
-  // Ocultar el contenedor de carga
-  loadingContainer.style.display = 'none';
-
-  offset += batchSize; // Actualiza el offset
   isLoading = false;
 }
+
+
 function aplicarFiltros(lote: Personaje[]): Personaje[] {
   const texto = inputBuscador.value.toLowerCase().trim();
   const filtroOcupacion = selectorOcupacion.value.toLowerCase().trim();
@@ -430,7 +491,6 @@ async function obtenerTodosLosPersonajes(): Promise<Personaje[]> {
     console.error('❌ Error al obtener personajes:', error);
     return [];
   }
-  return personajes;
 }
 
 function mostrarModal(personaje: Personaje) {
@@ -793,15 +853,15 @@ document.addEventListener('scroll', async () => {
   const contenedor = document.getElementById('contenedor');
   if (!contenedor) return;
 
-  // Detecta si el scroll está cerca del final del contenedor
   const scrollTop = window.scrollY;
   const windowHeight = window.innerHeight;
   const contenedorHeight = contenedor.offsetHeight;
 
   if (scrollTop + windowHeight >= contenedorHeight - 100 && !isLoading) {
-    await cargarMasPersonajes(todosLosPersonajes); // Carga 20 personajes más
+    await cargarMasPersonajes(personajesFiltrados.length > 0 ? personajesFiltrados : todosLosPersonajes);
   }
 });
+
 
 class SimpsonScrollButton {
   private button: HTMLButtonElement;
