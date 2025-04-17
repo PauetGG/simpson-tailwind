@@ -28,14 +28,16 @@ button, a, [role="button"], .cursor-pointer {
     font-weight: bold;
     color: black;
     display: flex;
-    justify-content: center;
-    align-items: flex-end; /* 🔽 letra abajo */
-    padding-bottom: 10px;
+    flex-direction: column; /* 🔽 Disposición en columna */
+    justify-content: flex-end; /* Colocar contenido hacia la parte inferior */
+    align-items: center; /* Centrar el contenido horizontalmente */
+    padding: 10px 5px; /* Espaciado interno */
     position: relative;
     z-index: 10;
     box-shadow: 2px 4px #888;
     transition: transform 0.1s ease;
   }
+
   
   @font-face {
     font-family: 'Simpsonfont';  /* Nombre que usarás en Tailwind */
@@ -44,6 +46,7 @@ button, a, [role="button"], .cursor-pointer {
     font-style: normal;
     font-display: swap; /* Mejora la renderización mientras carga */
   }
+   
   .tecla-negra {
     width: 40px;
     height: 130px;
@@ -53,6 +56,11 @@ button, a, [role="button"], .cursor-pointer {
     z-index: 20;
     transition: transform 0.1s ease;
     margin-top: 10px;
+    display: flex;
+    flex-direction: column; /* 🔽 Disposición en columna */
+    justify-content: flex-end; /* Colocar contenido hacia la parte inferior */
+    align-items: center; /* Centrar el contenido horizontalmente */
+    padding: 10px 5px; /* Espaciado interno */
     color: white;
   }
   
@@ -67,4 +75,17 @@ button, a, [role="button"], .cursor-pointer {
   }
   #loadingIndicator.hidden {
     display: none;
+}
+.randomizar-btn {
+  background-color: #4CAF50; /* Verde */
+  color: white;
+  padding: 10px 20px;
+  margin: 10px;
+  border: none;
+  cursor: pointer;
+  border-radius: 5px;
+}
+
+.randomizar-btn:hover {
+  background-color: #45a049;
 }

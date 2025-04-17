@@ -615,12 +615,28 @@ const teclaToSonido: { [key: string]: string } = {
   y: 'notaGs',
   u: 'notaAs'
 };
+const todasLasTeclas = [
+  { sonido: 'notaC', letra: 'A', imagen: 'src/images/img-sonidos/muelle.png' },
+  { sonido: 'notaD', letra: 'S', imagen: 'src/images/img-sonidos/homer.png' },
+  { sonido: 'notaE', letra: 'D', imagen: 'src/images/img-sonidos/homer2.png' },
+  { sonido: 'notaF', letra: 'F', imagen: 'src/images/img-sonidos/homer3.png' },
+  { sonido: 'notaG', letra: 'G', imagen: 'src/images/img-sonidos/simpsons_PNG59.png' },
+  { sonido: 'notaA', letra: 'H', imagen: 'src/images/img-sonidos/skiner.png' },
+  { sonido: 'notaB', letra: 'J', imagen: 'src/images/img-sonidos/simpsons_PNG41.png' },
+  { sonido: 'notaCs', letra: 'W', imagen: 'src/images/img-sonidos/simpsons_PNG43.png' },
+  { sonido: 'notaDs', letra: 'E', imagen: 'src/images/img-sonidos/Milhouse.png' },
+  { sonido: 'notaFs', letra: 'T', imagen: 'src/images/img-sonidos/simpsons_PNG32.png' },
+  { sonido: 'notaGs', letra: 'Y', imagen: 'src/images/img-sonidos/bart.png' },
+  { sonido: 'notaAs', letra: 'U', imagen: 'src/images/img-sonidos/simpsons_PNG36.png' },
+  { sonido: 'notaBs', letra: 'Z', imagen: 'src/images/img-sonidos/Ralph_Wiggum.png' },
+];
 function setupModalPiano() {
   const pianoModal = document.getElementById('modalPiano')!;
   const abrirBtn = document.getElementById('pianoButton')!;
   const cerrarBtn = document.getElementById('cerrarPiano')!;
 
   abrirBtn.addEventListener('click', () => {
+    generarTeclasRandom(); // Generar teclas aleatorias cada vez que se abre el piano
     pianoModal.classList.remove('hidden');
   });
 
@@ -628,44 +644,121 @@ function setupModalPiano() {
     pianoModal.classList.add('hidden');
   });
 
-  document.querySelectorAll<HTMLButtonElement>('.tecla').forEach(tecla => {
-    tecla.addEventListener('click', () => {
-      const idSonido = tecla.dataset.sonido;
-      const audio = document.getElementById(idSonido!) as HTMLAudioElement;
-      if (audio) {
-        audio.currentTime = 0;
-        audio.play();
-      }
-    });
-  });
   document.addEventListener('keydown', (e) => {
     const modal = document.getElementById('modalPiano');
     if (!modal || modal.classList.contains('hidden')) return;
-  
+
     const letra = e.key.toLowerCase();
     const sonidoId = teclaToSonido[letra];
     if (!sonidoId) return;
-  
+
     const audio = document.getElementById(sonidoId) as HTMLAudioElement;
     if (audio) {
       audio.currentTime = 0;
       audio.play().catch(() => {});
     }
-  
-    // 🔁 Encuentra la tecla visual correspondiente
-    const tecla = [...document.querySelectorAll('.tecla-blanca, .tecla-negra')]
-      .find(t => t instanceof HTMLButtonElement && t.dataset.sonido === sonidoId);
-  
+
+    const tecla = [...document.querySelectorAll('.tecla-blanca, .tecla-negra')].find(
+      t => t instanceof HTMLButtonElement && t.dataset.sonido === sonidoId
+    );
+
     if (tecla) {
       tecla.classList.add('presionada');
-  
-      // Quitar la clase tras un corto delay (como un "rebote")
+
       setTimeout(() => {
         tecla.classList.remove('presionada');
       }, 150);
+      generarTeclasRandom(); // Generar teclas con las imágenes
     }
   });
 }
+
+
+
+
+function generarTeclasRandom() {
+  const teclado = document.getElementById('teclado')!;
+  teclado.innerHTML = ''; // Limpia las teclas anteriores
+
+  const teclasBlancas = todasLasTeclas.filter(tecla => !tecla.sonido.includes('s'));
+  const teclasNegras = todasLasTeclas.filter(tecla => tecla.sonido.includes('s'));
+
+  const teclasBlancasRandom = teclasBlancas.sort(() => Math.random() - 0.5).slice(0, 7);
+  const teclasNegrasRandom = teclasNegras.sort(() => Math.random() - 0.5).slice(0, 3);
+
+  const teclasRandom = [...teclasBlancasRandom, ...teclasNegrasRandom].sort((a, b) => {
+    const isABlack = a.sonido.includes('s');
+    const isBBlack = b.sonido.includes('s');
+    if (isABlack && !isBBlack) return 1;
+    if (!isABlack && isBBlack) return -1;
+    return Math.random() - 0.5;
+  });
+
+  teclasRandom.forEach(tecla => {
+    const esBlanca = !tecla.sonido.includes('s');
+    const botonTecla = document.createElement('button');
+    botonTecla.className = `tecla absolute ${esBlanca ? 'tecla-blanca' : 'tecla-negra'}`;
+    botonTecla.dataset.sonido = tecla.sonido;
+
+    // Agregar la imagen y letra a la tecla
+    botonTecla.innerHTML = `
+      <span>${tecla.letra}</span>
+      <img src="${tecla.imagen}" alt="Icono" class="w-8 h-8 mx-auto mt-1" />
+    `;
+
+    // Añadir evento click a la tecla para reproducir sonido
+    botonTecla.addEventListener('click', () => {
+      const audio = document.getElementById(tecla.sonido) as HTMLAudioElement;
+      if (audio) {
+        audio.currentTime = 0;
+        audio.play().catch(() => {}); // Manejar errores silenciosamente
+      }
+    });
+
+    teclado.appendChild(botonTecla);
+  });
+  const teclasBlancasRendered = Array.from(teclado.querySelectorAll<HTMLButtonElement>('.tecla-blanca'));
+  const teclasNegrasRendered = Array.from(teclado.querySelectorAll<HTMLButtonElement>('.tecla-negra'));
+
+  let posicionBlancaLeft = 0;
+  const anchoTeclaBlanca = 50;
+
+  teclasBlancasRendered.forEach(teclaBlanca => {
+    teclaBlanca.style.left = `${posicionBlancaLeft * anchoTeclaBlanca}px`;
+    teclaBlanca.style.top = '0px';
+    teclaBlanca.style.zIndex = '10';
+
+  });
+
+  let indiceNegra = 0;
+  for (let i = 0; i < teclasBlancasRendered.length - 1 && indiceNegra < teclasNegrasRendered.length; i++) {
+    if (i === 0 && indiceNegra < teclasNegrasRendered.length) {
+      teclasNegrasRendered[indiceNegra].style.left = `${anchoTeclaBlanca * 0.75}px`;
+      teclasNegrasRendered[indiceNegra].style.top = '-10px';
+      teclasNegrasRendered[indiceNegra].style.zIndex = '20';
+      indiceNegra++;
+    }
+    if (i === 2 && indiceNegra < teclasNegrasRendered.length) {
+      teclasNegrasRendered[indiceNegra].style.left = `${anchoTeclaBlanca * 3.25}px`;
+      teclasNegrasRendered[indiceNegra].style.top = '-10px';
+      teclasNegrasRendered[indiceNegra].style.zIndex = '20';
+      indiceNegra++;
+    }
+    if (i === 5 && indiceNegra < teclasNegrasRendered.length) {
+      teclasNegrasRendered[indiceNegra].style.left = `${anchoTeclaBlanca * 5.75}px`;
+      teclasNegrasRendered[indiceNegra].style.top = '-10px';
+      teclasNegrasRendered[indiceNegra].style.zIndex = '20';
+      indiceNegra++;
+    }
+  }
+
+  teclado.style.position = 'relative';
+}
+
+// Asegúrate de inicializar la función cuando el documento esté listo
+document.addEventListener('DOMContentLoaded', () => {
+  setupModalPiano();
+});
 function setupQuizModal() {
   const quizButton = document.getElementById('quizButton')!;
   const quizModal = document.getElementById('quizModal')!;
@@ -927,6 +1020,7 @@ document.addEventListener('scroll', async () => {
     await cargarMasPersonajes(personajesFiltrados.length > 0 ? personajesFiltrados : todosLosPersonajes);
   }
 });
+
 
 class SimpsonScrollButton {
   private button: HTMLButtonElement;

@@ -89,6 +89,7 @@
         <h2 class="text-2xl mb-4 font-bold font-rock-salt">Simpson Piano</h2>
         <div class="relative h-52 w-full flex justify-center items-end">
           <div id="teclado" class="flex relative z-10">
+            <button id="randomizarTeclas" class="randomizar-btn"></button>
             <div class="relative">
               <button class="tecla tecla-blanca" data-sonido="notaC">A</button>
               <button class="tecla tecla-negra absolute left-[35px] -top-[10px]" data-sonido="notaCs">W</button>
@@ -160,21 +161,22 @@
   <audio id="burns1" src="/public/sounds/Burns.mp3"></audio>
   <audio id="bob1" src="/public/sounds/Bob.mp3"></audio>
   <audio id="barney1" src="/public/sounds/Barney.mp3"></audio>
-   <audio id="boingAudio" src="public/sounds/boing.mp3" preload="auto"></audio>
-   <audio id="notaC" src="public/sounds/boing.mp3" preload="auto"></audio>
-   <audio id="notaD" src="public/sounds/doh.mp3" preload="auto"></audio>
-   <audio id="notaE" src="public/sounds/WooHoo.mp3" preload="auto"></audio>
-   <audio id="notaF" src="public/sounds/ShutUp.mp3" preload="auto"></audio>
-   <audio id="notaA" src="public/sounds/UhOh.mp3" preload="auto"></audio>
-   <audio id="notaB" src="public/sounds/Oh.mp3" preload="auto"></audio>
-   <audio id="notaCs" src="public/sounds/Haha.mp3" preload="auto"></audio>
-   <audio id="notaDs" src="public/sounds/BYoink.mp3" preload="auto"></audio>
-   <audio id="notaFs" src="public/sounds/HYoink.mp3" preload="auto"></audio>
-   <audio id="notaGs" src="public/sounds/Scream.mp3" preload="auto"></audio>
-   <audio id="notaAs" src="public/sounds/Scream2.mp3" preload="auto"></audio>
-   <audio id="notaG" src="public/sounds/NHaha.mp3" preload="auto"></audio>
-   <script type="module" src="/src/main.ts"></script>
-   <img id="loadingGif" src="https://media.giphy.com/media/lyBCBlxAI0bo4/giphy.gif?cid=ecf05e4734puj8mij4pkfvg4fqsoeg270otfgtkclwvbbv9m&ep=v1_gifs_search&rid=giphy.gif&ct=g" alt="Cargando..." class="hidden w-16 h-16 mx-auto" />
+  <audio id="boingAudio" src="public/sounds/boing.mp3" preload="auto"></audio>
+  <audio id="notaC" src="public/sounds/boing.mp3" preload="auto"></audio>
+  <audio id="notaD" src="public/sounds/doh.mp3" preload="auto"></audio>
+  <audio id="notaE" src="public/sounds/WooHoo.mp3" preload="auto"></audio>
+  <audio id="notaF" src="public/sounds/ShutUp.mp3" preload="auto"></audio>
+  <audio id="notaA" src="public/sounds/UhOh.mp3" preload="auto"></audio>
+  <audio id="notaB" src="public/sounds/Oh.mp3" preload="auto"></audio>
+  <audio id="notaCs" src="public/sounds/Haha.mp3" preload="auto"></audio>
+  <audio id="notaDs" src="public/sounds/BYoink.mp3" preload="auto"></audio>
+  <audio id="notaFs" src="public/sounds/HYoink.mp3" preload="auto"></audio>
+  <audio id="notaGs" src="public/sounds/Scream.mp3" preload="auto"></audio>
+  <audio id="notaAs" src="public/sounds/Scream2.mp3" preload="auto"></audio>
+  <audio id="notaG" src="public/sounds/NHaha.mp3" preload="auto"></audio>
+  <audio id="notaBs" src="public/sounds/Ralph.mp3" preload="auto"></audio>
+  <script type="module" src="/src/main.ts"></script>
+  <img id="loadingGif" src="https://media.giphy.com/media/lyBCBlxAI0bo4/giphy.gif?cid=ecf05e4734puj8mij4pkfvg4fqsoeg270otfgtkclwvbbv9m&ep=v1_gifs_search&rid=giphy.gif&ct=g" alt="Cargando..." class="hidden w-16 h-16 mx-auto" />
     
 </div>
 
