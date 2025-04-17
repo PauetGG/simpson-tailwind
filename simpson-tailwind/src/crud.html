@@ -1,0 +1,382 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>CRUD Simpson</title>
+    <link href="./src/style.css" rel="stylesheet">
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link href="https://fonts.googleapis.com/css2?family=Rock+Salt&display=swap" rel="stylesheet">
+    <style>
+        @font-face {
+            font-family: 'Simpsonfont';
+            src: url('https://fonts.cdnfonts.com/css/simpsons') format('woff2');
+        }
+        .bounce-simpson-hover:hover {
+            animation: bounce 0.5s;
+        }
+        @keyframes bounce {
+            0%, 100% { transform: translateY(0); }
+            50% { transform: translateY(-10px); }
+        }
+    </style>
+</head>
+<body id="backgroundContainer" class="bg-[url('https://ia904506.us.archive.org/1/items/AfterDarkSimpsons/simpsons.png')] bg-cover bg-center bg-no-repeat bg-fixed min-h-screen bg-blue-300">
+
+  <a href="index.html" class="flex justify-center">
+    <img class="h-[25vh]" src="https://upload.wikimedia.org/wikipedia/commons/thumb/9/98/The_Simpsons_yellow_logo.svg/1600px-The_Simpsons_yellow_logo.svg.png" alt="">
+  </a>
+
+<div class="flex flex-col items-center justify-center p-4">
+    <!-- Botones principales -->
+     <div class="align-center">
+<button id="btn-agregar" class="bg-green-500 text-white font-bold py-2 px-4 border-b-4 border-green-600 hover:border-b-1 rounded-full">➕ Agregar Personaje</button>
+<button id="btn-modificar" class="bg-blue-500 text-white font-bold py-2 px-4 border-b-4 border-blue-600 hover:border-b-1 rounded-full">✏️ Modificar Personaje</button>
+<button id="btn-eliminar" class="bg-red-500 text-white font-bold py-2 px-4 border-b-4 border-red-600 hover:border-b-1 rounded-full">🗑️ Eliminar Personaje</button>
+</div>
+<!-- Formulario de agregar/modificar -->
+<form id="form-agregar" class="border-4 bg-green-300 border-black border-solid rounded-xl relative p-4 my-4" style="display: none;">
+ <h2 class="title text-center text-xl font-bold mb-2">➕ Añadir Personaje</h2>
+ <input type="text" id="nombre" placeholder="Nombre" required class="w-full p-2 mb-2 rounded"/><br />
+ <input type="text" id="imagen" placeholder="URL de la imagen" required class="w-full p-2 mb-2 rounded"/><br />
+ <textarea id="historia" placeholder="Historia del personaje" class="w-full p-2 mb-2 rounded"></textarea><br />
+ <select id="genero" class="w-full p-2 mb-2 rounded">
+   <option value="">Seleccionar Género</option>
+   <option value="Masculino">Masculino</option>
+   <option value="Femenino">Femenino</option>
+   <option value="Otro">Otro</option>
+ </select><br />
+ <select id="estado" class="w-full p-2 mb-2 rounded">
+   <option value="">Seleccionar Estado</option>
+   <option value="Vivo">Vivo</option>
+   <option value="Muerto">Muerto</option>
+ </select><br />
+ <input type="text" id="ocupacion" placeholder="Ocupación" class="w-full p-2 mb-2 rounded"/><br />
+ <button type="submit" class="bg-blue-500 text-white font-bold py-2 px-4 rounded w-full">💾 Guardar</button>
+</form>
+
+<!-- Buscador para modificación -->
+<div id="buscador-modificar" class="border-4 bg-blue-300 border-black border-solid rounded-xl relative p-4 my-4" style="display: none;">
+ <input type="text" id="buscar-id-nombre" placeholder="ID o Nombre del personaje" class="w-full p-2 mb-2 rounded"/>
+ <button id="btn-buscar-personaje" class="bg-blue-600 text-white font-bold py-2 px-4 rounded w-full">🔍 Buscar</button>
+ <div id="msg-error" style="color: red;" class="mt-2"></div>
+</div>
+
+<!-- Buscador para eliminación -->
+<div id="buscador-eliminar" class="border-4 bg-red-300 border-black border-solid rounded-xl relative p-4 my-4" style="display: none;">
+ <input type="text" id="input-eliminar" placeholder="ID o Nombre del personaje" class="w-full p-2 mb-2 rounded"/>
+ <button id="btn-confirmar-eliminar" class="bg-red-600 text-white font-bold py-2 px-4 rounded w-full">❌ Eliminar</button>
+ <div id="msg-eliminar" style="color: red;" class="mt-2"></div>
+</div>
+</div>
+<script>
+  let todosLosPersonajes = [];
+  let filtroGenero = '';
+  let filtroEstado = '';
+  let offset = 0;
+  let isLoading = false;
+  const batchSize = 20;
+  const favoritos = [];
+
+  // Function to load characters from API and local storage
+  async function cargarPersonajes() {
+    try {
+      // Load from API
+      const response = await fetch('https://apisimpsons.fly.dev/api/personajes?limit=20');
+      const data = await response.json();
+      const apiCharacters = data.docs || [];
+      
+      // Load from local storage
+      const localCharacters = JSON.parse(localStorage.getItem("personajesPersonalizados") || "[]");
+      
+      // Filter out deleted characters
+      const activeLocalCharacters = localCharacters.filter(char => !char.eliminado);
+      
+      // Combine both sources
+      todosLosPersonajes = [...activeLocalCharacters, ...apiCharacters];
+      
+      // Render all characters
+      renderPersonajes(todosLosPersonajes);
+    } catch (error) {
+      console.error("Error loading characters:", error);
+    }
+  }
+
+  // Render character cards
+  function renderPersonajes(personajes) {
+    const contenedor = document.getElementById('contenedor');
+    if (!contenedor) return;
+
+    contenedor.innerHTML = '';
+
+    personajes.slice(0, 20).forEach(personaje => {
+      const div = document.createElement('div');
+      div.className = 'personaje cursor-pointer w-64';
+
+      div.innerHTML = `
+      <div class="border-4 border-black border-solid rounded-xl relative">
+        <div class="h-[600px] bg-white rounded-lg shadow-md border-gray-200 p-2 flex flex-col border-b-4 border-r-4 border-gray-300">
+          <h3 style="font-family: 'Simpsonfont'; font-weight: bold;" class="text-lg text-center mb-3">${personaje.Nombre}</h3>
+          
+          <div class="rounded-lg p-2 mb-4 flex-grow flex items-center justify-center">
+            <img 
+              style="object-fit: contain" 
+              src="${personaje.Imagen}" 
+              alt="${personaje.Nombre}" 
+              class="w-32 h-64 mx-auto object-contain bounce-simpson-hover"
+              onerror="this.src='https://via.placeholder.com/150?text=Image+Not+Found'"
+            >
+          </div>
+          <div class="h-[200px] text-sm text-gray-600 bg-gray-200 rounded-lg p-2 border-b-4 border-l-4 border-gray-300 relative flex flex-col">
+          <div class="flex justify-end">
+           <button class="btn-fav absolute top-1 right-1 text-2xl text-gray-300 hover:scale-110 transition-transform">🤍</button>
+          </div>
+          <div class="text-center mt-1">
+            <p class="mb-1"><span style="font-family: 'Simpsonfont';" class="font-semibold">Genero: <br></span> ${personaje.Genero || 'N/A'}</p>
+            <p class="mb-1"><span style="font-family: 'Simpsonfont';" class="font-semibold">Estado: <br></span> ${personaje.Estado || 'N/A'}</p>
+            <p><span style="font-family: 'Simpsonfont';" class="font-semibold">Ocupación: <br></span> ${personaje.Ocupacion || 'N/A'}</p>
+          </div>
+          </div>
+        </div>
+      </div>
+    `;
+      contenedor.appendChild(div);
+    });
+  }
+
+  // Wait for DOM to be fully loaded
+  document.addEventListener('DOMContentLoaded', () => {
+    // Load characters when page loads
+    cargarPersonajes();
+
+    // Element references
+    const btnAgregar = document.getElementById("btn-agregar");
+    const formAgregar = document.getElementById("form-agregar");
+    const formTitulo = document.querySelector("#form-agregar .title");
+    const btnModificar = document.getElementById("btn-modificar");
+    const buscadorModificar = document.getElementById("buscador-modificar");
+    const btnBuscarPersonaje = document.getElementById("btn-buscar-personaje");
+    const inputBusquedaModificar = document.getElementById("buscar-id-nombre");
+    const mensajeError = document.getElementById("msg-error");
+    const btnEliminar = document.getElementById("btn-eliminar");
+    const buscadorEliminar = document.getElementById("buscador-eliminar");
+    const inputEliminar = document.getElementById("input-eliminar");
+    const btnConfirmarEliminar = document.getElementById("btn-confirmar-eliminar");
+    const mensajeEliminar = document.getElementById("msg-eliminar");
+  
+    // Check if essential elements exist
+    if (!btnAgregar || !formAgregar || !formTitulo || !btnModificar || !buscadorModificar || 
+        !btnBuscarPersonaje || !inputBusquedaModificar || !mensajeError || !btnEliminar || 
+        !buscadorEliminar || !inputEliminar || !btnConfirmarEliminar || !mensajeEliminar) {
+      console.error("One or more essential elements are missing from the DOM");
+      return;
+    }
+  
+    let esEdicion = false;
+    let personajeIdEditar = null;
+  
+    // Initialize form states
+    formAgregar.style.display = "none";
+    buscadorModificar.style.display = "none";
+    buscadorEliminar.style.display = "none";
+    mensajeError.style.display = "none";
+    mensajeEliminar.style.display = "none";
+  
+    // Mostrar/ocultar formulario de agregar y limpiar
+    btnAgregar.addEventListener("click", () => {
+      formAgregar.style.display = formAgregar.style.display === "none" ? "block" : "none";
+      formAgregar.reset();
+      formTitulo.textContent = "➕ Añadir Personaje";
+      formAgregar.removeAttribute("data-id-edicion");
+      esEdicion = false;
+      personajeIdEditar = null;
+    });
+  
+    // Mostrar/ocultar buscador de modificación
+    btnModificar.addEventListener("click", () => {
+      buscadorModificar.style.display = buscadorModificar.style.display === "none" ? "block" : "none";
+      buscadorEliminar.style.display = "none";
+    });
+  
+    // Mostrar/ocultar buscador de eliminación
+    btnEliminar.addEventListener("click", () => {
+      buscadorEliminar.style.display = buscadorEliminar.style.display === "none" ? "block" : "none";
+      buscadorModificar.style.display = "none";
+      mensajeEliminar.style.display = "none";
+      inputEliminar.value = "";
+    });
+  
+    // Confirmar eliminación
+    btnConfirmarEliminar.addEventListener("click", () => {
+      const valor = inputEliminar.value.trim().toLowerCase();
+      if (!valor) return;
+  
+      let personalizados = JSON.parse(localStorage.getItem("personajesPersonalizados") || "[]");
+  
+      // Try to find in custom characters first
+      const index = personalizados.findIndex((p) => 
+        p.Nombre.toLowerCase() === valor || p.id.toString().toLowerCase() === valor || 
+        (p._id && p._id.toString().toLowerCase() === valor)
+      );
+  
+      if (index !== -1) {
+        personalizados.splice(index, 1);
+        localStorage.setItem("personajesPersonalizados", JSON.stringify(personalizados));
+        mensajeEliminar.textContent = "🗑️ Personaje eliminado correctamente.";
+        mensajeEliminar.style.display = "block";
+        inputEliminar.value = "";
+        cargarPersonajes(); // Refresh the display
+        return;
+      }
+  
+      // If not found in custom characters, try API
+      fetch(`https://apisimpsons.fly.dev/api/personajes/find/${encodeURIComponent(valor)}`)
+        .then(res => {
+          if (!res.ok) throw new Error("Personaje no encontrado");
+          return res.json();
+        })
+        .then(data => {
+          if (data.result && data.result.length > 0) {
+            // Mark API character as deleted in local storage
+            const personaje = data.result[0];
+            personalizados.push({
+              id: personaje._id,
+              _id: personaje._id,
+              Nombre: personaje.Nombre,
+              Imagen: personaje.Imagen,
+              Historia: personaje.Historia,
+              Genero: personaje.Genero,
+              Estado: personaje.Estado,
+              Ocupacion: personaje.Ocupacion,
+              eliminado: true
+            });
+            localStorage.setItem("personajesPersonalizados", JSON.stringify(personalizados));
+            mensajeEliminar.textContent = "🗑️ Personaje marcado como eliminado.";
+            mensajeEliminar.style.display = "block";
+            inputEliminar.value = "";
+            cargarPersonajes(); // Refresh the display
+          } else {
+            throw new Error("Personaje no encontrado");
+          }
+        })
+        .catch((error) => {
+          mensajeEliminar.textContent = `❌ ${error.message || "Error al buscar personaje"}`;
+          mensajeEliminar.style.display = "block";
+        });
+    });
+  
+    // Buscar Personaje para modificar
+    btnBuscarPersonaje.addEventListener("click", () => {
+      const valor = inputBusquedaModificar.value.trim().toLowerCase();
+      if (!valor) return;
+  
+      const personalizados = JSON.parse(localStorage.getItem("personajesPersonalizados") || "[]");
+      const encontrado = personalizados.find((p) =>
+        p.Nombre.toLowerCase() === valor || 
+        p.id.toString().toLowerCase() === valor ||
+        (p._id && p._id.toString().toLowerCase() === valor)
+      );
+  
+      if (encontrado) {
+        rellenarFormulario(encontrado);
+        return;
+      }
+  
+      // Si no está en personalizados, lo buscamos en la API
+      fetch(`https://apisimpsons.fly.dev/api/personajes/find/${encodeURIComponent(valor)}`)
+        .then(res => {
+          if (!res.ok) throw new Error("Personaje no encontrado");
+          return res.json();
+        })
+        .then(data => {
+          if (data.result && data.result.length > 0) {
+            rellenarFormulario(data.result[0]);
+          } else {
+            throw new Error("Personaje no encontrado");
+          }
+        })
+        .catch((error) => {
+          mensajeError.textContent = `❌ ${error.message}`;
+          mensajeError.style.display = "block";
+        });
+    });
+  
+    function rellenarFormulario(personaje) {
+      if (!formAgregar || !formTitulo || !mensajeError) return;
+  
+      mensajeError.style.display = "none";
+      formAgregar.style.display = "block";
+      formTitulo.textContent = "✏️ Modificar Personaje";
+      esEdicion = true;
+      personajeIdEditar = personaje._id || personaje.id;
+  
+      document.getElementById("nombre").value = personaje.Nombre || "";
+      document.getElementById("imagen").value = personaje.Imagen || "";
+      document.getElementById("historia").value = personaje.Historia || "";
+      document.getElementById("genero").value = personaje.Genero || "";
+      document.getElementById("estado").value = personaje.Estado || "";
+      document.getElementById("ocupacion").value = personaje.Ocupacion || "";
+  
+      if (personajeIdEditar) {
+        formAgregar.setAttribute("data-id-edicion", personajeIdEditar.toString());
+      }
+    }
+  
+    // Guardar nuevo o modificar existente
+    formAgregar.addEventListener("submit", (e) => {
+      e.preventDefault();
+      if (!formAgregar) return;
+  
+      let almacenados = JSON.parse(localStorage.getItem("personajesPersonalizados") || "[]");
+  
+      const nombreInput = document.getElementById("nombre");
+      const imagenInput = document.getElementById("imagen");
+  
+      if (!nombreInput.value || !imagenInput.value) {
+        alert("❗ Debes completar al menos el nombre y la imagen del personaje.");
+        return;
+      }
+  
+      // ID: si estás en modo edición, usamos el ID que ya tenía
+      const nuevoId = esEdicion && personajeIdEditar ? personajeIdEditar : 
+                     Math.random().toString(36).substring(2) + Date.now().toString(36);
+  
+      const nuevoPersonaje = {
+        _id: nuevoId,
+        id: nuevoId,
+        Nombre: nombreInput.value,
+        Imagen: imagenInput.value,
+        Historia: document.getElementById("historia").value,
+        Genero: document.getElementById("genero").value,
+        Estado: document.getElementById("estado").value,
+        Ocupacion: document.getElementById("ocupacion").value
+      };
+  
+      if (esEdicion) {
+        // Modificamos
+        almacenados = almacenados.map((p) => 
+          p.id === personajeIdEditar || p._id === personajeIdEditar ? nuevoPersonaje : p
+        );
+      } else {
+        // Añadimos nuevo
+        almacenados.push(nuevoPersonaje);
+      }
+  
+      localStorage.setItem("personajesPersonalizados", JSON.stringify(almacenados));
+  
+      alert(esEdicion ? "✏️ Personaje modificado con éxito." : "✅ Personaje añadido correctamente.");
+      formAgregar.reset();
+      formAgregar.style.display = "none";
+  
+      // Reiniciamos estado
+      esEdicion = false;
+      personajeIdEditar = null;
+      
+      // Refresh the display
+      cargarPersonajes();
+    });
+  });
+</script>
+    
+</body>
+</html>
