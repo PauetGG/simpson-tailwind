@@ -16,8 +16,8 @@ let isLoading = false; // Para evitar múltiples cargas simultáneas
 const batchSize = 20; // Número de personajes por lote
 const favoritos: string[] = [];
 let personajesFiltrados: Personaje[] = [];
-
-
+let preguntasMostradas: string[] = [];
+let puntuacionTrivia = 0;
 
 // 🔧 Renderiza las tarjetas
 function renderPersonajes(personajes: Personaje[]) {
@@ -672,6 +672,8 @@ function setupQuizModal() {
   const cerrarQuiz = document.getElementById('cerrarQuiz')!;
   const playQuizSound = document.getElementById('playQuizSound')!;
   const quizOptions = document.getElementById('quizOptions')!;
+  let audioActual: HTMLAudioElement | null = null;
+
 
   const sonidos = [
     { id: 'homero1', personaje: 'Homer' },
@@ -780,6 +782,10 @@ function setupQuizModal() {
         btn.style.backgroundColor = esCorrecto ? 'rgb(74 222 128)' : 'rgb(248 113 113)';
 
         if (esCorrecto) {
+          if (audioActual) {
+            audioActual.pause();
+            audioActual.currentTime = 0;
+          }
           setTimeout(() => iniciarQuiz(), 1000);
         } else {
           vidas--;
@@ -842,7 +848,284 @@ function setupQuizModal() {
       const audio = document.getElementById(sonidoActual.id) as HTMLAudioElement;
       audio.currentTime = 0;
       audio.play();
+      audioActual = audio;
     }
+  });
+}
+const triviaButton = document.getElementById('triviaButton')!;
+const triviaModal = document.getElementById('triviaModal')!;
+const cerrarTrivia = document.getElementById('cerrarTrivia')!;
+
+triviaButton.addEventListener('click', () => {
+  document.getElementById('triviaPuntuacion')?.classList.remove('hidden');
+  triviaModal.classList.remove('hidden');
+});
+
+cerrarTrivia.addEventListener('click', () => {
+  triviaModal.classList.add('hidden');
+   document.getElementById('triviaPuntuacion')?.classList.add('hidden');
+});
+
+import preguntasData from '../preguntas_trivia_simpson.json';
+
+let vidasTrivia = 3;
+
+const triviaVidas = document.getElementById('triviaVidas')!;
+const empezarTrivia = document.getElementById('empezarTrivia')!;
+const triviaOptions = document.getElementById('triviaOptions')!;
+const categoriasTrivia = document.getElementById('categoriasTrivia')!;
+const chips = document.querySelectorAll('.categoria-chip')!;
+empezarTrivia.addEventListener('click', () => {
+  elegirCategoriaAleatoria();
+});
+
+function actualizarVidasTrivia() {
+  triviaVidas.innerHTML = '';
+  for (let i = 0; i < vidasTrivia; i++) {
+    const img = document.createElement('img');
+    img.src = '/src/images/donut.png'; // Ajusta si tienes otra ruta
+    img.alt = `Vida ${i + 1}`;
+    img.className = 'w-8 h-8 donut';
+    triviaVidas.appendChild(img);
+  }
+}
+
+function mostrarPreguntaTrivia(categoriaElegida: string) {
+  const preguntasCategoria = preguntasData.filter(p =>
+    p.categoria === categoriaElegida && !preguntasMostradas.includes(p.pregunta)
+  );
+
+  const triviaOptions = document.getElementById('triviaOptions')!;
+  const categoriasTrivia = document.getElementById('categoriasTrivia')!;
+  const empezarTrivia = document.getElementById('empezarTrivia')!;
+  const tituloTrivia = document.getElementById('tituloTrivia')!;
+
+  categoriasTrivia.classList.add('hidden');
+  empezarTrivia.classList.add('hidden');
+  tituloTrivia.classList.add('hidden');
+
+  actualizarVidasTrivia();
+
+  // 🛑 Si ya no quedan preguntas en esta categoría
+  if (preguntasCategoria.length === 0) {
+    triviaOptions.innerHTML = `
+      <p style="color: red; font-weight: bold;">No quedan más preguntas en esta categoría.</p>
+    `;
+    setTimeout(() => {
+      elegirCategoriaAleatoria();
+    }, 1500);
+    return;
+  }
+
+  // ✅ Seleccionar pregunta nueva
+  const pregunta = preguntasCategoria[Math.floor(Math.random() * preguntasCategoria.length)];
+  preguntasMostradas.push(pregunta.pregunta); // marcar como usada
+
+  // 🔍 Buscar coincidencia con personajes de la API
+  const coincidencia = todosLosPersonajes.find(p =>
+    p.Nombre.toLowerCase().includes(pregunta.correcta.toLowerCase())
+  );
+
+  if (coincidencia) {
+    triviaOptions.innerHTML = `
+      <h3 class="text-xl font-bold text-yellow-600 mb-4 w-full text-center">${pregunta.pregunta}</h3>
+      <div id="triviaOpcionesVisuales" style="display: flex; flex-wrap: wrap; justify-content: center; gap: 1rem;"></div>
+    `;
+
+    const opciones: Personaje[] = [coincidencia];
+    let intentos = 0;
+
+    while (opciones.length < 4 && intentos < 50) {
+      const random = todosLosPersonajes[Math.floor(Math.random() * todosLosPersonajes.length)];
+      if (!opciones.find(p => p.Nombre === random.Nombre)) {
+        opciones.push(random);
+      }
+      intentos++;
+    }
+
+    opciones.sort(() => Math.random() - 0.5);
+    const contenedorOpciones = document.getElementById('triviaOpcionesVisuales')!;
+
+    opciones.forEach(personaje => {
+      const btn = document.createElement('button');
+      btn.className ='flex flex-col items-center justify-center w-full max-w-[180px] h-36 border-2 border-black rounded-xl p-2 bg-white hover:scale-105 transition-transform';
+      const img = document.createElement('img');
+      img.src = personaje.Imagen;
+      img.alt = personaje.Nombre;
+      img.title = personaje.Nombre;
+      img.className = 'max-w-full max-h-[72px] object-contain';
+      btn.appendChild(img);
+
+      const nombre = document.createElement('p');
+      nombre.textContent = personaje.Nombre;
+      nombre.className = 'mt-2 text-sm font-semibold text-center';
+      btn.appendChild(nombre);
+
+      btn.addEventListener('click', () => {
+        const esCorrecto = personaje.Nombre === coincidencia.Nombre;
+        btn.style.backgroundColor = esCorrecto ? '#4ade80' : '#f87171';
+
+        const todosBotones = contenedorOpciones.querySelectorAll('button');
+        todosBotones.forEach(b => (b as HTMLButtonElement).disabled = true);
+
+        setTimeout(() => {
+          if (esCorrecto) {
+            puntuacionTrivia++;
+            actualizarPuntuacionTrivia();
+          } else {
+            vidasTrivia--;
+            actualizarVidasTrivia();
+            if (vidasTrivia === 0) {
+              mostrarGameOver();
+              return;
+            }
+          }
+        
+          elegirCategoriaAleatoria();
+        }, 1000);
+      });
+
+      contenedorOpciones.appendChild(btn);
+    });
+
+    return;
+  }
+
+  // 📝 MODO CLÁSICO (texto)
+  triviaOptions.innerHTML = `
+    <h3 class="text-xl font-bold text-yellow-600 mb-4">${pregunta.pregunta}</h3>
+  `;
+  triviaOptions.className = '';
+  triviaOptions.style.display = 'flex';
+  triviaOptions.style.flexDirection = 'column';
+  triviaOptions.style.gap = '0.75rem';
+  triviaOptions.style.marginTop = '1rem';
+
+  pregunta.opciones.forEach(opcion => {
+    const btn = document.createElement('button');
+    btn.textContent = opcion;
+    btn.style.backgroundColor = 'white';
+    btn.style.border = '2px solid black';
+    btn.style.padding = '0.5rem 1rem';
+    btn.style.borderRadius = '9999px';
+    btn.style.color = 'black';
+    btn.style.fontWeight = '600';
+    btn.style.cursor = 'pointer';
+    btn.style.transition = 'background-color 0.3s ease';
+
+    btn.addEventListener('mouseenter', () => {
+      if (!btn.disabled) btn.style.backgroundColor = '#fef08a';
+    });
+    btn.addEventListener('mouseleave', () => {
+      if (!btn.disabled) btn.style.backgroundColor = 'white';
+    });
+
+    btn.addEventListener('click', () => {
+      const esCorrecto = opcion === pregunta.correcta;
+      btn.style.backgroundColor = esCorrecto ? '#4ade80' : '#f87171';
+
+      const todosBotones = triviaOptions.querySelectorAll('button');
+      todosBotones.forEach(b => (b as HTMLButtonElement).disabled = true);
+
+      setTimeout(() => {
+        if (esCorrecto) {
+          puntuacionTrivia++;
+          actualizarPuntuacionTrivia();
+        } else {
+          vidasTrivia--;
+          actualizarVidasTrivia();
+          if (vidasTrivia === 0) {
+            mostrarGameOver();
+            return;
+          }
+        }
+        elegirCategoriaAleatoria();
+      }, 1000);  
+    });
+
+    triviaOptions.appendChild(btn);
+  });
+}
+const sonidoTick = new Audio('/sounds/tick.mp3'); // Ajusta la ruta según dónde lo guardaste
+sonidoTick.volume = 0.3;
+const sonidoFinal = new Audio('/sounds/this.mp3');
+sonidoFinal.volume = 0.4;
+
+function actualizarPuntuacionTrivia() {
+  const puntuacionDiv = document.getElementById('triviaPuntuacion');
+  if (puntuacionDiv) {
+    puntuacionDiv.textContent = `Puntuación: ${puntuacionTrivia}`;
+  }
+}
+function elegirCategoriaAleatoria() {
+  categoriasTrivia.classList.remove('hidden');
+  triviaOptions.innerHTML = '';
+
+  let currentIndex = 0;
+  let totalIterations = 20 + Math.floor(Math.random() * 10);
+  let iteration = 0;
+
+  const intervalo = setInterval(() => {
+    chips.forEach(chip => chip.classList.remove('active'));
+    chips[currentIndex].classList.add('active');
+
+    // 🔊 Sonido por paso
+    sonidoTick.currentTime = 0;
+    sonidoTick.play();
+
+    currentIndex = (currentIndex + 1) % chips.length;
+    iteration++;
+
+    if (iteration >= totalIterations) {
+      clearInterval(intervalo);
+
+      const categoriaElegida = chips[(currentIndex - 1 + chips.length) % chips.length].textContent?.trim();
+      console.log("Nueva categoría seleccionada:", categoriaElegida);
+
+      // ✅ Sonido final
+      sonidoFinal.currentTime = 0;
+      sonidoFinal.play();
+
+      if (categoriaElegida) {
+        setTimeout(() => {
+          mostrarPreguntaTrivia(categoriaElegida);
+        }, 1200); // espera un poco para dejar sonar el efecto
+      }
+    }
+  }, 300);
+}
+function mostrarGameOver() {
+  const triviaOptions = document.getElementById('triviaOptions')!;
+  const categoriasTrivia = document.getElementById('categoriasTrivia')!;
+  const empezarTrivia = document.getElementById('empezarTrivia')!;
+  const tituloTrivia = document.getElementById('tituloTrivia')!;
+  const triviaVidas = document.getElementById('triviaVidas')!;
+  const chips = document.querySelectorAll('.categoria-chip')!;
+
+  triviaOptions.innerHTML = `
+    <div class="text-center space-y-4">
+      <h2 class="text-3xl font-extrabold text-red-600">¡Juego terminado!</h2>
+      <p class="text-xl text-black">Te quedaste sin donuts 🍩😭</p>
+      <button id="reiniciarTrivia" class="mt-2 px-6 py-2 bg-yellow-500 text-black font-bold rounded-full border-b-4 border-yellow-600 hover:border-b-2 transition-all">
+        🔁 Volver a jugar
+      </button>
+    </div>
+  `;
+
+  // Mostrar título otra vez
+  tituloTrivia.classList.remove('hidden');
+
+  document.getElementById('reiniciarTrivia')?.addEventListener('click', () => {
+    vidasTrivia = 3;
+    triviaVidas.innerHTML = '';
+    categoriasTrivia.classList.remove('hidden');
+    empezarTrivia.classList.remove('hidden');
+    triviaOptions.innerHTML = '';
+    chips.forEach(chip => chip.classList.remove('active'));
+    document.getElementById('triviaHeader')?.classList.remove('hidden');
+    tituloTrivia.classList.remove('hidden');
+    puntuacionTrivia = 0;
+    actualizarPuntuacionTrivia();
   });
 }
 

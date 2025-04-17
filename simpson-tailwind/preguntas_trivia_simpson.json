@@ -1,0 +1,722 @@
+[
+  {
+    "id": 1,
+    "categoria": "Historia",
+    "pregunta": "¿En qué año se emitió por primera vez Los Simpson como serie?",
+    "opciones": [
+      "Helen Lovejoy",
+      "George Bush",
+      "1989",
+      "Los Gómez"
+    ],
+    "correcta": "1989"
+  },
+  {
+    "id": 2,
+    "categoria": "Historia",
+    "pregunta": "¿Qué personaje fue alcalde de Springfield durante muchas temporadas?",
+    "opciones": [
+      "2000",
+      "Joe Quimby",
+      "Matt Stone",
+      "George Bush"
+    ],
+    "correcta": "Joe Quimby"
+  },
+  {
+    "id": 3,
+    "categoria": "Historia",
+    "pregunta": "¿Qué familia fue la rival de los Simpson en un episodio clásico?",
+    "opciones": [
+      "Los Thompson",
+      "1990",
+      "Los Gómez",
+      "Matt Stone"
+    ],
+    "correcta": "Los Thompson"
+  },
+  {
+    "id": 4,
+    "categoria": "Historia",
+    "pregunta": "¿Qué personaje murió tras la salida de su actor de voz?",
+    "opciones": [
+      "George Bush",
+      "Maude Flanders",
+      "The Simpsons Movie",
+      "2000"
+    ],
+    "correcta": "Maude Flanders"
+  },
+  {
+    "id": 5,
+    "categoria": "Historia",
+    "pregunta": "¿Cómo se llama el primer episodio emitido de Los Simpson?",
+    "opciones": [
+      "Simpsons Roasting on an Open Fire",
+      "The Simpsons Movie",
+      "Helen Lovejoy",
+      "George Bush"
+    ],
+    "correcta": "Simpsons Roasting on an Open Fire"
+  },
+  {
+    "id": 6,
+    "categoria": "Historia",
+    "pregunta": "¿Qué año se considera el inicio de la 'época dorada' de Los Simpson?",
+    "opciones": [
+      "Matt Stone",
+      "George Bush",
+      "The Simpsons Movie",
+      "1991"
+    ],
+    "correcta": "1991"
+  },
+  {
+    "id": 7,
+    "categoria": "Historia",
+    "pregunta": "¿Quién creó Los Simpson?",
+    "opciones": [
+      "Matt Groening",
+      "The Simpsons Movie",
+      "George Bush",
+      "2000"
+    ],
+    "correcta": "Matt Groening"
+  },
+  {
+    "id": 8,
+    "categoria": "Historia",
+    "pregunta": "¿Cómo se llama el especial de Halloween anual?",
+    "opciones": [
+      "The Simpsons Movie",
+      "Treehouse of Horror",
+      "Matt Stone",
+      "1990"
+    ],
+    "correcta": "Treehouse of Horror"
+  },
+  {
+    "id": 9,
+    "categoria": "Historia",
+    "pregunta": "¿Qué personaje fue reemplazado por Apu en la tienda?",
+    "opciones": [
+      "James",
+      "Carl",
+      "Matt Stone",
+      "George Bush"
+    ],
+    "correcta": "James"
+  },
+  {
+    "id": 10,
+    "categoria": "Historia",
+    "pregunta": "¿Qué personaje fue parte del escuadrón musical de los Borbotones?",
+    "opciones": [
+      "Frank Grimes",
+      "Homer",
+      "Matt Stone",
+      "Carl"
+    ],
+    "correcta": "Homer"
+  },
+  {
+    "id": 11,
+    "categoria": "Geografía",
+    "pregunta": "¿Cómo se llama la ciudad donde viven Los Simpson?",
+    "opciones": [
+      "Springfield",
+      "El supermercado",
+      "Utah",
+      "Casa del árbol"
+    ],
+    "correcta": "Springfield"
+  },
+  {
+    "id": 12,
+    "categoria": "Geografía",
+    "pregunta": "¿Cuál es el país de origen de Apu?",
+    "opciones": [
+      "Springwood",
+      "La Taberna de Carl",
+      "Bosque Nacional",
+      "India"
+    ],
+    "correcta": "India"
+  },
+  {
+    "id": 13,
+    "categoria": "Geografía",
+    "pregunta": "¿Dónde está ubicada la planta nuclear?",
+    "opciones": [
+      "En Springfield",
+      "La Taberna de Carl",
+      "Springwood",
+      "Utah"
+    ],
+    "correcta": "En Springfield"
+  },
+  {
+    "id": 14,
+    "categoria": "Geografía",
+    "pregunta": "¿Cómo se llama el bar que frecuenta Homer?",
+    "opciones": [
+      "Utah",
+      "La Taberna de Moe",
+      "El supermercado",
+      "Texas"
+    ],
+    "correcta": "La Taberna de Moe"
+  },
+  {
+    "id": 15,
+    "categoria": "Geografía",
+    "pregunta": "¿Qué estado de EE.UU. se ha mencionado como ubicación posible de Springfield?",
+    "opciones": [
+      "Bosque Nacional",
+      "Springwood",
+      "Oregon",
+      "Utah"
+    ],
+    "correcta": "Oregon"
+  },
+  {
+    "id": 16,
+    "categoria": "Geografía",
+    "pregunta": "¿Dónde vive Patty y Selma?",
+    "opciones": [
+      "Springwood",
+      "En un apartamento en Springfield",
+      "El supermercado",
+      "Escuela de Shelbyville"
+    ],
+    "correcta": "En un apartamento en Springfield"
+  },
+  {
+    "id": 17,
+    "categoria": "Geografía",
+    "pregunta": "¿Cómo se llama la escuela donde estudian Bart y Lisa?",
+    "opciones": [
+      "Escuela Primaria de Springfield",
+      "Utah",
+      "Springwood",
+      "La Taberna de Carl"
+    ],
+    "correcta": "Escuela Primaria de Springfield"
+  },
+  {
+    "id": 18,
+    "categoria": "Geografía",
+    "pregunta": "¿Dónde trabaja Marge en varios episodios?",
+    "opciones": [
+      "Escuela de Shelbyville",
+      "Shelbyville",
+      "En la tienda por departamentos",
+      "Casa del árbol"
+    ],
+    "correcta": "En la tienda por departamentos"
+  },
+  {
+    "id": 19,
+    "categoria": "Geografía",
+    "pregunta": "¿Qué lugar frecuenta Lisa para tocar música?",
+    "opciones": [
+      "El parque de Springfield",
+      "Texas",
+      "Utah",
+      "Casa del árbol"
+    ],
+    "correcta": "El parque de Springfield"
+  },
+  {
+    "id": 20,
+    "categoria": "Geografía",
+    "pregunta": "¿Dónde fue Homer cuando se perdió en el bosque?",
+    "opciones": [
+      "Escuela de Shelbyville",
+      "El supermercado",
+      "Canadá",
+      "Bosque Nacional de Springfield"
+    ],
+    "correcta": "Bosque Nacional de Springfield"
+  },
+  {
+    "id": 21,
+    "categoria": "Personajes",
+    "pregunta": "¿Cuál es el segundo nombre de Milhouse?",
+    "opciones": [
+      "Lenny",
+      "Rafael",
+      "Mussolini",
+      "Bart"
+    ],
+    "correcta": "Mussolini"
+  },
+  {
+    "id": 22,
+    "categoria": "Personajes",
+    "pregunta": "¿Cómo se llama el gato de la familia Simpson?",
+    "opciones": [
+      "Rafael",
+      "Smithers",
+      "Bart",
+      "Bola de Nieve II"
+    ],
+    "correcta": "Bola de Nieve II"
+  },
+  {
+    "id": 23,
+    "categoria": "Personajes",
+    "pregunta": "¿Quién es el jefe de Homer en la planta nuclear?",
+    "opciones": [
+      "Martin",
+      "Bart",
+      "Sr. Burns",
+      "Todd"
+    ],
+    "correcta": "Sr. Burns"
+  },
+  {
+    "id": 24,
+    "categoria": "Personajes",
+    "pregunta": "¿Qué personaje es el payaso famoso en la serie?",
+    "opciones": [
+      "Rafael",
+      "Willie",
+      "Krusty",
+      "Martin"
+    ],
+    "correcta": "Krusty"
+  },
+  {
+    "id": 25,
+    "categoria": "Personajes",
+    "pregunta": "¿Cómo se llama el borracho habitual de la taberna de Moe?",
+    "opciones": [
+      "Joseph",
+      "Barney",
+      "Sideshow Mel",
+      "Rafael"
+    ],
+    "correcta": "Barney"
+  },
+  {
+    "id": 26,
+    "categoria": "Personajes",
+    "pregunta": "¿Quién es el mejor amigo de Bart?",
+    "opciones": [
+      "Smithers",
+      "Sideshow Mel",
+      "Milhouse",
+      "Martin"
+    ],
+    "correcta": "Milhouse"
+  },
+  {
+    "id": 27,
+    "categoria": "Personajes",
+    "pregunta": "¿Qué personaje es dueño del Kwik-E-Mart?",
+    "opciones": [
+      "Snowball I",
+      "Sideshow Mel",
+      "Apu",
+      "Martin"
+    ],
+    "correcta": "Apu"
+  },
+  {
+    "id": 28,
+    "categoria": "Personajes",
+    "pregunta": "¿Cómo se llama la hermana vegetariana de Bart?",
+    "opciones": [
+      "Bart",
+      "Lisa",
+      "Lenny",
+      "Snowball I"
+    ],
+    "correcta": "Lisa"
+  },
+  {
+    "id": 29,
+    "categoria": "Personajes",
+    "pregunta": "¿Qué personaje vive al lado de los Simpson y es muy religioso?",
+    "opciones": [
+      "Ned Flanders",
+      "Willie",
+      "Sideshow Mel",
+      "Bart"
+    ],
+    "correcta": "Ned Flanders"
+  },
+  {
+    "id": 30,
+    "categoria": "Personajes",
+    "pregunta": "¿Quién es el director de la escuela de Bart?",
+    "opciones": [
+      "Lenny",
+      "Seymour Skinner",
+      "Snowball I",
+      "Rafael"
+    ],
+    "correcta": "Seymour Skinner"
+  },
+  {
+    "id": 31,
+    "categoria": "Frases Célebres",
+    "pregunta": "¿Quién dice la frase 'Ay, caramba'?",
+    "opciones": [
+      "Bart",
+      "Marge",
+      "Homer",
+      "Otto"
+    ],
+    "correcta": "Bart"
+  },
+  {
+    "id": 32,
+    "categoria": "Frases Célebres",
+    "pregunta": "¿Qué personaje dice 'Excelente...'?",
+    "opciones": [
+      "Sr. Burns",
+      "Marge",
+      "Snake",
+      "Apu"
+    ],
+    "correcta": "Sr. Burns"
+  },
+  {
+    "id": 33,
+    "categoria": "Frases Célebres",
+    "pregunta": "¿Quién suele decir 'No tuve la culpa yo estaba programado para obedeceeer'?",
+    "opciones": [
+      "Ralph",
+      "Nelson",
+      "Marge",
+      "Lisa"
+    ],
+    "correcta": "Ralph"
+  },
+  {
+    "id": 34,
+    "categoria": "Frases Célebres",
+    "pregunta": "¿Quién dice 'Estúpido y sensual Flanders'?",
+    "opciones": [
+      "Otto",
+      "Marge",
+      "Homer",
+      "Lisa"
+    ],
+    "correcta": "Homer"
+  },
+  {
+    "id": 35,
+    "categoria": "Frases Célebres",
+    "pregunta": "¿Quién dice '¡Hola, vecinito!'?",
+    "opciones": [
+      "Snake",
+      "Apu",
+      "Homer",
+      "Ned Flanders"
+    ],
+    "correcta": "Ned Flanders"
+  },
+  {
+    "id": 36,
+    "categoria": "Frases Célebres",
+    "pregunta": "¿Quién dice 'Yo vengo de muy lejos... en el espacio y el tiempo'?",
+    "opciones": [
+      "Snake",
+      "Lisa",
+      "Nelson",
+      "Homer"
+    ],
+    "correcta": "Lisa"
+  },
+  {
+    "id": 37,
+    "categoria": "Frases Célebres",
+    "pregunta": "¿Quién dice '¡Multiplícate por cero!'?",
+    "opciones": [
+      "Bart",
+      "Skinner",
+      "Marge",
+      "Comic Book Guy"
+    ],
+    "correcta": "Bart"
+  },
+  {
+    "id": 38,
+    "categoria": "Frases Célebres",
+    "pregunta": "¿Quién dice 'Yo no fui'?",
+    "opciones": [
+      "Homer",
+      "Comic Book Guy",
+      "Bart",
+      "Snake"
+    ],
+    "correcta": "Bart"
+  },
+  {
+    "id": 39,
+    "categoria": "Frases Célebres",
+    "pregunta": "¿Quién dice 'Estoy frío, frío, frío... ahora caliente, caliente'?",
+    "opciones": [
+      "Homer",
+      "Milhouse",
+      "Marge",
+      "Skinner"
+    ],
+    "correcta": "Milhouse"
+  },
+  {
+    "id": 40,
+    "categoria": "Frases Célebres",
+    "pregunta": "¿Quién dice '¡Es mi primer día!'?",
+    "opciones": [
+      "Apu",
+      "Marge",
+      "Comic Book Guy",
+      "Gil"
+    ],
+    "correcta": "Gil"
+  },
+  {
+    "id": 41,
+    "categoria": "Episodios",
+    "pregunta": "¿Cuál es el primer episodio de la serie?",
+    "opciones": [
+      "Simpsons Roasting on an Open Fire",
+      "Bart the General",
+      "Radioactive Man",
+      "Who Shot Mr. Burns"
+    ],
+    "correcta": "Simpsons Roasting on an Open Fire"
+  },
+  {
+    "id": 42,
+    "categoria": "Episodios",
+    "pregunta": "¿En qué episodio Homer se vuelve astronauta?",
+    "opciones": [
+      "Homer the Great",
+      "Deep Space Homer",
+      "Who Shot Mr. Burns",
+      "Homerpalooza"
+    ],
+    "correcta": "Deep Space Homer"
+  },
+  {
+    "id": 43,
+    "categoria": "Episodios",
+    "pregunta": "¿Qué episodio trata sobre el monorriel?",
+    "opciones": [
+      "Marge vs. the Monorail",
+      "Lisa's Pony",
+      "Duffless",
+      "Radioactive Man"
+    ],
+    "correcta": "Marge vs. the Monorail"
+  },
+  {
+    "id": 44,
+    "categoria": "Episodios",
+    "pregunta": "¿En qué episodio aparece Frank Grimes?",
+    "opciones": [
+      "Homer's Enemy",
+      "Radioactive Man",
+      "Who Shot Mr. Burns",
+      "Bart the General"
+    ],
+    "correcta": "Homer's Enemy"
+  },
+  {
+    "id": 45,
+    "categoria": "Episodios",
+    "pregunta": "¿Qué episodio parodia al Sr. Burns como Drácula?",
+    "opciones": [
+      "Radioactive Man",
+      "Lisa's Pony",
+      "Treehouse of Horror IV",
+      "Who Shot Mr. Burns"
+    ],
+    "correcta": "Treehouse of Horror IV"
+  },
+  {
+    "id": 46,
+    "categoria": "Episodios",
+    "pregunta": "¿Qué episodio muestra el origen de Maggie?",
+    "opciones": [
+      "Homer vs. Lisa",
+      "And Maggie Makes Three",
+      "Bart the General",
+      "Lisa's Pony"
+    ],
+    "correcta": "And Maggie Makes Three"
+  },
+  {
+    "id": 47,
+    "categoria": "Episodios",
+    "pregunta": "¿Qué episodio cuenta el pasado de Marge y Homer?",
+    "opciones": [
+      "Duffless",
+      "Radioactive Man",
+      "The Way We Was",
+      "Bart the General"
+    ],
+    "correcta": "The Way We Was"
+  },
+  {
+    "id": 48,
+    "categoria": "Episodios",
+    "pregunta": "¿En qué episodio Lisa se convierte en vegetariana?",
+    "opciones": [
+      "Lisa's Pony",
+      "Who Shot Mr. Burns",
+      "Radioactive Man",
+      "Lisa the Vegetarian"
+    ],
+    "correcta": "Lisa the Vegetarian"
+  },
+  {
+    "id": 49,
+    "categoria": "Episodios",
+    "pregunta": "¿Qué episodio muestra el futuro de Lisa como presidenta?",
+    "opciones": [
+      "Bart Gets an F",
+      "Homerpalooza",
+      "Homer the Great",
+      "Bart to the Future"
+    ],
+    "correcta": "Bart to the Future"
+  },
+  {
+    "id": 50,
+    "categoria": "Episodios",
+    "pregunta": "¿Qué episodio incluye el viaje místico de Homer con chile picante?",
+    "opciones": [
+      "Radioactive Man",
+      "Bart Gets an F",
+      "El Viaje Misterioso de Nuestro Jomer",
+      "Duffless"
+    ],
+    "correcta": "El Viaje Misterioso de Nuestro Jomer"
+  },
+  {
+    "id": 51,
+    "categoria": "Cultura Pop",
+    "pregunta": "¿Qué cantante apareció en un episodio y fue doblado por sí mismo?",
+    "opciones": [
+      "Itchy y Scratchy",
+      "El Hombre Increíble",
+      "Rambo",
+      "Michael Jackson"
+    ],
+    "correcta": "Michael Jackson"
+  },
+  {
+    "id": 52,
+    "categoria": "Cultura Pop",
+    "pregunta": "¿Qué película parodia Homer cuando se vuelve vigilante?",
+    "opciones": [
+      "Itchy y Scratchy",
+      "Rambo",
+      "Batman",
+      "Prince"
+    ],
+    "correcta": "Batman"
+  },
+  {
+    "id": 53,
+    "categoria": "Cultura Pop",
+    "pregunta": "¿Qué superhéroe aparece en los cómics que lee Bart?",
+    "opciones": [
+      "Rambo",
+      "Tom Cruise",
+      "Madonna",
+      "El Hombre Radioactivo"
+    ],
+    "correcta": "El Hombre Radioactivo"
+  },
+  {
+    "id": 54,
+    "categoria": "Cultura Pop",
+    "pregunta": "¿Qué famoso director ha sido parodiado en varios episodios?",
+    "opciones": [
+      "Family Guy",
+      "Rambo",
+      "Steven Spielberg",
+      "Madonna"
+    ],
+    "correcta": "Steven Spielberg"
+  },
+  {
+    "id": 55,
+    "categoria": "Cultura Pop",
+    "pregunta": "¿Qué serie animada aparece como parodia dentro de Los Simpson?",
+    "opciones": [
+      "Tomy y Daly",
+      "Itchy y Scratchy",
+      "Prince",
+      "Tom Cruise"
+    ],
+    "correcta": "Tomy y Daly"
+  },
+  {
+    "id": 56,
+    "categoria": "Cultura Pop",
+    "pregunta": "¿Qué actor interpretó a un ladrón que se escapó con Maggie?",
+    "opciones": [
+      "Rambo",
+      "Mel Gibson",
+      "George Lucas",
+      "Itchy y Scratchy"
+    ],
+    "correcta": "Mel Gibson"
+  },
+  {
+    "id": 57,
+    "categoria": "Cultura Pop",
+    "pregunta": "¿Qué película se parodia cuando Homer se hace guardaespaldas?",
+    "opciones": [
+      "El Guardaespaldas",
+      "George Lucas",
+      "Tom Cruise",
+      "Madonna"
+    ],
+    "correcta": "El Guardaespaldas"
+  },
+  {
+    "id": 58,
+    "categoria": "Cultura Pop",
+    "pregunta": "¿Qué celebridad donó dinero para una nueva escuela en Springfield?",
+    "opciones": [
+      "Madonna",
+      "Family Guy",
+      "Rambo",
+      "Lady Gaga"
+    ],
+    "correcta": "Lady Gaga"
+  },
+  {
+    "id": 59,
+    "categoria": "Cultura Pop",
+    "pregunta": "¿Qué serie rival de los 90 ha sido parodiada?",
+    "opciones": [
+      "Rambo",
+      "Rocky",
+      "Itchy y Scratchy",
+      "South Park"
+    ],
+    "correcta": "South Park"
+  },
+  {
+    "id": 60,
+    "categoria": "Cultura Pop",
+    "pregunta": "¿Qué celebridad aparece como mentor de Lisa en un episodio musical?",
+    "opciones": [
+      "Ringo Starr",
+      "George Lucas",
+      "Paul McCartney",
+      "Rocky"
+    ],
+    "correcta": "Paul McCartney"
+  }
+]

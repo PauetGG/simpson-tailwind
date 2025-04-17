@@ -39,6 +39,9 @@
         <button id="quizButton" class="rounded-full p-4 bg-yellow-500 text-black font-bold border-b-4 border-yellow-600 hover:border-b-1">
           ❓ Quiz
         </button>
+        <button id="triviaButton" class="rounded-full p-4 bg-yellow-500 text-black font-bold border-b-4 border-yellow-600 hover:border-b-1">
+          🎯 Trivia
+        </button>
       </div>
     
       <!-- Buscador -->
@@ -136,6 +139,37 @@
         <div id="quizOptions" class="flex flex-col gap-3 mt-4"></div>
       </div>
     </div>
+    <!-- Modal Trivia -->
+    <div id="triviaModal" class="fixed inset-0 backdrop-blur bg-opacity-60 flex items-center justify-center z-50 hidden">
+      <div class="bg-white p-6 rounded-2xl shadow-xl w-[90%] max-w-xl text-center relative">
+        
+        <!-- Botón cerrar -->
+        <button id="cerrarTrivia" class="absolute top-3 right-3 text-red-600 text-xl font-bold">✖</button>
+        
+        <h2 id="tituloTrivia" class="text-2xl font-extrabold mb-4 text-yellow-600">Elige tu destino, jugador 🍩</h2>
+        <div id="triviaHeader" class="flex justify-between items-center mb-4 w-full px-4">
+          <div id="triviaVidas" class="flex gap-2"></div>
+          <div id="triviaPuntuacion" class="text-black font-bold hidden">Puntuación: 0</div>
+        </div>    
+        <!-- Categorías visuales -->
+        <div id="categoriasTrivia" class="grid grid-cols-2 sm:grid-cols-3 gap-4 justify-center mb-6">
+          <div class="categoria-chip bg-yellow-200 text-black font-semibold py-2 px-4 rounded-full shadow">Historia</div>
+          <div class="categoria-chip bg-yellow-200 text-black font-semibold py-2 px-4 rounded-full shadow">Geografía</div>
+          <div class="categoria-chip bg-yellow-200 text-black font-semibold py-2 px-4 rounded-full shadow">Personajes</div>
+          <div class="categoria-chip bg-yellow-200 text-black font-semibold py-2 px-4 rounded-full shadow">Frases Célebres</div>
+          <div class="categoria-chip bg-yellow-200 text-black font-semibold py-2 px-4 rounded-full shadow">Episodios</div>
+          <div class="categoria-chip bg-yellow-200 text-black font-semibold py-2 px-4 rounded-full shadow">Cultura Pop</div>
+        </div>
+
+        <!-- Botón comenzar -->
+        <button id="empezarTrivia" class="mt-4 px-6 py-2 bg-yellow-500 text-black font-bold rounded-full border-b-4 border-yellow-600 hover:border-b-2 transition-all">
+          🎲 Empezar
+        </button>
+       
+        <div id="triviaOptions" class="mt-6"></div>
+      </div>
+    </div>
+
 
     <div id="randomContainer" class="fixed top-0 left-0 w-full h-full backdrop-blur bg-opacity-80 flex items-center justify-center z-50 hidden"></div>
     <div id="contenedor"  class="flex flex-wrap gap-4 justify-center p-4"></div>

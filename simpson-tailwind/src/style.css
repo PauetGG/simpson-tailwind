@@ -68,3 +68,9 @@ button, a, [role="button"], .cursor-pointer {
   #loadingIndicator.hidden {
     display: none;
 }
+.categoria-chip.active {
+    background-color: #facc15; /* amarillo más intenso */
+    border: 2px solid #f59e0b;
+    transform: scale(1.1);
+    transition: all 0.2s ease-in-out;
+  }
