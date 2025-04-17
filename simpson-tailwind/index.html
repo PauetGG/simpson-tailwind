@@ -62,7 +62,12 @@
       <button data-estado="Ficticio" class="filtro-estado bg-purple-700 text-white font-bold py-2 px-12 border-b-4 border-purple-900 hover:border-b-1 rounded-full">Ficticio</button>
       <button data-estado="Fallecido" class="filtro-estado bg-pink-700 text-white font-bold py-2 px-12 border-b-4 border-red-900 hover:border-b-1 rounded-full">Fallecido</button>
       <button data-estado="Desconocido" class="filtro-estado bg-gray-700 text-white font-bold py-2 px-12 border-b-4 border-gray-900 hover:border-b-1 rounded-full">Desconocido</button>
+      <button id="CRUD" class="bg-gray-300 text-white font-bold py-2 px-12 border-b-4 border-gray-400 hover:border-b-1 rounded-full">
+        <a href="crud.html">Laboratorio Simpson</a>
+      </button>
+    
       <select id="selectorOcupacion" class="class=filtro-estado bg-blue-500 text-white font-bold py-2 px-12 border-b-4 border-blue-800 hover:border-b-1 rounded-full">
+        
         <option value="">Todas las ocupaciones</option>
         <option value="Alumno">Alumnno</option>
         <option value="Desempleado">Desempleado</option>
@@ -108,6 +113,7 @@
             <div class="relative">
               <button class="tecla tecla-blanca" data-sonido="notaB">J</button>
             </div>
+            
           </div>
         </div>
       </div>
@@ -128,8 +134,12 @@
           🔊 Reproducir sonido
         </button>
         <div id="quizOptions" class="flex flex-col gap-3 mt-4"></div>
+        
       </div>
+      
     </div>
+    
+    
 
     <div id="randomContainer" class="fixed top-0 left-0 w-full h-full backdrop-blur bg-opacity-80 flex items-center justify-center z-50 hidden"></div>
     <div id="contenedor"  class="flex flex-wrap gap-4 justify-center p-4"></div>
