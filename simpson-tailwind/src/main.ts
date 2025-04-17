@@ -380,22 +380,89 @@ document.getElementById('limpiarFiltros')?.addEventListener('click', () => {
   sonidoAlHoverDeBounce();
   
 });
-const btnMostrarFavoritos = document.getElementById('mostrarFavoritos')!;
-let mostrandoFavoritos = false; // ⬅️ Estado de toggle
 
-btnMostrarFavoritos.addEventListener('click', () => {
+const btnMostrarFavoritos = document.getElementById('mostrarFavoritos')!;
+let mostrandoFavoritos = false;
+
+// 🔁 Función para mostrar favoritos con animación y mensaje de fin
+async function mostrarFavoritosConFin() {
   const contenedor = document.getElementById('contenedor');
   if (!contenedor) return;
 
+  contenedor.innerHTML = ''; // Limpiar los personajes
+
+  // ✅ Buscar el container de loading si ya existe
+  let loadingContainer = document.getElementById('loadingContainer') as HTMLDivElement;
+
+  if (!loadingContainer) {
+    loadingContainer = document.createElement('div');
+    loadingContainer.id = 'loadingContainer';
+    loadingContainer.className = 'flex items-center justify-center space-x-4 mt-4';
+    contenedor.parentElement?.appendChild(loadingContainer);
+  }
+
+  // ✅ Limpiar contenido previo del loading
+  loadingContainer.innerHTML = '';
+
+  // 👇 Elementos de loading
+  const loadingGif = document.createElement('img');
+  loadingGif.src = 'https://media.giphy.com/media/lyBCBlxAI0bo4/giphy.gif';
+  loadingGif.alt = 'Cargando...';
+  loadingGif.style.width = '100px';
+  loadingGif.style.height = '100px';
+
+  const loadingText = document.createElement('span');
+  loadingText.style.fontFamily = 'Simpsonfont';
+  loadingText.textContent = 'Cargando favoritos...';
+  loadingText.className = 'text-lg font-bold text-yellow-500';
+
+  loadingContainer.appendChild(loadingGif);
+  loadingContainer.appendChild(loadingText);
+
+  // Espera simulada
+  await new Promise(resolve => setTimeout(resolve, 1000));
+
+  // Mostrar favoritos
+  const favoritosFiltrados = todosLosPersonajes.filter(p =>
+    favoritos.includes(p.Nombre)
+  );
+  renderPersonajes(favoritosFiltrados);
+
+  // 🧹 Limpiar y mostrar mensaje final
+  loadingContainer.innerHTML = '';
+
+  const finGif = document.createElement('img');
+  finGif.src = 'https://media4.giphy.com/media/v1.Y2lkPTc5MGI3NjExaHR3djFxZDhkZzJ3YWdydnF4d2k4aTA2dTJvMXVodTQ2and0YjFxaSZlcD12MV9pbnRlcm5hbF9naWZfYnlfaWQmY3Q9Zw/jUwpNzg9IcyrK/giphy.gif';
+  finGif.alt = 'Fin';
+  finGif.style.width = '100px';
+  finGif.style.height = '100px';
+
+  const finText = document.createElement('span');
+  finText.textContent = '¡Eso es todo! No hay más favoritos.';
+  finText.className = 'text-lg font-bold text-red-600';
+
+  loadingContainer.appendChild(finGif);
+  loadingContainer.appendChild(finText);
+}
+
+
+// ❤️ Botón para alternar entre todos y favoritos
+btnMostrarFavoritos.addEventListener('click', () => {
   if (mostrandoFavoritos) {
-    // ⬅️ Si ya está activado, volvemos a mostrar todos con filtros
     aplicarFiltrosYBuscar();
     mostrandoFavoritos = false;
     btnMostrarFavoritos.textContent = '❤️ Ver Favoritos';
+
+    // 🧹 Eliminar loadingContainer si existe (residuo del modo favoritos)
+    const oldLoader = document.getElementById('loadingContainer');
+    if (oldLoader) oldLoader.remove();
+
     return;
   }
 
-  // ⬅️ Si está desactivado, activamos y mostramos favoritos
+  const contenedor = document.getElementById('contenedor');
+  if (!contenedor) return;
+
   if (favoritos.length === 0) {
     contenedor.innerHTML = `
       <div class="text-center text-xl font-bold text-gray-500 mt-8">
@@ -403,10 +470,7 @@ btnMostrarFavoritos.addEventListener('click', () => {
       </div>
     `;
   } else {
-    const favoritosFiltrados = todosLosPersonajes.filter(p =>
-      favoritos.includes(p.Nombre)
-    );
-    renderPersonajes(favoritosFiltrados);
+    mostrarFavoritosConFin();
   }
 
   mostrandoFavoritos = true;
@@ -850,6 +914,8 @@ document.addEventListener('DOMContentLoaded', () => {
   new BackgroundToggler();
 });
 document.addEventListener('scroll', async () => {
+  if (mostrandoFavoritos) return;
+
   const contenedor = document.getElementById('contenedor');
   if (!contenedor) return;
 
@@ -861,7 +927,6 @@ document.addEventListener('scroll', async () => {
     await cargarMasPersonajes(personajesFiltrados.length > 0 ? personajesFiltrados : todosLosPersonajes);
   }
 });
-
 
 class SimpsonScrollButton {
   private button: HTMLButtonElement;
