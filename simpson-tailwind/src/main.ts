@@ -504,7 +504,7 @@ async function setupBotonAleatorio() {
         </div>
         <div class="h-[200px] text-sm text-gray-600 bg-gray-200 rounded-lg p-2 border-b-4 border-l-4 border-gray-300 relative flex flex-col">
         <div class="flex justify-end">
-         <button class="btn-fav absolute top-1 right-1 text-2xl text-gray-300 hover:scale-110 transition-transform">🤍</button>
+         <button class="btn-fav absolute top-1 right-1 text-2xl text-gray-300 hover:scale-110 transition-transform"></button>
         </div>
         <div class="text-center mt-1">
           <p class="mb-1"><span style="font-family: 'Simpsonfont';" class="font-semibold">Genero: <br></span> ${aleatorio.Genero}</p>
