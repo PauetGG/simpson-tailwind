@@ -652,36 +652,41 @@ function setupModalPiano() {
   } else {
     console.error('El botón randomizarTeclas no se encontró en el DOM.');
   }
-  document.addEventListener('keydown', (e) => {
-    const modal = document.getElementById('modalPiano');
-    if (!modal || modal.classList.contains('hidden')) return;
+ document.addEventListener('keydown', (e) => {
+  const modal = document.getElementById('modalPiano');
+  if (!modal || modal.classList.contains('hidden')) return;
 
-    const letra = e.key.toLowerCase();
-    const sonidoId = teclaToSonido[letra];
-    if (!sonidoId) return;
+  const letra = e.key.toLowerCase();
+  
+  // Si la tecla presionada es "r", randomiza las teclas
+  if (letra === 'r') {
+    generarTeclasRandom();
+    return; // Salir para evitar ejecutar la lógica de reproducción de sonidos
+  }
 
-    const audio = document.getElementById(sonidoId) as HTMLAudioElement;
-    if (audio) {
-      audio.currentTime = 0;
-      audio.play().catch(() => {});
-    }
+  // Si no es "r", busca el sonido correspondiente
+  const sonidoId = teclaToSonido[letra];
+  if (!sonidoId) return;
 
-    const tecla = [...document.querySelectorAll('.tecla-blanca, .tecla-negra')].find(
-      t => t instanceof HTMLButtonElement && t.dataset.sonido === sonidoId
-    );
+  const audio = document.getElementById(sonidoId) as HTMLAudioElement;
+  if (audio) {
+    audio.currentTime = 0;
+    audio.play().catch(() => {});
+  }
 
-    if (tecla) {
-      tecla.classList.add('presionada');
+  const tecla = [...document.querySelectorAll('.tecla-blanca, .tecla-negra')].find(
+    t => t instanceof HTMLButtonElement && t.dataset.sonido === sonidoId
+  );
 
-      setTimeout(() => {
-        tecla.classList.remove('presionada');
-      }, 150);
-      generarTeclasRandom(); // Generar teclas con las imágenes
-    }
-  });
+  if (tecla) {
+    tecla.classList.add('presionada');
+
+    setTimeout(() => {
+      tecla.classList.remove('presionada');
+    }, 150);
+  }
+});
 }
-
-
 
 
 function generarTeclasRandom() {
