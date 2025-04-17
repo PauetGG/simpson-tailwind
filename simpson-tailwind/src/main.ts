@@ -634,6 +634,7 @@ function setupModalPiano() {
   const pianoModal = document.getElementById('modalPiano')!;
   const abrirBtn = document.getElementById('pianoButton')!;
   const cerrarBtn = document.getElementById('cerrarPiano')!;
+  const randomizarBtn = document.getElementById('randomizarTeclas');
 
   abrirBtn.addEventListener('click', () => {
     generarTeclasRandom(); // Generar teclas aleatorias cada vez que se abre el piano
@@ -644,6 +645,13 @@ function setupModalPiano() {
     pianoModal.classList.add('hidden');
   });
 
+  if (randomizarBtn) { // Verifica si el botón fue encontrado
+    randomizarBtn.addEventListener('click', () => {
+      generarTeclasRandom();
+    });
+  } else {
+    console.error('El botón randomizarTeclas no se encontró en el DOM.');
+  }
   document.addEventListener('keydown', (e) => {
     const modal = document.getElementById('modalPiano');
     if (!modal || modal.classList.contains('hidden')) return;
@@ -685,6 +693,7 @@ function generarTeclasRandom() {
 
   const teclasBlancasRandom = teclasBlancas.sort(() => Math.random() - 0.5).slice(0, 7);
   const teclasNegrasRandom = teclasNegras.sort(() => Math.random() - 0.5).slice(0, 3);
+  
 
   const teclasRandom = [...teclasBlancasRandom, ...teclasNegrasRandom].sort((a, b) => {
     const isABlack = a.sonido.includes('s');
@@ -750,6 +759,7 @@ function generarTeclasRandom() {
       teclasNegrasRendered[indiceNegra].style.zIndex = '20';
       indiceNegra++;
     }
+    
   }
 
   teclado.style.position = 'relative';
