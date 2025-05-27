@@ -1,4 +1,4 @@
-# 📺 Los Simpson - Pokédex Interactiva
+# 📺 Los Simpson
 
 Proyecto grupal desarrollado con **Vite + TypeScript** que simula una Pokédex de personajes de **Los Simpson**. Permite explorar, buscar, filtrar, marcar favoritos y jugar con varias funcionalidades interactivas como un piano, quizzes y trivia.
 
