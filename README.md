@@ -1,32 +1,70 @@
-# 📺 Simpsons API App
+# 📺 Los Simpson - Pokédex Interactiva
 
-Una aplicación web que consume la [Simpsons API](https://apisimpsons.fly.dev/) para mostrar todos los personajes de la serie, utilizando TypeScript, Tailwind CSS y Vite.
+Proyecto grupal desarrollado con **Vite + TypeScript** que simula una Pokédex de personajes de **Los Simpson**. Permite explorar, buscar, filtrar, marcar favoritos y jugar con varias funcionalidades interactivas como un piano, quizzes y trivia.
 
----
+## 🎯 Objetivo del proyecto
 
-## ✨ Características
-
-- 🔁 Carga progresiva de todos los personajes de Los Simpson (más de 600).
-- ⚡ Renderiza los personajes por lotes (100 por página) a medida que se cargan.
-- 🖼️ Tarjetas visuales y responsivas con imágenes y datos clave.
-- 🎲 Función para obtener un personaje aleatorio al pulsar un botón.
-- 🧠 Estructura escalable y organizada con TypeScript.
+Ofrecer una experiencia interactiva y divertida con personajes de Los Simpson usando una API pública y múltiples recursos como sonido, animaciones, filtros y lógica personalizada. Ideal tanto para fans como para quienes quieran practicar TypeScript y DOM avanzado.
 
 ---
 
-## 🚀 Tecnologías utilizadas
+## 🚀 Tecnologías usadas
 
-- [Vite](https://vitejs.dev/) + TypeScript
-- [Tailwind CSS](https://tailwindcss.com/)
-- HTML & DOM API
-- [Simpsons API pública](https://apisimpsons.fly.dev/)
+- ⚡️ Vite
+- 🧠 TypeScript
+- 🎨 Tailwind CSS
+- 🛠️ HTML y DOM API
+- 🔊 Audio HTML + efectos
+- 📦 LocalStorage
 
 ---
 
-## 🔧 Instalación y uso
+## 🧩 Funcionalidades principales
 
-### 1. Clona el repositorio
+### 🔍 Exploración de personajes
+- Scroll infinito para cargar personajes desde la API `https://apisimpsons.fly.dev`.
+- Tarjetas visuales con imagen, género, estado y ocupación.
+- Modal con detalles ampliados.
 
-```bash
-git clone https://github.com/tu-usuario/simpsons-api-app.git
-cd simpsons-api-app
+### 🎯 Filtros inteligentes
+- Filtro por **nombre**, **género**, **estado** y **ocupación**.
+- Combinación de múltiples filtros simultáneamente.
+- Botón de reset para limpiar los filtros.
+
+### ❤️ Favoritos
+- Marca personajes como favoritos (❤️).
+- Visualiza solo tus personajes favoritos.
+- Estado persistente usando `localStorage`.
+
+### 🎲 Personaje aleatorio
+- Muestra un personaje aleatorio al pulsar el botón.
+- Incluye imagen, datos y modal emergente.
+
+### 🎹 Piano interactivo Simpson
+- Teclas que reproducen sonidos divertidos.
+- Cada tecla muestra un personaje o imagen icónica.
+- Soporte para teclado físico (`A`–`J`, `W`, `E`, etc.).
+- Teclas aleatorias cada vez que se abre el piano.
+
+### ❓ Quiz de sonidos
+- Adivina qué personaje habla en el sonido reproducido.
+- Selecciona entre 4 opciones visuales.
+- Pierdes vidas (🍩) si fallas, reinicio automático al perder.
+
+### 🧠 Trivia Simpson
+- Preguntas divididas por categorías (familia, trabajo, etc.).
+- Selección aleatoria tipo ruleta.
+- Puntuación y vidas (🍩) con visual feedback.
+- Modo visual si la respuesta coincide con un personaje.
+
+### 🧰 CRUD completo
+- Añadir, modificar y eliminar personajes personalizados.
+- Integrado con `localStorage`.
+- Filtros y búsqueda aplican también a los personajes personalizados.
+- Al eliminar personajes de la API, se ocultan simulando su "borrado".
+
+### 🟨 Cambiador de fondo
+- Botón para alternar entre diferentes fondos visuales (día/noche).
+
+### ⬆️ Botón de scroll to top
+- Icono de Bart para volver arriba cuando haces scroll.
